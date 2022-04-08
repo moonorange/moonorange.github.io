@@ -48,7 +48,7 @@ Google Photo API は全てのアクセスに対して有効なものかどうか
 
 ### 4 つのロールの関係
 
-![OAuth_Roles](/oauth_roles.png)
+{{<figure src="./oauth_roles.png" alt="OAuth_Roles" width="75%">}}
 
 1. クライアントは認可サーバーに対して`リソースへのアクセス権`を要求
 2. 認可サーバーは`クライアントへのアクセス圏の移譲`についてリソースオーナーの意思を確認する
