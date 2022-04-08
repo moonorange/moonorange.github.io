@@ -3,12 +3,17 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>Sample Page - Kei's blog</title>
+<title>Linked List - Kei's blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Sample Page">
-<meta name=twitter:description content="HUGOのサンプル h1 h2 h3 h4 h5 h6 a b c d e f $ bash BOLD italic 44GG44KT44GT #include <stdio.h> int main() { printf(&#34;Hello, World!\n&#34;); return 0; }">
+<meta name=twitter:title content="Linked List">
+<meta name=twitter:description content="Introduction The linked list is a linear data structure.
+There are two types of linked lists, the singly linked list and the doubly linked list.
+Linked list The linked list elements are not stored at a contiguous location; the elements are linked using pointers.
+Advantages over arrays
+ Dynamic size Ease of insertion/deletion (Need to move all elements after targeted element in array)  Implementation
+class Node(object): def __init__(self, val): self.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -35,7 +40,7 @@
 <ul class=menu__list>
 <li class="menu__item menu__item--active">
 <a class=menu__link href=/posts/sample/>
-<span class=menu__text>Sample Page</span>
+<span class=menu__text>Linked List</span>
 </a>
 </li>
 </ul>
@@ -47,66 +52,200 @@
 <main class=main role=main>
 <article class=post>
 <header class=post__header>
-<h1 class=post__title>Sample Page</h1>
+<h1 class=post__title>Linked List</h1>
 <div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-01-01T00:00:00Z>January 01, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/hugo/ rel=category>hugo</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-05-14T00:00:00Z>May 14, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/data-structures-and-algorithms/ rel=category>Data Structures and Algorithms</a>
 </span>
 </div></div>
 </header><div class="content post__content clearfix">
-<h1 id=hugoのサンプル>HUGOのサンプル</h1>
-<h1 id=h1>h1</h1>
-<h2 id=h2>h2</h2>
-<h3 id=h3>h3</h3>
-<h4 id=h4>h4</h4>
-<h5 id=h5>h5</h5>
-<h6 id=h6>h6</h6>
-<ul>
-<li>
-<p>a</p>
-<ul>
-<li>b
-<ul>
-<li>c</li>
-<li>d</li>
-</ul>
-</li>
-<li>e</li>
-</ul>
-</li>
-<li>
-<p>f</p>
-</li>
-<li>
-<p><code>$ bash</code></p>
-</li>
-<li>
-<p><strong>BOLD</strong></p>
-</li>
-<li>
-<p><em>italic</em></p>
-</li>
-<li>
-<p><del>44GG44KT44GT</del></p>
-</li>
-</ul>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdio.h&gt;</span><span style=color:#75715e>
-</span><span style=color:#75715e></span>
-<span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>() {
-  printf(<span style=color:#e6db74>&#34;Hello, World!</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>);
-  <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;
-}
-</code></pre></div><figure><img src=./image.jpeg alt=モード width=75%>
-</figure>
+<h1 id=introduction>Introduction</h1>
+<p>The linked list is a linear data structure.</p>
+<p>There are two types of linked lists, the singly linked list and the doubly linked list.</p>
+<h2 id=linked-list>Linked list</h2>
+<p>The linked list elements are not stored at a contiguous location; the elements are linked using pointers.</p>
+<p>Advantages over arrays</p>
+<ol>
+<li>Dynamic size</li>
+<li>Ease of insertion/deletion (Need to move all elements after targeted element in array)</li>
+</ol>
+<p>Implementation</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Node</span>(object):
+    <span style=color:#66d9ef>def</span> __init__(self, val):
+        self<span style=color:#f92672>.</span>val: int <span style=color:#f92672>=</span> val
+        self<span style=color:#f92672>.</span>next: Node <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SinglyLinkedList</span>:
+    <span style=color:#66d9ef>def</span> __init__(self):
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Initialize your data structure here.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        self<span style=color:#f92672>.</span>head: Node <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+        self<span style=color:#f92672>.</span>size: int <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get</span>(self, index: int) <span style=color:#f92672>-&gt;</span> int:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Get the value of the index-th node in the linked list. If the index is invalid, return -1.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        <span style=color:#66d9ef>if</span> index <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>or</span> index <span style=color:#f92672>&gt;=</span> self<span style=color:#f92672>.</span>size:
+            <span style=color:#66d9ef>return</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>
+        current <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>head
+        <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(index):
+            current <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+        <span style=color:#66d9ef>return</span> current<span style=color:#f92672>.</span>val
+
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>addAtHead</span>(self, val: int) <span style=color:#f92672>-&gt;</span> <span style=color:#66d9ef>None</span>:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Add a node of value val before the first element of the linked list. After the insertion,           the new node will be the first node of the linked list.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        self<span style=color:#f92672>.</span>addAtIndex(<span style=color:#ae81ff>0</span>, val)
+
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>addAtTail</span>(self, val: int) <span style=color:#f92672>-&gt;</span> <span style=color:#66d9ef>None</span>:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Append a node of value val to the last element of the linked list.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        self<span style=color:#f92672>.</span>addAtIndex(self<span style=color:#f92672>.</span>size, val)
+
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>addAtIndex</span>(self, index: int, val: int) <span style=color:#f92672>-&gt;</span> <span style=color:#66d9ef>None</span>:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Add a node of value val before the index-th node in the linked list. If index equals to the         length of linked list, the node will be appended to the end of linked list. If index is             greater than the length, the node will not be inserted.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        <span style=color:#66d9ef>if</span> index <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>or</span> index <span style=color:#f92672>&gt;</span> self<span style=color:#f92672>.</span>size:
+            <span style=color:#66d9ef>return</span>
+
+        current <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>head
+        new_node <span style=color:#f92672>=</span> Node(val)
+        <span style=color:#66d9ef>if</span> index <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>:
+            new_node<span style=color:#f92672>.</span>next <span style=color:#f92672>=</span> current
+            self<span style=color:#f92672>.</span>head <span style=color:#f92672>=</span> new_node
+        <span style=color:#66d9ef>else</span>:
+            <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(index <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>):
+                current <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+            new_node<span style=color:#f92672>.</span>next <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+            current<span style=color:#f92672>.</span>next <span style=color:#f92672>=</span> new_node
+
+        self<span style=color:#f92672>.</span>size <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>deleteAtIndex</span>(self, index: int) <span style=color:#f92672>-&gt;</span> <span style=color:#66d9ef>None</span>:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Delete the index-th node in the linked list, if the index is valid.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        <span style=color:#66d9ef>if</span> index <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>or</span> index <span style=color:#f92672>&gt;=</span> self<span style=color:#f92672>.</span>size:
+            <span style=color:#66d9ef>return</span>
+
+        current <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>head
+        <span style=color:#66d9ef>if</span> index <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>:
+            self<span style=color:#f92672>.</span>head <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+        <span style=color:#66d9ef>else</span>:
+            <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(index <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>):
+                current <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+            current<span style=color:#f92672>.</span>next <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next<span style=color:#f92672>.</span>next
+        self<span style=color:#f92672>.</span>size <span style=color:#f92672>-=</span> <span style=color:#ae81ff>1</span>
+</code></pre></div><h2 id=doubly-linked-list>Doubly Linked List</h2>
+<p>Advantages over singly linked list</p>
+<ol>
+<li>A DLL can be traversed in both forward and backward directions.</li>
+<li>The delete operation in DLL is more efficient if a pointer to the node to be deleted is given.</li>
+<li>We can quickly insert a new node before a given node.
+In a singly linked list, to delete a node, a pointer to the previous node is needed. To get this previous node, sometimes the list is traversed. In DLL, we can get the previous node using a previous pointer.</li>
+</ol>
+<p>Disadvantages over singly linked list</p>
+<ol>
+<li>Every node of DLL requires extra space for a previous pointer. It is possible to implement DLL with a single pointer though (See <a href=https://www.geeksforgeeks.org/xor-linked-list-a-memory-efficient-doubly-linked-list-set-1/>this</a>).</li>
+<li>All operations require an extra pointer previous to be maintained. For example, in insertion, we need to modify previous pointers together with next pointers. For example in following functions for insertions at different positions, we need 1 or 2 extra steps to set a previous pointer.</li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Node</span>(object):
+    <span style=color:#66d9ef>def</span> __init__(self, val):
+  self<span style=color:#f92672>.</span>val: int <span style=color:#f92672>=</span> val
+  self<span style=color:#f92672>.</span>prev: Node <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+  self<span style=color:#f92672>.</span>next: Node <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>DoublyLinkedList</span>:
+    <span style=color:#66d9ef>def</span> __init__(self):
+  <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>  Initialize your data structure here.
+</span><span style=color:#e6db74>  &#34;&#34;&#34;</span>
+  self<span style=color:#f92672>.</span>head: Node <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+  self<span style=color:#f92672>.</span>tail: Node <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+  self<span style=color:#f92672>.</span>size: int <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get</span>(self, index: int) <span style=color:#f92672>-&gt;</span> int:
+  <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>  Get the value of the index-th node in the linked list. If the index is invalid, return -1.
+</span><span style=color:#e6db74>  &#34;&#34;&#34;</span>
+  <span style=color:#66d9ef>if</span> index <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>or</span> index <span style=color:#f92672>&gt;=</span> self<span style=color:#f92672>.</span>size:
+   <span style=color:#66d9ef>return</span> <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>
+  current <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>head
+  <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(index):
+   current <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+  <span style=color:#66d9ef>return</span> current<span style=color:#f92672>.</span>val
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>addAtHead</span>(self, val: int) <span style=color:#f92672>-&gt;</span> <span style=color:#66d9ef>None</span>:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Add a node of value val before the first element of the linked list. After the insertion,           the new node will be the first node of the linked list.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        self<span style=color:#f92672>.</span>addAtIndex(<span style=color:#ae81ff>0</span>, val)
+
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>addAtTail</span>(self, val: int) <span style=color:#f92672>-&gt;</span> <span style=color:#66d9ef>None</span>:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Append a node of value val to the last element of the linked list.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        self<span style=color:#f92672>.</span>addAtIndex(self<span style=color:#f92672>.</span>size, val)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>addAtIndex</span>(self, index: int, val: int) <span style=color:#f92672>-&gt;</span> <span style=color:#66d9ef>None</span>:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Add a node of value val before the index-th node in the linked list. If index equals to the         length of linked list, the node will be appended to the end of linked list. If index is             greater than the length, the node will not be inserted.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        <span style=color:#66d9ef>if</span> index <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>or</span> index <span style=color:#f92672>&gt;</span> self<span style=color:#f92672>.</span>size:
+            <span style=color:#66d9ef>return</span>
+
+        current <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>head
+        new_node <span style=color:#f92672>=</span> Node(val)
+        <span style=color:#66d9ef>if</span> index <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>:
+            new_node<span style=color:#f92672>.</span>next <span style=color:#f92672>=</span> current
+            self<span style=color:#f92672>.</span>head <span style=color:#f92672>=</span> new_node
+        <span style=color:#66d9ef>else</span>:
+            <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(index <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>):
+                current <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+            new_node<span style=color:#f92672>.</span>next <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+            current<span style=color:#f92672>.</span>next <span style=color:#f92672>=</span> new_node
+
+        self<span style=color:#f92672>.</span>size <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>deleteAtIndex</span>(self, index: int) <span style=color:#f92672>-&gt;</span> <span style=color:#66d9ef>None</span>:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        Delete the index-th node in the linked list, if the index is valid.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        <span style=color:#66d9ef>if</span> index <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>or</span> index <span style=color:#f92672>&gt;=</span> self<span style=color:#f92672>.</span>size:
+            <span style=color:#66d9ef>return</span>
+
+        current <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>head
+        <span style=color:#66d9ef>if</span> index <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>:
+            self<span style=color:#f92672>.</span>head <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+        <span style=color:#66d9ef>else</span>:
+            <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(index <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>):
+                current <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next
+            current<span style=color:#f92672>.</span>next <span style=color:#f92672>=</span> current<span style=color:#f92672>.</span>next<span style=color:#f92672>.</span>next
+        self<span style=color:#f92672>.</span>size <span style=color:#f92672>-=</span> <span style=color:#ae81ff>1</span>
+</code></pre></div><h1 id=reference>Reference</h1>
+<p><a href=https://www.geeksforgeeks.org/data-structures/linked-list/>Linked List Data Structure</a></p>
+<p><a href=https://leetcode.com/explore/learn/card/linked-list/209/singly-linked-list/>Introduction to Data Structure Linked List Singly Linked List</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
 <ul class=tags__list>
 <li class=tags__item>
-<a class="tags__link btn" href=/tags/go/ rel=tag>go</a>
+<a class="tags__link btn" href=/tags/linked-list/ rel=tag>Linked List</a>
 </li>
 <li class=tags__item>
-<a class="tags__link btn" href=/tags/markdown/ rel=tag>markdown</a>
+<a class="tags__link btn" href=/tags/python/ rel=tag>Python</a>
 </li>
 </ul>
 </div>
@@ -138,7 +277,7 @@ Software Engineer living in Japan
 <h4 class=widget__title>Recent Posts</h4>
 <div class=widget__content>
 <ul class=widget__list>
-<li class=widget__item><a class=widget__link href=/posts/sample/>Sample Page</a></li>
+<li class=widget__item><a class=widget__link href=/posts/sample/>Linked List</a></li>
 </ul>
 </div>
 </div>
@@ -147,15 +286,15 @@ Software Engineer living in Japan
 <div class=widget__content>
 <ul class=widget__list>
 <li class=widget__item>
-<a class=widget__link href=/categories/hugo/>hugo</a></li>
+<a class=widget__link href=/categories/data-structures-and-algorithms/>Data Structures and Algorithms</a></li>
 </ul>
 </div>
 </div>
 <div class="widget-taglist widget">
 <h4 class=widget__title>Tags</h4>
 <div class=widget__content>
-<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=go>go</a>
-<a class="widget-taglist__link widget__link btn" href=/tags/markdown/ title=markdown>markdown</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
 </div>
 </div>
 <div class="widget-social widget">
