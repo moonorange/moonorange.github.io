@@ -1,6 +1,9 @@
 ---
 title: DB Random Notes(DB関連)
 date: '2021-10-23'
+categories: ["Middleware"]
+tags: ["DB", "Japanese"]
+menu: main
 ---
 
 ## RAID
@@ -53,7 +56,7 @@ RAID1 の高信頼性と RAID0 の高速性を両立させることができる�
 
 ログファイル：DBMS がテーブルのデータに対する変更を受け付けたときに変更分を一旦溜め込むファイル、その後一括してデータファイルに変更を加える
 
-![DB物理ファイル](/db_files.png)
+{{<figure src="./db_files.png" alt="DB物理ファイル" width="75%">}}
 
 ## 正規化
 
@@ -107,7 +110,7 @@ SQL チューニングの手段として非常にポピュラーなもので目�
 
 B-tree index は得意領域があると言うより平均して優秀なため、よく使われる。
 
-![B-tree レーダーチャート](/b-tree_chart.png)
+{{<figure src="./b-tree_chart.png" alt="B-tree レーダーチャート" width="75%">}}
 
 ### 均一性
 
@@ -235,7 +238,7 @@ B-tree 以外にも index は存在する。
 
 ビットマップインデックスはデータの値からビットデータを作成しそれを index とするものである。
 
-![bitmap_index](/bitmap_index.png)
+{{<figure src="./bitmap_index.png" alt="ビットマップインデックス" width="75%">}}
 
 ビットデータの演算で検索を行うことができるため、B-tree が苦手だったカーディナリティが低い列に対しても検索性能が良い。
 
@@ -257,7 +260,7 @@ SQL はこの統計情報をもとにアクセスパスを決定する。
 
 ### オプティマイザと実行計画
 
-![table_acces_path](/table_access_flow.png)
+{{<figure src="./table_access_flow.png" alt="テーブルアクセスフロー" width="75%">}}
 
 DBMS が SQL 文を受け取る際のフローは上図にのようになっている。
 

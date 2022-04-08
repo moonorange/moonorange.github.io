@@ -1,6 +1,9 @@
 ---
 title: '非同期処理(Asynchronous Programming)'
 date: '2021-04-05'
+categories: ["Frontend"]
+tags: ["Asynchronous Programming", "JavaScript", "Japanese"]
+menu: main
 ---
 
 # 概要
