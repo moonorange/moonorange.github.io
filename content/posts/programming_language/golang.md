@@ -1,6 +1,9 @@
 ---
 title: 'Golang Basic(Golang基礎)'
 date: '2021-12-11'
+categories: ["Programming Language"]
+tags: ["Go", "Japanese"]
+menu: main
 ---
 
 # 概要
@@ -288,7 +291,3 @@ func TestHex_String(t *testing.T) {
 [Go 101(a knowledge base for Go programming)](https://go101.org/)
 
 [シフト演算を分かりやすく解説](https://medium-company.com/%E3%82%B7%E3%83%95%E3%83%88%E6%BC%94%E7%AE%97/)
-
-```
-
-```
