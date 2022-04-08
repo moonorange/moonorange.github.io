@@ -1,26 +1,26 @@
-# 公開するページのURL
-baseURL = "https://kat0h.github.io/hugo-blog-template"
+# Page url
+baseURL = "https://moonorange.github.io"
 
-languageCode = "ja"
-DefaultContentLanguage = "ja"
+languageCode = "en"
+DefaultContentLanguage = "en"
 HasCJKLanguage = true
 enableRobotsTXT = true
 
-# ブログのタイトル
-title = "hugo-blog-template"
+# Blog title
+title = "Kei's blog"
 
 theme = "mainroad"
 paginate = 20
 
 # 自己紹介
 [Author]
-    name = "Author"
-    bio = "ここに自己紹介を入れることができます"
-    avatar = "img/avatar.png"
+    name = "Keigo Kida"
+    bio = "Software Engineer living in Japan"
+    avatar = "img/avatar.jpeg"
 
 [Params]
     customCSS = ["css/custom.css"]
-    copyright = "Author"
+    copyright = "Keigo Kida"
     readmore = true
     authorbox = true
     post_meta = ["date", "categories"]
@@ -28,16 +28,15 @@ paginate = 20
 
 # ページのテーマカラー
 [Params.style.vars]
-  highlightColor = "#e22d30"
+  highlightColor = "#00008b"
 
 # SNS等のユーザー名
 [Params.widgets.social]
-  twitter = "uvrub"
-  github = "kato-k"
+  github = "moonorange"
+  linkedin = "keigo-k-70557314b"
 
 [Params.sidebar]
     home = "right"
     list = "right"
     single = "right"
     widgets = ["search", "recent", "categories", "taglist", "social"]
-
