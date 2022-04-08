@@ -3,12 +3,12 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>デザインパターン２ - Kei's blog</title>
+<title>Tree - Kei's blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="デザインパターン２">
-<meta name=twitter:description content="8 Abstract Factory 抽象的な部品を組み合わせて抽象的な製品を作る 実装 抽象的な部品 Item link と tray のスーパークラス link と tray を同一視するためのクラス caption field はこの項目の見出">
+<meta name=twitter:title content="Tree">
+<meta name=twitter:description content="Tree  Properties  Every tree has a special node called the root node. The root node can be used to traverse every node of the tree. It is called root because the tree originated from root only. If a tree has N nodes(vertices), the number of edges is always one less than the number of nodes (i.e., N-1). If it has more than that, it&rsquo;s called a graph not a tree.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -36,89 +36,64 @@
 <main class=main role=main>
 <article class=post>
 <header class=post__header>
-<h1 class=post__title>デザインパターン２</h1>
+<h1 class=post__title>Tree</h1>
 <div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2020-08-05T00:00:00Z>August 05, 2020</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/software-design/ rel=category>Software Design</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-04-08T00:00:00Z>April 08, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
 </span>
 </div></div>
 </header>
 <div class="content post__content clearfix">
-<h1 id=8-abstract-factory>8 Abstract Factory</h1>
-<p>抽象的な部品を組み合わせて抽象的な製品を作る</p>
-<h1 id=実装>実装</h1>
-<h2 id=抽象的な部品>抽象的な部品</h2>
-<h3 id=item>Item</h3>
-<p>link と tray のスーパークラス
-link と tray を同一視するためのクラス
-caption field はこの項目の見出し
-makehtml method は抽象メソッドで html の文字列が返り値となるようサブクラスで実装</p>
-<h3 id=link>Link</h3>
-<p>html のハイパーリンクを抽象的に表現したクラス
-url field はリンクの飛び先 url
-makehtml を実装してないので抽象クラス</p>
-<h3 id=tray>Tray</h3>
-<p>複数の link や tray を集めてひとまとまりにしたもの
-link や tray を add method で集める。それらの super class である item を引数にとる
-makehtml を実装してないので抽象クラス</p>
-<h2 id=抽象的な製品>抽象的な製品</h2>
-<h3 id=page>Page</h3>
-<p>html ページ全体を抽象的に表現したクラス
-link や tray が抽象的な部品であるなら page は抽象的な製品
-title 　 field はページのタイトル
-author はページの作者
-add method で item を追加する
-output method でタイトルを元にファイル名を決定し makeHTML method で内容をファイルに書き込む
-makeHTMl を抽象メソッドとして定義</p>
-<h3 id=抽象的な工場>抽象的な工場</h3>
-<h3 id=factory>Factory</h3>
-<p>get_factory method はクラス名を指定して具体的な工場のインスタンスを生成するもの。ただし戻り値は抽象的な工場
-create_link, tray, page の各メソッドは抽象的な工場で部品や製品を作るときに用いるメソッド
-具体的な作成はサブクラスだがシグニチャ(引数の型と数)とメソッドの名前は決められている</p>
-<h2 id=具体的な工場>具体的な工場</h2>
-<h3 id=listfactory>ListFactory</h3>
-<p>create_link, tray, page を実装</p>
-<h2 id=具体的な部品>具体的な部品</h2>
-<h3 id=listlink>ListLink</h3>
-<p>link のサブクラス
-make_html を実装</p>
-<h3 id=listtray>ListTray</h3>
-<p>tray のサブクラス
-make_html を実装。tray field の中の item を html のタグとして表現する</p>
-<h2 id=具体的な製品>具体的な製品</h2>
-<h3 id=listpage>ListPage</h3>
-<p>Page のサブクラス
-make_html method を実装</p>
-<h1 id=登場人物>登場人物</h1>
-<h2 id=abstractproduct>AbstractProduct</h2>
-<p>抽象的な部品や製品の interface</p>
-<h2 id=abstractfactory>AbstractFactory</h2>
-<p>AbstractProduct のインスタンスを作り出すためのインターフェース</p>
-<h2 id=client>Client</h2>
-<p>AbstractFactory と AbstractProduct のインターフェースだけを使って仕事を行う役</p>
-<h2 id=createproduct>CreateProduct</h2>
-<p>AbstractProduct のインターフェースの実装をする</p>
-<h2 id=concretefactory>ConcreteFactory</h2>
-<p>AbstractFactory のインターフェースを実装</p>
-<h1 id=知っておくべきこと>知っておくべきこと</h1>
-<h2 id=具体的な工場を新たに追加するのは簡単>具体的な工場を新たに追加するのは簡単</h2>
-<p>いくら具体的な工場を追加しても抽象的な工場や main 関数に修正を加える必要はない</p>
-<h2 id=部品を新たに追加するのは困難>部品を新たに追加するのは困難</h2>
-<p>AbstarctFactory に新たな部品を追加しようとすると具体的な工場全てに修正加えなければならない</p>
-<h1 id=参考>参考</h1>
-<p><a href="https://www.amazon.co.jp/%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E6%8C%87%E5%90%91%E3%81%A7%E3%81%AA%E3%81%9C%E3%81%A4%E3%81%8F%E3%82%8B%E3%81%AE%E3%81%8B-%E7%AC%AC3%E7%89%88-%E7%9F%A5%E3%81%A3%E3%81%A6%E3%81%8A%E3%81%8D%E3%81%9F%E3%81%84OOP%E3%80%81%E8%A8%AD%E8%A8%88%E3%80%81%E3%82%A2%E3%82%B8%E3%83%A3%E3%82%A4%E3%83%AB%E9%96%8B%E7%99%BA%E3%81%AE%E5%9F%BA%E7%A4%8E%E7%9F%A5%E8%AD%98-%E5%B9%B3%E6%BE%A4-%E7%AB%A0/dp/4296000187/ref=sr_1_3_sspa?adgrpid=97228450450&dchild=1&gclid=CjwKCAjwyvaJBhBpEiwA8d38vCSN9YLFZrO7BK1V4aME5GqEeH_TbfjAE2LQvkARmIrUhtbcuR1ITxoCEtYQAvD_BwE&hvadid=439342708792&hvdev=c&hvlocphy=1009301&hvnetw=g&hvqmt=e&hvrand=2989518601321199022&hvtargid=kwd-332957222879&hydadcr=21755_11003627&jp-ad-ap=0&keywords=%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E6%8C%87%E5%90%91+%E6%9C%AC&qid=1631459100&sr=8-3-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzMEdWQUhTM1UxQjFUJmVuY3J5cHRlZElkPUEwNjUyMTA2MUlLUlk5WFIxREhESiZlbmNyeXB0ZWRBZElkPUEzSjA5MDNOTUpYTk9aJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==">オブジェクト指向でなぜつくるのか 第 3 版 知っておきたい OOP、設計、アジャイル開発の基礎知識</a></p>
+<h1 id=tree>Tree</h1>
+<figure><img src=./tree_datastructure.jpeg alt=Tree width=75%>
+</figure>
+<h2 id=properties>Properties</h2>
+<ul>
+<li>Every tree has a special node called the root node. The root node can be used to traverse every node of the tree. It is called root because the tree originated from root only.</li>
+<li>If a tree has N nodes(vertices), the number of edges is always one less than the number of nodes (i.e., N-1). If it has more than that, it&rsquo;s called a graph not a tree.</li>
+<li>Every child has only a single Parent but Parent can have multiple children.</li>
+</ul>
+<h2 id=terminology>Terminology</h2>
+<ul>
+<li>The <code>depth</code> of a node is the number of edges from the node to the tree&rsquo;s root node. A root node will have a depth of 0.</li>
+<li>The <code>height</code> of a node is the number of edges on the longest path from the node to a leaf. A leaf node will have a height of 0.</li>
+</ul>
+<figure><img src=./height_depth_tree.png alt="Tree Height and Depth" width=75%>
+</figure>
+<h2 id=types-of-trees>Types of Trees</h2>
+<h3 id=general-tree>General Tree</h3>
+<p>A Tree without any constraint imposed on the hierarchy of the tree is called a general tree.</p>
+<p>Each node can have an infinite number of children.</p>
+<p>This is the super-set of all other types of trees.</p>
+<h3 id=binary-tree>Binary Tree</h3>
+<p>Binary Tree is the type of tree in which each parent can have at most two children.</p>
+<h3 id=binary-search-tree>Binary Search Tree</h3>
+<p>BST is an extension of BT with some added constraints.</p>
+<p>In BST, the value of the left node must be smaller than the parent node, and the value of the right node must be greater than the parent node.</p>
+<h3 id=avl-tree>AVL Tree</h3>
+<p>AVL Tree is a self-balancing binary tree.</p>
+<p>In AVL tree, the heights of children&rsquo;s node differ at most 1, i.e., the valid balancing factor in AVL tree are 1, 0 and -1. When a new node added to a tree and tree becomes unbalanced, rotation is done to make a tree balanced.</p>
+<p><img src="https://www.thecrazyprogrammer.com/wp-content/uploads/2019/09/AVL-Tree.png?ezimgfmt=ng:webp/ngcb1" alt></p>
+<h3 id=n-ary-tree>N-ary Tree</h3>
+<p>In N-ary Tree, the maximum number of children that a node can have is limited to N.</p>
+<h3 id=tries>Tries</h3>
+<p>It is commonly used to represent a dictionary for looking up words in a vocabulary</p>
+<p>For example, when implementing a search bar with auto-completion or query suggestion, tries is needed to look up words quickly starting with the characters input by the user.</p>
+<figure><img src=./query_suggestion.png alt="Query Suggestion" width=100%>
+</figure>
+<h1 id=ref>Ref</h1>
+<p><a href=https://www.thecrazyprogrammer.com/2019/09/types-of-trees-in-data-structure.html>Types of Trees in Data Structure</a></p>
+<p><a href="https://www.youtube.com/watch?v=FNeL18KsWPc">MIT Lecture 6: AVL Trees, AVL Sort</a></p>
+<p><a href=https://albertauyeung.github.io/2020/06/15/python-trie.html/>Tries</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
 <ul class=tags__list>
 <li class=tags__item>
-<a class="tags__link btn" href=/tags/oop/ rel=tag>OOP</a>
+<a class="tags__link btn" href=/tags/tree/ rel=tag>Tree</a>
 </li>
 <li class=tags__item>
-<a class="tags__link btn" href=/tags/design-pattern/ rel=tag>Design Pattern</a>
-</li>
-<li class=tags__item>
-<a class="tags__link btn" href=/tags/japanese-article/ rel=tag>Japanese Article</a>
+<a class="tags__link btn" href=/tags/trie/ rel=tag>Trie</a>
 </li>
 </ul>
 </div>
