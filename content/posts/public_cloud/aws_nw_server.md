@@ -11,7 +11,7 @@ date: '2020-02-12'
 
 AmazonVirtualPrivateCloud の略。ユーザー専用のプライベートなクラウド環境を提供するサービスである。
 
-![VPC structure](/vpc%20structure.png)
+{{<figure src="./vpc_structure.png" alt="VPC structure" width="75%">}}
 
 ## NAT
 
@@ -27,7 +27,7 @@ NAT を導入すると、「片方向だけの接続を許す」ことが実現�
 TCP/IP で使われている通信先を特定するためのプロトコル。
 IP アドレスは、32 ビットで構成されている。
 
-![ip address](/ip_address.png)
+{{<figure src="./ip_address.png" alt="IP Address" width="75%">}}
 
 図のようにネットワーク部は同じネットワークに属する限りは同じ値
 ホスト部が割り当てたいサーバーやクライアント、ネットワーク機器に対する値となる。
@@ -35,7 +35,7 @@ IP アドレスは、32 ビットで構成されている。
 インターネットに接続する際に用いる IP アドレスのことを「パブリック IP アドレス」と言う。
 インターネットで使われないものをプライベート IP アドレスという
 
-![private ip address](/private%20ip.png)
+{{<figure src="./private_ip.png" alt="private ip address" width="75%">}}
 
 ## IP アドレスの表記方法
 
@@ -51,7 +51,7 @@ CIDR 表記だと 192.168.1.0/24」と記述される。
 
 ## パケット
 
-![パケット](/packet.png)
+{{<figure src="./packet.png" alt="パケット" width="75%">}}
 
 ### パケットフィルタリング
 
@@ -119,7 +119,7 @@ Outbound は All traffic にする。
 任意のドメインを取得する。
 サブドメインが必要な場合はこちらで登録する
 
-![独自ドメイン](/original_domain.png)
+{{<figure src="./original_domain.png" alt="独自ドメイン" width="75%">}}
 
 ## ACM(Certificate Manager) SSL 証明書の発行
 
