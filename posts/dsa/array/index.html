@@ -1,0 +1,493 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>配列(Array) - Kei's blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="配列(Array)">
+<meta name=twitter:description content="実行時間 最悪実行時間(worst-case running time): 実行時間に対する保証の中で、最も強力なもの。 あるデータ構造の操作について最悪実行時間が f (n)">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's blog</div>
+</div>
+</a>
+</div>
+<nav class=menu>
+<button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>Menu</span>
+</button>
+<ul class=menu__list>
+<li class=menu__item>
+<a class=menu__link href=/posts/public_cloud/aws_nw_server/>
+<span class=menu__text>awsでのwebサーバー構築について</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/binary_tree/>
+<span class=menu__text>Binary Tree</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/db/>
+<span class=menu__text>DB Random Notes(DB関連)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/programming_language/golang/>
+<span class=menu__text>Golang Basic(Golang基礎)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/linked_list/>
+<span class=menu__text>Linked List</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/oauth2/>
+<span class=menu__text>OAuth2</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/oop/>
+<span class=menu__text>OOP Random Notes</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/react-redux/>
+<span class=menu__text>ReactとReduxについて(About React and Redux)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/redis/>
+<span class=menu__text>Redis</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/web_security/>
+<span class=menu__text>Web脆弱性</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/os/>
+<span class=menu__text>オペレーティングシステム(OS)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns/>
+<span class=menu__text>デザインパターン</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns_2/>
+<span class=menu__text>デザインパターン２</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/network/>
+<span class=menu__text>ネットワークについて(About network)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/ipc/>
+<span class=menu__text>プロセス間通信(Inter process communication)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/ml/cnn/>
+<span class=menu__text>畳み込みニューラルネットワーク(CNN)</span>
+</a>
+</li>
+<li class="menu__item menu__item--active">
+<a class=menu__link href=/posts/dsa/array/>
+<span class=menu__text>配列(Array)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/asynchronous_programming/>
+<span class=menu__text>非同期処理(Asynchronous Programming)</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>配列(Array)</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2020-08-17T00:00:00Z>August 17, 2020</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+</span>
+</div></div>
+</header><div class="content post__content clearfix">
+<h1 id=実行時間>実行時間</h1>
+<p>最悪実行時間(worst-case running time):
+実行時間に対する保証の中で、最も強力なもの。
+あるデータ構造の操作について最悪実行時間が f (n)であるといったら、そのような操作の実行時間が f (n) より長くなることは決してない。</p>
+<p>償却実行時間(amortized running time):
+償却実行時間が f (n) であるとは、典型的な操作にかかるコストが f (n) を超えないことを意味する。
+より正確には、m 個の操作にかかる実行時間を合計しても、mf (n) を超えないことを意味する。
+いくつかの操作には f (n) より長い時間がかかるかもしれないが、操作の列全体として考えれば、1 つあたりの実行時間は f (n) という意味だ。</p>
+<p>期待実行時間(expected running time):
+期待実行時間が f (n) であるとは、実行時間が確率変数(1.3.4 節を参照)であり、その確率変数の期待値が f (n) であることを意味する。
+この期待値を計算する際に考えるランダム性は、そのデータ構造内で起こる選択におけるランダム性である。</p>
+<h3 id=減価償却とは>減価償却とは?</h3>
+<p>固定資産を使用可能期間にしたがって、少しずつ費用を計上すること</p>
+<h3 id=期待値とは>期待値とは</h3>
+<p>期待値とは、1 回の試行で得られる値の平均値のことで、得られうるすべての値とそれが起こる確率の積を足し合わせたもの。</p>
+<h1 id=interface>Interface</h1>
+<h2 id=list-interface-にまとめられるもの>List Interface にまとめられるもの</h2>
+<p>FIFO キューにおける add(x)、remove() を、それぞれ enqueue(x)、dequeue() と呼ぶ</p>
+<p>Stack と呼ぶ場合は、add(x) と remove() のことを、それぞれ push(x) および pop() と呼ぶ。これにより LIFO と FIFO の取り出し規則を区別できる。</p>
+<p>FIFO キューと LIFO キュー(スタック)を一般化した Deque というインターフェースもある。</p>
+<p>Deque は双方向キューと呼ばれ、先頭と末尾を持った要素の列を表しており、先頭または末尾に要素を追加できる。
+Deque における操作には、addFirst(x)、removeFirst()、addLast(x)、 removeLast()がある</p>
+<h2 id=list-interface>List Interface</h2>
+<ol>
+<li>size(): リストの長さ n を返す</li>
+<li>get(i): xi の値を返す</li>
+<li>set(i,x): xi の値を x にする</li>
+<li>add(i,x): x を i 番め *2 として追加し、xi,&mldr;,xn−1 を後ろにずらす。
+すなわち、j ∈ {i,&mldr;,n−1} について xj+1 = xj とし、n をひとつ増やし、xi = x とする</li>
+<li>remove(i): xi を削除し、xi+1,&mldr;,xn−1 を前にずらす。
+すなわち、j ∈ {i,&mldr;,n − 2} について xj = xj+1 とし、n をひとつ減らす</li>
+</ol>
+<h2 id=uset-interface>USet Interface</h2>
+<p>USet インターフェースは、重複がなく順序付けられていない要素の集まりを表現する(USet の U は unordered の意味)。
+USet インターフェースは数学における集合(set)のようなものだ。
+USet には、n 個の互いに相異なる要素が含まれる。つまり、同じ要素が複数入っていることはない。
+また、USet では要素の並び順は決まっていない。USet には以下の操作を実行できる。
+size(): 集合の要素数 n を返す
+add(x): 集合の中に x=y を満たす y がなければ x を加える。追加されたら true を返しされなければ false
+remove(x): 集合の中に x=y を満たす y があれば取り除き、その y を返す。なければ null を返す
+find(x): 集合の中に x=y を満たす y があればその y を返す。なければ null を返す</p>
+<h2 id=sset-interface>SSet Interface</h2>
+<p>SSet インターフェースは順序付けされた要素の集まりを表現する(SSet の S
+は sorted の意味)。SSet には全順序集合の要素が入る。
+全順序集合とは、任意の 2 つの要素 x と y について大小を比較できるような集合をいう。
+SSet は、USet とまったく同じセマンティクスを持つ操作 size()、add(x)、remove(x) をサポートする。
+USet と SSet の違いは find(x) にある。
+find(x): 順序付けられた集合から x の位置を特定する。
+すなわち y ≥ x を満たす最小の要素 y を見つける。もしそのような y が存在すればそれを返し、存在しないなら null を返す</p>
+<h1 id=配列を使ったリスト>配列を使ったリスト</h1>
+<p>C++ のふつうの配列は要素数を保持していないので、要素数を保持する配列のクラス array を定義する</p>
+<p>(Page 28).</p>
+<h2 id=arraystack>ArrayStack</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>add</span>(<span style=color:#66d9ef>int</span> i, T x) {
+   <span style=color:#66d9ef>if</span> (n <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>&gt;=</span> a.length) resize();
+   <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> j <span style=color:#f92672>=</span> n; j <span style=color:#f92672>&gt;</span> i; j<span style=color:#f92672>--</span>)
+    a[j] <span style=color:#f92672>=</span> a[j <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>];
+  a[i] <span style=color:#f92672>=</span> x;
+  n<span style=color:#f92672>++</span>;
+  }
+</code></pre></div><p>(Page 30).</p>
+<p>resize()のコストを無視すれば、add(i,x) のコストは x を入れる場所を作るために右にシフトする要素数に比例する。
+つまり、この操作の（resize() のコストを無視した）実行時間は、O(n − i) である。</p>
+<p>(Page 30).</p>
+<p>remove(i) も同様に実装できる。a[i + 1],&mldr;,a[n − 1] を左に 1 つシフトし、 n の値を 1 つ小さくする。
+a.length() >= 3n だった場合 resize()を読んで a を小さくする
+計算量は resize()を無視すれば同様に O(n-i)である</p>
+<ul>
+<li>
+<p>配列では任意の要素に一定の時間でアクセスできる。そのため、get(i)操作と set(i,x) 操作を定数時間で実行できる</p>
+</li>
+<li>
+<p>配列はそれほど動的ではない。リストの中ほどに要素を追加、削除するには、隙間を作ったり埋めたりするため、配列に含まれる多くの要素を移動させる必要がある。
+add(i,x) 操作と remove(i) 操作の実行時間が n と i に依存するのは、これが原因である</p>
+</li>
+<li>
+<p>配列は伸び縮みしない。backing array のサイズより多くの要素をデータ構造に入れるには、新しい配列を割り当てて古い配列の要素をそちらにコピーしなければならず、この操作のコストは大きい</p>
+</li>
+</ul>
+<p>resize() の実装は単純。大きさ 2n の新しい配列 b を割り当て、n 個の a の 要素を b の先頭の n 個としてコピーする。そして a を b に置き換える。よって、resize() の呼び出し後は a.length = 2n が成り立つ
+大きさ 2n の配列 b を割り当て、 n 個の要素をコピーする。これには O(n) の時間がかかる。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>resize</span>() {
+   array<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span> b(max(<span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> n, <span style=color:#ae81ff>1</span>));
+   <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> n; i<span style=color:#f92672>++</span>)
+    b[i] <span style=color:#f92672>=</span> a[i];
+   a <span style=color:#f92672>=</span> b;
+    }
+</code></pre></div><p>(Page 32).</p>
+<h3 id=要約>要約</h3>
+<p>次の定理は ArrayStack の性能について整理したものだ。
+定理 2.1. ArrayStack は List インターフェースを実装する。
+resize() にかかる時間を無視した場合の ArrayStack における各操作の実行時間を以下にまとめる。</p>
+<ul>
+<li>get(i) および set(i,x) の実行時間は O(1) である</li>
+<li>add(i,x) および remove(i) の実行時間は O(1 + n − i) である
+空の ArrayStack に対して任意の m 個の add(i,x) および remove(i) からなる操作の列を実行する。
+このとき resize() にかかる時間の合計は O(m) である。</li>
+</ul>
+<p>ArrayStack というデータ構造は、Stack インターフェースを実装する効率的な方法である。
+特に、push(x) は add(n,x) に相当し、pop() は remove(n − 1)に相当する。
+これらいずれの操作の償却実行時間も O(1) である。</p>
+<h2 id=fastarraystack>FastArrayStack</h2>
+<p>FastArrayStack：最適化された ArrayStack である。
+ArrayStack で主にやっていることは、（add(i,x) と remove(i) のため に）データをシフトすることと、（resize() のために）データをコピ-することである。
+実装では、これに for ループを使った。しかし実際には、データのシフトやコピーに特化したもっと効率的な機能が使える。
+C++ には、std::copy(a0,a1,b) アルゴリズムがある。</p>
+<h2 id=arrayqueue>ArrayQueue</h2>
+<p>このデータ構造では、（add(x) によって）追加された要素が、同じ順番で（remove() によって）削除される。
+(Page 35).</p>
+<p>仮に無限長の配列 a があれば FIFO を簡単に実装できる。
+次に削除する要素を追跡するインデックス j と、キューの要素 数 n を記録しておく。そうすれば、キューの要素は以下の場所に入っている</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++>a[j],a[j <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>],...,a[j <span style=color:#f92672>+</span> n <span style=color:#960050;background-color:#1e0010>−</span> <span style=color:#ae81ff>1</span>]
+</code></pre></div><p>剰余算術は無限長の配列を模倣するのに便利である。i mod a.length が常 に 0,&mldr;,a.length − 1 の値を取ることを利用して、配列の中にキューの要素を うまく入れられるのだ。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++>a[j<span style=color:#f92672>%</span>a.length],a[(j <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>)<span style=color:#f92672>%</span>a.length],...,a[(j <span style=color:#f92672>+</span> n <span style=color:#960050;background-color:#1e0010>−</span> <span style=color:#ae81ff>1</span>)<span style=color:#f92672>%</span>a.length]
+</code></pre></div><p>ここでは a を循環配列として使っている。配列の添字が a.length − 1 を超え ると、配列の先頭に戻ってくるわけである。
+(Page 36).</p>
+<h3 id=要約-1>要約</h3>
+<p>ArrayQueue は、（FIFO の）Queue インターフェースの実装である。resize() のコストを無視すると、ArrayQueue は add(x)、remove() の実 行時間は O(1) である。さらに、空の ArrayQueue に対して長さ m の任意の add(x) および remove() からなる操作の列を実行するとき、resize() にかかる時間の合計は O(m) である。
+(Page 39).</p>
+<h2 id=arraydeque配列を使った高速な双方向キュー>ArrayDeque：配列を使った高速な双方向キュー</h2>
+<p>両端に対して追加と削除が効率よくできるデータ構造
+ArrayDeque に対する get(i) と set(i,x) は簡単だ。配列の要素 a[(j + i) mod a.length] を読み書きすればよい。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>add</span>(<span style=color:#66d9ef>int</span> i, T x) {
+  <span style=color:#66d9ef>if</span> (n <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>&gt;=</span> a.length) resize();
+  <span style=color:#66d9ef>if</span> (i <span style=color:#f92672>&lt;</span> n<span style=color:#f92672>/</span><span style=color:#ae81ff>2</span>) { <span style=color:#75715e>// a[0],..,a[i-1] を左に 1 つずらす
+</span><span style=color:#75715e></span>    j <span style=color:#f92672>=</span> (j <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>) <span style=color:#f92672>?</span> a.length <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>:</span> j <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>;
+    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> k <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; k <span style=color:#f92672>&lt;=</span> i<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>; k<span style=color:#f92672>++</span>)
+      a[(j<span style=color:#f92672>+</span>k)<span style=color:#f92672>%</span>a.length] <span style=color:#f92672>=</span> a[(j<span style=color:#f92672>+</span>k<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span>)<span style=color:#f92672>%</span>a.length];
+} <span style=color:#66d9ef>else</span> { <span style=color:#75715e>// a[i],..,a[n-1] を右に 1 つずらす
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>int</span> k <span style=color:#f92672>=</span> n; k <span style=color:#f92672>&gt;</span> i; k<span style=color:#f92672>--</span>)
+      a[(j<span style=color:#f92672>+</span>k)<span style=color:#f92672>%</span>a.length] <span style=color:#f92672>=</span> a[(j<span style=color:#f92672>+</span>k<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)<span style=color:#f92672>%</span>a.length];
+    }
+
+  a[(j<span style=color:#f92672>+</span>i)<span style=color:#f92672>%</span>a.length] <span style=color:#f92672>=</span> x; n<span style=color:#f92672>++</span>; }
+</code></pre></div><p>このように要素をずらせば、add(i,x) によって移動する要素の数が高々 min{i,n − i} 個に保証される。そのため、add(i,x) の実行時間は、resize() を無視すれば O(1 + min{i,n − i}) である。 remove(i) も同様に実装できる。i &lt; n/2 かどうかに応じて、左から i 個の要素をいずれも 1 つずつ右にシフトするか、右から n − i − 1 個の要 素をいずれも 1 つずつ左にシフトする。remove(i) の実行時間も、やはり O(1 + min{i,n − i}) である。</p>
+<p>(Page 41).</p>
+<h3 id=要約-2>要約</h3>
+<p>resize の実行時間を無視すれば</p>
+<ul>
+<li>get(i) および set(i,x) の実行時間は O(1) である</li>
+<li>add(i,x) および remove(i) の実行時間は O(1+min{i,n−i}) である</li>
+</ul>
+<p>(Page 42).</p>
+<h2 id=dualarraydeque2-つのスタックから作った双方向-キュー>DualArrayDeque：2 つのスタックから作った双方向 キュー</h2>
+<p>DualArray deque では front と back という名前の 2 つの ArrayStack を背中合わせに配置 する。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++>ArrayStack<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span> front;
+ArrayStack<span style=color:#f92672>&lt;</span>T<span style=color:#f92672>&gt;</span> back;
+</code></pre></div><p>DualArrayDeque では、要素数 n を明示的に保持しない。要素数は n = front.size() + back.size() により求められる。</p>
+<p>要素の追加</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>add</span>(<span style=color:#66d9ef>int</span> i, T x) {
+   <span style=color:#66d9ef>if</span> (i <span style=color:#f92672>&lt;</span> front.size()) {
+     front.add(front.size() <span style=color:#f92672>-</span> i, x);
+     } <span style=color:#66d9ef>else</span> {
+        back.add(i <span style=color:#f92672>-</span> front.size(), x);
+    }
+    balance();
+}
+</code></pre></div><p><img src=/arraydeque_add.png alt="an image of arraydeque add"></p>
+<p>で balance() のコストを無視した add(i,x) の実行時間を求める。 i &lt; front.size() のときは、add(i,x) により front.add(front.size() − i,x) が実行されるだけである。front は ArrayStack なので、この実行時間は次のようになる。
+<code> O(front.size() − (front.size() − i) + 1) = O(1 + i)</code></p>
+<p>一方、i ≥ front.size() のときには、add(i,x) により back.add(i − front.size(),x) が実行されるだけである。
+このときの実行時間は次のようになる。
+<code>O(back.size() − (i − front.size()) + 1) = O(1 + n − i)</code>
+(Page 45).</p>
+<p>add(i,x) の実行時間</p>
+<pre><code>O(1 + i) if i &lt; n/4
+O(n) if n/4 ≤ i &lt; 3n/4
+O(1 + n − i) if i ≥ 3n/4
+</code></pre><p>balance() のおかげで front.size() と back.size() の差が三倍より大きくなることはない(size() &lt; 2 の場合を除く。
+具体的には、balance() により、 3<em>front.size() ≥ back.size() かつ 3</em>back.size() ≥ front.size() であることが保証される。</p>
+<p>balance() の実行時間は簡単に解析できる。
+balance() によってバランス が調整されるときは、O(n) 個の要素が動かされるので、実行時間は O(n) である。</p>
+<p>balance() によって要素が動かされてから、次に balance() によって 要素が動かされるまでに、add(i,x) および remove(i) が実行される回数が n/2 − 1 以上であることを示す。
+補題 2.1 の証明と同様に、これを示せば balance() の合計実行時間が O(m) であることを示したことになる。</p>
+<p>ここではポテンシャル法（potential method）という技法を使う。
+DualArrayDeque のポテンシャル Φ を、front と back の要素数の差と定義する。
+<code>Φ = |front.size() − back.size()|</code>
+次の式が成り立つので、要素を動かす balance() を呼び出した直後のポテンシャル Φ0 は 1 以下である点に注目しよう。
+<code>Φ0 = |⌊n/2⌋ − ⌈n/2⌉| ≤ 1</code></p>
+<p>(Page 47).</p>
+<p>balance() が呼び出されて要素が動く直前の状況について</p>
+<pre><code>n = front.size() + back.size()
+  &lt; back.size()/3 + back.size()
+  = 4/3 back.size()
+</code></pre><pre><code>Φ1 = back.size() − front.size()
+   &gt; back.size() − back.size()/3
+   = 2 3 back.size()
+   &gt; 2/3 × 3/4n
+   = n/2
+</code></pre><p>以上より、add(i,x) および remove(i) が呼ばれる回数は、それ以前に balance() によって要素が動かされてから Φ1 − Φ0 > n/2−1 以上である。</p>
+<p>resize() と balance() のコストを無視すると、DualArrayDeque における各操作の実行時間は次のようになる。</p>
+<ul>
+<li>get(i) および set(i,x) の実行時間は O(1) である</li>
+<li>add(i,x) および remove(i) の実行時間は O(1 + min{i,n − i}) である
+また、空の DualArrayDeque に対して長さ m の任意の add(i,x) および remove(i) からなる操作の列を実行するとき、resize() にかかる時間の合 計は O(m) である。
+(Page 48).</li>
+</ul>
+<h2 id=rootisharraystackメモリ効率に優れた配列スタック>RootishArrayStack：メモリ効率に優れた配列スタック</h2>
+<p>これまでのデータ構造は使ってない領域が多く発生するという欠点がある
+RootishArrayStack では、n 個の要素を O( √ n) 個の配列に入れる。各配列は、常に O( √ n) 箇所以下しか空いていない。
+残りのすべての場所にはデータが入っているのだ。つまり、n 個の要素を入れるときに無駄になるスペースは O( √ n) 以下である。</p>
+<p>RootishArrayStack ではブロックと呼ぶ r 個の配列に要素を入れる。
+これらの配列に 0,1,&mldr;,r − 1 と番号を付ける。
+b 番め のブロックには b + 1 個の要素を入れる。すなわち、r 個のブロックに含まれ る要素数の合計は次のように計算できる。
+等差数列の和のため<code>1 + 2 + 3 + ··· + r = r(r + 1)/2</code></p>
+<p>(Page 49).</p>
+<h3 id=要約-3>要約</h3>
+<p>grow()および shrink() のコストを無視すると、RootishArrayStack にお ける各操作の実行時間は下記のようになる。</p>
+<ul>
+<li>get(i) および set(i,x) の実行時間は O(1) である</li>
+<li>add(i,x) および remove(i) の実行時間は O(1 + n − i) である</li>
+</ul>
+<p>(Page 55).</p>
+<h1 id=参考>参考</h1>
+<p><a href=https://github.com/spinute/ods>Open Data Structures 日本語訳プロジェクト</a></p>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/array/ rel=tag>Array</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/c++/ rel=tag>C++</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/japanese/ rel=tag>Japanese</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
+</div>
+</div>
+<aside class=sidebar><div class="widget-search widget">
+<form class=widget-search__form role=search method=get action=https://google.com/search>
+<label>
+<input class=widget-search__field type=search placeholder=SEARCH… name=q aria-label=SEARCH…>
+</label>
+<input class=widget-search__submit type=submit value=Search>
+<input type=hidden name=sitesearch value=https://moonorange.github.io>
+</form>
+</div>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/golang/>Golang Basic(Golang基礎)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/web_security/>Web脆弱性</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/db/>DB Random Notes(DB関連)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/software_design/oop/>OOP Random Notes</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/redis/>Redis</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/oauth2/>OAuth2</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/linked_list/>Linked List</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/binary_tree/>Binary Tree</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/asynchronous_programming/>非同期処理(Asynchronous Programming)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/react-redux/>ReactとReduxについて(About React and Redux)</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese/ title=Japanese>Japanese</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=LinkedIn rel="noopener noreferrer" href=https://linkedin.com/in/keigo-k-70557314b target=_blank><svg class="widget-social__link-icon icon icon-linkedin" width="24" height="24" viewBox="0 0 352 352"><path d="M0 40v272c0 21.9 18.1 40 40 40h272c21.9.0 40-18.1 40-40V40c0-21.9-18.1-40-40-40H40C18.1.0.0 18.1.0 40zm312-8c4.6.0 8 3.4 8 8v272c0 4.6-3.4 8-8 8H40c-4.6.0-8-3.4-8-8V40c0-4.6 3.4-8 8-8H312zM59.5 87c0 15.2 12.3 27.5 27.5 27.5s27.5-12.3 27.5-27.5S102.2 59.5 87 59.5 59.5 71.8 59.5 87zM187 157h-1v-21h-45v152h47v-75c0-19.8 3.9-39 28.5-39 24.2.0 24.5 22.4 24.5 40v74h47v-83.5c0-40.9-8.7-72-56.5-72-23 0-38.2 12.6-44.5 24.5zM64 288h47.5V136H64V288z"/></svg>
+<span>LinkedIn</span>
+</a>
+</div>
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2022 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>非同期処理(Asynchronous Programming) - Kei's blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="非同期処理(Asynchronous Programming)">
+<meta name=twitter:description content="概要 JavaScript を使う上で重要な概念である非同期処理について説明していく。 非同期処理とは 「ある関数が呼び出されたとき、戻り値として本来渡したい結果を返">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's blog</div>
+</div>
+</a>
+</div>
+<nav class=menu>
+<button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>Menu</span>
+</button>
+<ul class=menu__list>
+<li class=menu__item>
+<a class=menu__link href=/posts/public_cloud/aws_nw_server/>
+<span class=menu__text>awsでのwebサーバー構築について</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/binary_tree/>
+<span class=menu__text>Binary Tree</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/db/>
+<span class=menu__text>DB Random Notes(DB関連)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/programming_language/golang/>
+<span class=menu__text>Golang Basic(Golang基礎)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/linked_list/>
+<span class=menu__text>Linked List</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/oauth2/>
+<span class=menu__text>OAuth2</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/oop/>
+<span class=menu__text>OOP Random Notes</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/react-redux/>
+<span class=menu__text>ReactとReduxについて(About React and Redux)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/redis/>
+<span class=menu__text>Redis</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/web_security/>
+<span class=menu__text>Web脆弱性</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/os/>
+<span class=menu__text>オペレーティングシステム(OS)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns/>
+<span class=menu__text>デザインパターン</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns_2/>
+<span class=menu__text>デザインパターン２</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/network/>
+<span class=menu__text>ネットワークについて(About network)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/ipc/>
+<span class=menu__text>プロセス間通信(Inter process communication)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/ml/cnn/>
+<span class=menu__text>畳み込みニューラルネットワーク(CNN)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/array/>
+<span class=menu__text>配列(Array)</span>
+</a>
+</li>
+<li class="menu__item menu__item--active">
+<a class=menu__link href=/posts/frontend/asynchronous_programming/>
+<span class=menu__text>非同期処理(Asynchronous Programming)</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>非同期処理(Asynchronous Programming)</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-04-05T00:00:00Z>April 05, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/frontend/ rel=category>Frontend</a>
+</span>
+</div></div>
+</header><div class="content post__content clearfix">
+<h1 id=概要>概要</h1>
+<p>JavaScript を使う上で重要な概念である非同期処理について説明していく。
+非同期処理とは</p>
+<p>「ある関数が呼び出されたとき、戻り値として本来渡したい結果を返すのではなく、一度関数としては終了し（＝呼び出し元に戻る）、後で『本来渡したかった値』を返せる状態になったときに、呼び出し元にその値を通知する」という仕組み</p>
+<p>JavaScript の非同期処理の重要概念は Callback、Promise、async/await の 3 つがあり、それらについて説明する。</p>
+<h2 id=callback-関数について>Callback 関数について</h2>
+<p>callback とは<code>ある関数を他の関数に渡すこと</code>または<code>引数として渡される関数</code>のことを言う。
+他の関数は、何らかの条件が満たされたとき、または何らかの（非同期の）イベントが発生したときに、引数の関数を呼び出す。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>foo</span>() {
+  <span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>readFile</span>(<span style=color:#e6db74>&#39;/etc/passwd&#39;</span>, (<span style=color:#a6e22e>err</span>, <span style=color:#a6e22e>data</span>) =&gt; {
+    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>err</span>) <span style=color:#66d9ef>throw</span> <span style=color:#a6e22e>err</span>;
+    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>data</span>);
+  });
+  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;foo&#39;</span>);
+}
+</code></pre></div><p>radFile 関数が終了したら 2 つ目の引数に渡した arrow 関数を実行する。
+この場合、readFile の<code>終了を待たずにconsole.log('foo')が先に実行される。</code></p>
+<h2 id=promise-について>Promise について</h2>
+<p>Promise とは Future パターン（Promise パターン）というデザインパターンの一種で、ECMAScript6（ES2015）で標準化された組み込みのクラスである。
+Promise を使った非同期処理の関数は<code>Promise オブジェクト</code>(非同期処理の最終的な完了処理 (もしくは失敗) およびその結果の値を表現する)を返す。</p>
+<p>Promise オブジェクトとは簡単に言うと、<code>今は値を返せないが、あとで返すことを約束する</code>オブジェクトである。</p>
+<h3 id=promise-の状態について>Promise の状態について</h3>
+<p>Promise オブジェクトは 3 つの内部状態を持つ</p>
+<ul>
+<li>pending（保留）: まだ非同期処理は終わっていない（成功も失敗もしていない）</li>
+<li>fulfilled（成功）: 非同期処理が正常に終了した</li>
+<li>rejected（拒否）: 非同期処理が失敗した</li>
+</ul>
+<p>初期状態は pending であり、<code>一度fulfilled or rejectedになるとそれ以降は状態が変わらず、終了時に返す値も変わらない</code></p>
+<h3 id=コンストラクター>コンストラクター</h3>
+<p>Promise のコンストラクターは関数を引数に取る。そしてその関数は以下の特徴がある。</p>
+<ul>
+<li>関数は 2 つの関数(resolve, reject)を引数に取る
+<ul>
+<li>resolve に引数を渡して実行すると状態が fulfilled になり、引数の値が Promise オブジェクトが保持する値になる</li>
+<li>reject に引数を渡して実行すると状態が rejected になり、引数の値が Promise オブジェクトが保持する値になる</li>
+</ul>
+</li>
+<li>関数が例外を投げた場合も状態が rejected になり、投げた値があ Promise オブジェクトが保持する値になる
+<ul>
+<li>throw する値を rejected に渡して実行した時と同じ</li>
+</ul>
+</li>
+</ul>
+<p>fs.readFile()を Promise 化した例。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#75715e>// Promiseのコンストラクタにresolveとrejectを引数に取るarrow関数を渡す
+</span><span style=color:#75715e></span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>readFilePromise</span>(<span style=color:#a6e22e>path</span>) {
+  <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>new</span> Promise((<span style=color:#a6e22e>resolve</span>, <span style=color:#a6e22e>reject</span>) =&gt; {
+    <span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>readFile</span>(<span style=color:#a6e22e>path</span>, (<span style=color:#a6e22e>err</span>, <span style=color:#a6e22e>data</span>) =&gt; {
+      <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>err</span>) {
+        <span style=color:#a6e22e>reject</span>(<span style=color:#a6e22e>err</span>); <span style=color:#75715e>// 失敗: 内部状態をrejectedにする
+</span><span style=color:#75715e></span>      } <span style=color:#66d9ef>else</span> {
+        <span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>data</span>); <span style=color:#75715e>// 成功: 内部状態をfulfilledにする
+</span><span style=color:#75715e></span>      }
+    });
+  });
+}
+</code></pre></div><h3 id=then-catch>then(), catch()</h3>
+<p>非同期処理の結果を取り出す then()と catch()について説明する。</p>
+<h4 id=then>then</h4>
+<p>then()は<code>2つの関数</code>を引数に取る。
+Promise の状態が fulfilled になったら 1 番目の関数が rejected になると二番目が実行される。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#a6e22e>readFilePromise</span>(<span style=color:#e6db74>&#39;/etc/passwd&#39;</span>).<span style=color:#a6e22e>then</span>(
+  (<span style=color:#a6e22e>data</span>) =&gt; {
+    <span style=color:#75715e>// 読み出しに成功したらresolve()に渡した値が引数として渡される
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;OK&#39;</span>, <span style=color:#a6e22e>data</span>);
+  },
+  (<span style=color:#a6e22e>err</span>) =&gt; {
+    <span style=color:#75715e>// 読み出しに失敗するか fs.readFile() 自体が例外を投げたら
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// reject()に渡した値が引数として渡される
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;error&#39;</span>, <span style=color:#a6e22e>err</span>);
+  }
+);
+</code></pre></div><h2 id=async-関数について>async 関数について</h2>
+<p>関数の前に async を宣言することにより、非同期関数（async function）を定義できる。
+Promise オブジェクトを返す非同期処理をより簡単に書けるようにするものである。
+async を関数の前につけると Promise オブジェクトを返すようになる。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>sample</span>() {}
+</code></pre></div><p>async function には以下の特徴がある。</p>
+<ul>
+<li>async function は呼び出されると Promise を返す</li>
+<li>async function が値を return した場合、Promise は戻り値を resolve する</li>
+<li>async function が例外や何らかの値を throw した場合はその値を reject する</li>
+</ul>
+<h3 id=await>await</h3>
+<p>async function 内で Promise の結果（resolve、reject）が返されるまで待機する（処理を一時停止する）演算子のこと。
+以下のように、関数の前に await を指定すると、その関数の Promise の結果が返されるまで待機する。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>sampleResolve</span>(<span style=color:#a6e22e>value</span>) {
+  <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>new</span> Promise((<span style=color:#a6e22e>resolve</span>) =&gt; {
+    <span style=color:#a6e22e>setTimeout</span>(() =&gt; {
+      <span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>value</span>);
+    }, <span style=color:#ae81ff>1000</span>);
+  });
+}
+
+<span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>sample</span>() {
+  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>result</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>sampleResolve</span>();
+
+  <span style=color:#75715e>// sampleResolve()のPromiseの結果が返ってくるまで以下は実行されない
+</span><span style=color:#75715e></span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>result</span>);
+}
+</code></pre></div><h2 id=まとめ>まとめ</h2>
+<p>非同期処理とはあるタスクの完了を待つ間に別の処理をすることである。
+JS の非同期処理の重要概念は call back 関数、Promise、async await の 3 つがある。</p>
+<p>callback とはある関数に引数として与えられる関数のことを言い、何かしらの処理が完了された時に呼び戻す関数である。</p>
+<p>Promise オブジェクトとはあとで値を返すことを約束するオブジェクトであり pending, fulfilled, rejected の 3 つの内部状態を持つ
+Promise のコンストラクタに引数として与えられる関数の引数として resolve、reject をとる
+resolve に引数を渡して実行すると状態が fulfilled になり、引数の値が Promise オブジェクトが保持する値になる
+reject に引数を渡して実行すると状態が rejected になり、引数の値が Promise オブジェクトが保持する値になる
+.then で値を取得することができる</p>
+<p>async, await とは Promise より簡潔に非同期処理を記述するためのシンタックスシュガーである。
+関数の前に async をつけるだけで Promise を返す非同期処理を書ける。
+また async 関数の中で await を使うことで処理の完了を待つことができる。</p>
+<h2 id=参考>参考</h2>
+<p><a href=https://qiita.com/soarflat/items/1a9613e023200bbebcb3>async/await 入門（JavaScript）</a></p>
+<p><a href=https://developer.mozilla.org/ja/docs/Glossary/Asynchronous>Asynchronous（非同期）</a></p>
+<p><a href=https://knowledge.sakura.ad.jp/24890/>JavaScript の非同期処理を理解する その 2 〜Promise 編〜</a></p>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/asynchronous-programming/ rel=tag>Asynchronous Programming</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/javascript/ rel=tag>JavaScript</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/japanese/ rel=tag>Japanese</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
+</div>
+</div>
+<aside class=sidebar><div class="widget-search widget">
+<form class=widget-search__form role=search method=get action=https://google.com/search>
+<label>
+<input class=widget-search__field type=search placeholder=SEARCH… name=q aria-label=SEARCH…>
+</label>
+<input class=widget-search__submit type=submit value=Search>
+<input type=hidden name=sitesearch value=https://moonorange.github.io>
+</form>
+</div>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/golang/>Golang Basic(Golang基礎)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/web_security/>Web脆弱性</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/db/>DB Random Notes(DB関連)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/software_design/oop/>OOP Random Notes</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/redis/>Redis</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/oauth2/>OAuth2</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/linked_list/>Linked List</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/binary_tree/>Binary Tree</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/asynchronous_programming/>非同期処理(Asynchronous Programming)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/react-redux/>ReactとReduxについて(About React and Redux)</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese/ title=Japanese>Japanese</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=LinkedIn rel="noopener noreferrer" href=https://linkedin.com/in/keigo-k-70557314b target=_blank><svg class="widget-social__link-icon icon icon-linkedin" width="24" height="24" viewBox="0 0 352 352"><path d="M0 40v272c0 21.9 18.1 40 40 40h272c21.9.0 40-18.1 40-40V40c0-21.9-18.1-40-40-40H40C18.1.0.0 18.1.0 40zm312-8c4.6.0 8 3.4 8 8v272c0 4.6-3.4 8-8 8H40c-4.6.0-8-3.4-8-8V40c0-4.6 3.4-8 8-8H312zM59.5 87c0 15.2 12.3 27.5 27.5 27.5s27.5-12.3 27.5-27.5S102.2 59.5 87 59.5 59.5 71.8 59.5 87zM187 157h-1v-21h-45v152h47v-75c0-19.8 3.9-39 28.5-39 24.2.0 24.5 22.4 24.5 40v74h47v-83.5c0-40.9-8.7-72-56.5-72-23 0-38.2 12.6-44.5 24.5zM64 288h47.5V136H64V288z"/></svg>
+<span>LinkedIn</span>
+</a>
+</div>
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2022 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>DB Random Notes(DB関連) - Kei's blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="DB Random Notes(DB関連)">
+<meta name=twitter:description content="RAID 複数の Disk をまとめて一つの storage とする技術。 基本的にはデータを冗長化すること可用性を高めるためのものである。パフォーマンス向上のために用いられる">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's blog</div>
+</div>
+</a>
+</div>
+<nav class=menu>
+<button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>Menu</span>
+</button>
+<ul class=menu__list>
+<li class=menu__item>
+<a class=menu__link href=/posts/public_cloud/aws_nw_server/>
+<span class=menu__text>awsでのwebサーバー構築について</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/binary_tree/>
+<span class=menu__text>Binary Tree</span>
+</a>
+</li>
+<li class="menu__item menu__item--active">
+<a class=menu__link href=/posts/middleware/db/>
+<span class=menu__text>DB Random Notes(DB関連)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/programming_language/golang/>
+<span class=menu__text>Golang Basic(Golang基礎)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/linked_list/>
+<span class=menu__text>Linked List</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/oauth2/>
+<span class=menu__text>OAuth2</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/oop/>
+<span class=menu__text>OOP Random Notes</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/react-redux/>
+<span class=menu__text>ReactとReduxについて(About React and Redux)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/redis/>
+<span class=menu__text>Redis</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/web_security/>
+<span class=menu__text>Web脆弱性</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/os/>
+<span class=menu__text>オペレーティングシステム(OS)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns/>
+<span class=menu__text>デザインパターン</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns_2/>
+<span class=menu__text>デザインパターン２</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/network/>
+<span class=menu__text>ネットワークについて(About network)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/ipc/>
+<span class=menu__text>プロセス間通信(Inter process communication)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/ml/cnn/>
+<span class=menu__text>畳み込みニューラルネットワーク(CNN)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/array/>
+<span class=menu__text>配列(Array)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/asynchronous_programming/>
+<span class=menu__text>非同期処理(Asynchronous Programming)</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>DB Random Notes(DB関連)</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-10-23T00:00:00Z>October 23, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/middleware/ rel=category>Middleware</a>
+</span>
+</div></div>
+</header><div class="content post__content clearfix">
+<h2 id=raid>RAID</h2>
+<p>複数の Disk をまとめて一つの storage とする技術。</p>
+<p>基本的にはデータを冗長化すること可用性を高めるためのものである。パフォーマンス向上のために用いられることも多い。</p>
+<h3 id=raid0ストライピング>RAID0(ストライピング)</h3>
+<p>データを複数の disk に分けて保持する方式。冗長性はなく、一つでも disk が壊れたらデータが失われる。</p>
+<p>人によっては RAID と認めない人もおり実際に本番環境で用いるべき構成ではない。</p>
+<h3 id=raid1>RAID1</h3>
+<p>別名ミラーリングと呼ばれる方式で複数の disk に全く同じデータを持つ方式。</p>
+<p>複数の disk に同じデータを持つことで可用性はますが、性能向上には寄与せず disk 使用効率も悪い。</p>
+<h3 id=raid5>RAID5</h3>
+<p>パリティ分散と呼ばれる方式をとっており最低 3 本の Disk を必要としデータ共にパリティと呼ばれるエラー訂正符号を格納する。</p>
+<p>そのため、Disk の内一本までなら壊れてもデータを復旧でき、データも分散されているため I/O 効率もあげることができる。</p>
+<p>デメリットとしてはパリティ計算の必要性があることで書き込み性能が落ちることであるがデータベースは読み込みが多いためそちらの効率の方が重要視される。</p>
+<h3 id=raid1010>RAID10(1+0)</h3>
+<p>名前が示す通り RAID1 と 0 を組み合わせた手法。始めに RAID1 のグループ(ミラーリング)を二つ作り、そのグループを使って RAID0 を作る。</p>
+<p>RAID1 の高信頼性と RAID0 の高速性を両立させることができる。デメリットとしては最低でも Disk が 4 本いるためコストが高いことである。</p>
+<h2 id=raid-まとめ>RAID まとめ</h2>
+<p>実際、運用ではお金に余裕がある場合は高信頼性と高速性を兼ね備えた RAID10 を使うのが好ましい。</p>
+<p>そうではない場合は RAID5 を使うことである程度の信頼性と高速性を実現するのが望ましい。</p>
+<h2 id=データベースに格納されるファイルについて>データベースに格納されるファイルについて</h2>
+<p><code>データファイル</code>：user がデータベースに格納するデータを保持するファイル</p>
+<p><code>インデックスファイル</code>：テーブルに作成されたインデックスを保持するファイル</p>
+<p><code>システムファイル</code>：DBMS の内部管理用に使われるデータを保持するファイル</p>
+<p><code>一時ファイル</code>：DBMS 内部での一時的なデータを格納するファイル、SQL で使われたサブクエリを展開したデータや GROUP BY などの際のソートデータなどがある</p>
+<p>ログファイル：DBMS がテーブルのデータに対する変更を受け付けたときに変更分を一旦溜め込むファイル、その後一括してデータファイルに変更を加える</p>
+<figure><img src=./db_files.png alt=DB物理ファイル width=75%>
+</figure>
+<h2 id=正規化>正規化</h2>
+<p>データベースのデータの冗長性を排除し、一貫性と効率性を保持するためのデータ形式である正規系にすること。</p>
+<p>通常の業務では<code>第３正規化まで</code>をするケースが多い。</p>
+<h3 id=第一正規化>第一正規化</h3>
+<p>スカラ値の原則。一つのセルに一つの値</p>
+<p>スカラ値しか許されないのは仮に一つのセルに複数の値がある場合、主キーが決まれば値が一意に決まるといった*関数従属性が満たされず定義に反するから。</p>
+<p>*関数従属性とは数学の関数と同様に X の値が決まれば Y の値が一つに定まる関係を言う。</p>
+<h3 id=第二正規化>第二正規化</h3>
+<p>主キーの一部の列に対して従属している列がある状態を<code>部分関数従属</code>と呼ぶ。</p>
+<p>対して主キーを構成する全ての列に従属性があることを<code>完全関数従属</code>と呼ぶ。</p>
+<p>部分関数従属を解消し、完全関数従属のみのテーブルを作ること。</p>
+<h3 id=第三正規化>第三正規化</h3>
+<p>テーブル内部に存在する段階的な従属関係のことを<code>推移的関数従属</code>と呼ぶ。</p>
+<p>推移的関数従属の解消をするのが第三正規化。</p>
+<p>第３正規化を行うことで全ての非キー列はキー列に対してのみ従属している状態にできる。</p>
+<h3 id=無損失分解>無損失分解</h3>
+<p>テーブルを分解する前の状態に戻せる、つまりテーブルの情報を完全に保存しつつ分解することを<code>無損失分解</code>と呼ぶ。</p>
+<p>正規化したテーブルを非正規形の状態に戻すのは結合 SQL を用いて行うことができる。</p>
+<p>第２、第３正規化はどちらも無損失分解である。</p>
+<h2 id=インデックス>インデックス</h2>
+<p>SQL チューニングの手段として非常にポピュラーなもので目的のデータを速く見つけるための索引である。</p>
+<p>特徴として以下の 3 つを持つ。</p>
+<ul>
+<li>アプリケーション透過的(アプリケーションプログラムに影響を与えない)</li>
+<li>データ透過的(データに影響を与えない)</li>
+<li>かつ性能改善の効果が大きい</li>
+</ul>
+<p>インデックスの種類には関してはビットマップインデックス、ハッシュインデックスなどいくつかあるあ B-tree が一番多い。</p>
+<p>B-tree index は得意領域があると言うより平均して優秀なため、よく使われる。</p>
+<figure><img src=./b-tree_chart.png alt="B-tree レーダーチャート" width=75%>
+</figure>
+<h3 id=均一性>均一性</h3>
+<p>平衡木であるため、キーの値に関わらず探索を同じ計算量で扱える。</p>
+<p>バランスを自動的に整える機能もあるが、テーブルへの更新、削除、挿入などでバランスが崩れることもある。</p>
+<h3 id=持続性>持続性</h3>
+<p>B-tree は木の高さが平均的に 3~4 程度であるため、データ量が膨大に増えたとしても性能劣化が緩やかである。</p>
+<h3 id=処理汎用性>処理汎用性</h3>
+<p>挿入、更新、削除のコストも同じく O(log n)である。</p>
+<p>ビットマップインデックスは検索に関しては B-tree を凌駕することもあるが、更新に多大な時間を要する。</p>
+<h3 id=非等値性>非等値性</h3>
+<p>等号(=)による検索だけでなく不等号、BETWEEN などの検索でも高速化を実現できる。</p>
+<h3 id=親ソート性>親ソート性</h3>
+<p>B-Tree index は木構造のデータを生成するため、作成時にデータが sort されるという特徴がある。</p>
+<p>そのため DBMS においては専用のメモリ領域を一旦割り当てられるようなコストの高い sort 処理を skip することができる。</p>
+<h3 id=インデックスをどのように作るか>インデックスをどのように作るか</h3>
+<p>インデックスを作る際にいくつかの指針がある。</p>
+<h4 id=大規模なテーブルに対して作成する>大規模なテーブルに対して作成する</h4>
+<p>フルスキャンでも十分に速く探索できるようなデータ数が少ないテーブルに対してではなく、データが多いテーブルに作る。</p>
+<p>目安としてはレコード数が１万件以下の場合はほぼ効果がないと考えて良い。</p>
+<p>ハードウェアのスペックによって変わるので実行計画などを見て確認すると良いかも。</p>
+<h4 id=カーディナリティの高い列に作成する>カーディナリティの高い列に作成する</h4>
+<p>データがあまり分散していない列に作成しても効果が薄いためカーディナリティ(データの種類)が多く、分散している列に作るべき。</p>
+<p>目安としては<code>全体のレコード数の 5%程度</code>に絞り込めるカーディナリティがある列が望ましい。</p>
+<p>注意点としてはカーディナリティは複合 index を作る場合は複合列の組み合わせで考えること。</p>
+<h4 id=b-tree-index-が効かないケース>B-tree index が効かないケース</h4>
+<p><code>インデックス列に演算を行なっている</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#66d9ef>WHERE</span> index_col <span style=color:#f92672>*</span> <span style=color:#ae81ff>1</span>.<span style=color:#ae81ff>1</span> <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>100</span>
+</code></pre></div><p>インデックスは裸で用いらなければならない。</p>
+<p>インデックスはあくまで <code>index_col</code> に設定されており <code>index_col \* 1.1</code> に設定されているわけではないため。</p>
+<p><code>IS NULL 述語を使っている</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#66d9ef>WHERE</span> index_col <span style=color:#66d9ef>IS</span> <span style=color:#66d9ef>NULL</span>
+</code></pre></div><p>一般的に B-tree は null をデータとみなさず保持していないため、null をキーとすることは有効でない。</p>
+<p>DBMS の仕様によってはできることもあるが、汎用的ではない。</p>
+<p><code>否定形を用いている</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#66d9ef>WHERE</span> index_col <span style=color:#f92672>&lt;&gt;</span> <span style=color:#ae81ff>100</span>
+</code></pre></div><p>否定形を用いた場合は探索範囲がキー以外となり狭まらいため、利用できない。</p>
+<p><code>ORを用いている</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#66d9ef>WHERE</span> index_col <span style=color:#f92672>=</span> <span style=color:#ae81ff>99</span> <span style=color:#66d9ef>OR</span> index_col <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>
+</code></pre></div><p>OR を用いた場合は index が効かないため IN で書き換える。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#66d9ef>WHERE</span> index_col <span style=color:#66d9ef>IN</span>(<span style=color:#ae81ff>99</span>,<span style=color:#ae81ff>100</span>)
+</code></pre></div><p><code>後方一致、中間一致のLIKE述語を用いている</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#66d9ef>WHERE</span> index_col <span style=color:#66d9ef>LIKE</span> <span style=color:#e6db74>&#39;%a&#39;</span>;
+
+<span style=color:#66d9ef>WHERE</span> index_col <span style=color:#66d9ef>LIKE</span> <span style=color:#e6db74>&#39;%a%&#39;</span>;
+</code></pre></div><p>LIKE 述語を使う際は前方一致(<code>a%</code>など)の場合のみ index が効く。</p>
+<p><code>暗黙の型変換を行なっている</code></p>
+<p>*index_col は CHAR 型で定義されているとする</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql>x <span style=color:#66d9ef>SELECT</span> <span style=color:#f92672>*</span> <span style=color:#66d9ef>FROM</span> SomeTable <span style=color:#66d9ef>WHERE</span> index_col <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>; 
+o <span style=color:#66d9ef>SELECT</span> <span style=color:#f92672>*</span> <span style=color:#66d9ef>FROM</span> SomeTable <span style=color:#66d9ef>WHERE</span> index_col <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;100&#39;</span>;
+o <span style=color:#66d9ef>SELECT</span> <span style=color:#f92672>*</span> <span style=color:#66d9ef>FROM</span> SomeTable <span style=color:#66d9ef>WHERE</span> index_col <span style=color:#f92672>=</span> <span style=color:#66d9ef>CAST</span>(<span style=color:#ae81ff>100</span>, <span style=color:#66d9ef>AS</span> CHAR(<span style=color:#ae81ff>2</span>));
+</code></pre></div><p>明示的に型変換をせず WHERE や結合条件に使ってしまうと index が効かなくなる。</p>
+<h3 id=b-tree-index-作成によるデメリット>B-tree index 作成によるデメリット</h3>
+<p>更新性能を低下させる。</p>
+<p>インデックスの対象の列が更新される際、インデックスの値も更新する必要がある。</p>
+<h3 id=b-tree-index-以外の-index-について>B-tree index 以外の index について</h3>
+<p>B-tree 以外にも index は存在する。</p>
+<p>ビットマップインデックスとハッシュインデックスについて説明する。</p>
+<h4 id=ビットマップインデックス>ビットマップインデックス</h4>
+<p>ビットマップインデックスはデータの値からビットデータを作成しそれを index とするものである。</p>
+<figure><img src=./bitmap_index.png alt=ビットマップインデックス width=75%>
+</figure>
+<p>ビットデータの演算で検索を行うことができるため、B-tree が苦手だったカーディナリティが低い列に対しても検索性能が良い。</p>
+<p>また OR 条件に対しても利用できる点やビットデータはサイズが小さく index のサイズが小さくなるといった利点もある。</p>
+<p>デメリットとしてはデータ更新のたびにビットデータを更新しなければならず、更新性能が悪いといった欠点がある。</p>
+<h4 id=ハッシュインデックス>ハッシュインデックス</h4>
+<p>ハッシュインデックスとはその名の通り、ハッシュ関数を使いデータの値をハッシュ値に変換してインデックスを保存するものである。</p>
+<p>このため等値検索においては O(1)と非常に高速な検索が行えるという利点があるがそれ以外の検索では使えないというデメリットがある。</p>
+<h2 id=統計情報>統計情報</h2>
+<p>統計情報とはテーブルのデータや index についてのデータ、メタデータである。</p>
+<p>SQL はこの統計情報をもとにアクセスパスを決定する。</p>
+<h3 id=オプティマイザと実行計画>オプティマイザと実行計画</h3>
+<figure><img src=./table_access_flow.png alt=テーブルアクセスフロー width=75%>
+</figure>
+<p>DBMS が SQL 文を受け取る際のフローは上図にのようになっている。</p>
+<p>まず<code>パーサー</code>と呼ばれる module が <code>SQL 文が正常な構文であるかどうかチェック</code>する。</p>
+<p>もし文法的に間違っているような場合はエラーを返す。</p>
+<p>パーサーによるチェックの後は<code>オプティマイザ</code>と呼ばれる実行計画を決める module に送られる。</p>
+<p>オプティマイザは<code>カタログマネージャー</code>という module に統計情報の照会をかけ、それを元に最短と思われるパスを選択し SQL を手続きに変換する。</p>
+<p>その時得られた手続き(実行計画)に従ってテーブルデータにアクセスする。</p>
+<h3 id=統計情報の収集タイミングについて>統計情報の収集タイミングについて</h3>
+<p>データが大きく更新された際はデータの値の分布などが変わっている可能性があるので出来るだけ早く更新したい。</p>
+<p>しかし現実的にはサービスがよく使われているような時間に統計情報を更新するといった重い処理をするのはパフォーマンスの低下を招く可能性があるので夜間に実施されることが多い。</p>
+<p>DBMS によってはデフォルトの設定で定期的に実行してくれることもある。</p>
+<p>統計情報のロックを行い更新されないように凍結することもできる。これは現時点でのアクセスパスが最適だと分かっているケースなどに利用される。</p>
+<h1 id=参考>参考</h1>
+<p>達人に学ぶ DB 設計徹底指南書～初級者で終わりたくないあなたへ
+ミック. 達人に学ぶ DB 設計 徹底指南書 (Japanese Edition). Kindle 版.</p>
+<p><a href=https://qiita.com/kiyodori/items/f66a545a47dc59dd8839>B-tree インデックス入門</a></p>
+<p><a href=https://qiita.com/gohandesuyo/items/b3a684157b2eefc69a79>ビットマップインデックスの仕組み</a></p>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/db/ rel=tag>DB</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/japanese/ rel=tag>Japanese</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
+</div>
+</div>
+<aside class=sidebar><div class="widget-search widget">
+<form class=widget-search__form role=search method=get action=https://google.com/search>
+<label>
+<input class=widget-search__field type=search placeholder=SEARCH… name=q aria-label=SEARCH…>
+</label>
+<input class=widget-search__submit type=submit value=Search>
+<input type=hidden name=sitesearch value=https://moonorange.github.io>
+</form>
+</div>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/golang/>Golang Basic(Golang基礎)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/web_security/>Web脆弱性</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/db/>DB Random Notes(DB関連)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/software_design/oop/>OOP Random Notes</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/redis/>Redis</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/oauth2/>OAuth2</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/linked_list/>Linked List</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/binary_tree/>Binary Tree</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/asynchronous_programming/>非同期処理(Asynchronous Programming)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/react-redux/>ReactとReduxについて(About React and Redux)</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese/ title=Japanese>Japanese</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=LinkedIn rel="noopener noreferrer" href=https://linkedin.com/in/keigo-k-70557314b target=_blank><svg class="widget-social__link-icon icon icon-linkedin" width="24" height="24" viewBox="0 0 352 352"><path d="M0 40v272c0 21.9 18.1 40 40 40h272c21.9.0 40-18.1 40-40V40c0-21.9-18.1-40-40-40H40C18.1.0.0 18.1.0 40zm312-8c4.6.0 8 3.4 8 8v272c0 4.6-3.4 8-8 8H40c-4.6.0-8-3.4-8-8V40c0-4.6 3.4-8 8-8H312zM59.5 87c0 15.2 12.3 27.5 27.5 27.5s27.5-12.3 27.5-27.5S102.2 59.5 87 59.5 59.5 71.8 59.5 87zM187 157h-1v-21h-45v152h47v-75c0-19.8 3.9-39 28.5-39 24.2.0 24.5 22.4 24.5 40v74h47v-83.5c0-40.9-8.7-72-56.5-72-23 0-38.2 12.6-44.5 24.5zM64 288h47.5V136H64V288z"/></svg>
+<span>LinkedIn</span>
+</a>
+</div>
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2022 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+</body>
+</html>

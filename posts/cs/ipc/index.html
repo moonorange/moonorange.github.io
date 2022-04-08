@@ -1,0 +1,397 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>プロセス間通信(Inter process communication) - Kei's blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="プロセス間通信(Inter process communication)">
+<meta name=twitter:description content="マルチプロセスについて 複数のプロセスが、ある共有メモリ領域を競合するアクセスをしている時、競合アクセスしているプログラム部分をクリティカルセ">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's blog</div>
+</div>
+</a>
+</div>
+<nav class=menu>
+<button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>Menu</span>
+</button>
+<ul class=menu__list>
+<li class=menu__item>
+<a class=menu__link href=/posts/public_cloud/aws_nw_server/>
+<span class=menu__text>awsでのwebサーバー構築について</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/binary_tree/>
+<span class=menu__text>Binary Tree</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/db/>
+<span class=menu__text>DB Random Notes(DB関連)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/programming_language/golang/>
+<span class=menu__text>Golang Basic(Golang基礎)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/linked_list/>
+<span class=menu__text>Linked List</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/oauth2/>
+<span class=menu__text>OAuth2</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/oop/>
+<span class=menu__text>OOP Random Notes</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/react-redux/>
+<span class=menu__text>ReactとReduxについて(About React and Redux)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/redis/>
+<span class=menu__text>Redis</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/web_security/>
+<span class=menu__text>Web脆弱性</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/os/>
+<span class=menu__text>オペレーティングシステム(OS)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns/>
+<span class=menu__text>デザインパターン</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns_2/>
+<span class=menu__text>デザインパターン２</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/network/>
+<span class=menu__text>ネットワークについて(About network)</span>
+</a>
+</li>
+<li class="menu__item menu__item--active">
+<a class=menu__link href=/posts/cs/ipc/>
+<span class=menu__text>プロセス間通信(Inter process communication)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/ml/cnn/>
+<span class=menu__text>畳み込みニューラルネットワーク(CNN)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/array/>
+<span class=menu__text>配列(Array)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/asynchronous_programming/>
+<span class=menu__text>非同期処理(Asynchronous Programming)</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>プロセス間通信(Inter process communication)</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-01-13T00:00:00Z>January 13, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/cs/ rel=category>CS</a>
+</span>
+</div></div>
+</header><div class="content post__content clearfix">
+<h2 id=マルチプロセスについて>マルチプロセスについて</h2>
+<p>複数のプロセスが、ある共有メモリ領域を競合するアクセスをしている時、競合アクセスしているプログラム部分をクリティカルセクションと言う。</p>
+<p>ある資源を同時に利用できるスレッド数が最大１の場合を相互排除と呼ぶ。</p>
+<p>※スレッド
+コンピュータのプログラムは、基本的に 1 行ずつコードが実行されながら動作する。通常、分岐やループがあっても、プログラム全体は 1 つの流れになっている。このような一連のプログラムの流れを「スレッド」（Thread：「糸」などの意味）と呼ぶ。</p>
+<h2 id=linux-のプロセス間通信>Linux のプロセス間通信</h2>
+<p>プロセス間通信とはプロセスの間で行われるデータ交換のこと。</p>
+<p>インターネット通信など。</p>
+<h3 id=共有メモリ>共有メモリ</h3>
+<p>一つの CP 内でメモリを共有することで同時に読み出しできるためアクセススピードが高速になる。同時に書き込むと競合が発生する。</p>
+<h3 id=セマフォ>セマフォ</h3>
+<p>整数型のデータを親子関係のないプロセス間で共有できる。共有メモリの相互排除に使われる。</p>
+<h3 id=マップドメモリー>マップドメモリー</h3>
+<p>複数のプロセスがファイルを介してデータを交換する。高速化のためにメモリ上にあるように仮想アドレス空間を用いる。</p>
+<h3 id=パイプ>パイプ</h3>
+<p>親子関係にあるプロセス間の一方向の通信を実現。</p>
+<p>linux、unix 系統などでは小さくて汎用なプログラムを複数繋ぐことで大きなプログラムを実装する思想があるよう。</p>
+<h3 id=名前付きパイプ>名前付きパイプ</h3>
+<p>親子関係がなくても全てのプロセスが FIFO を作成、アクセス、削除できる。</p>
+<h3 id=ソケット通信>ソケット通信</h3>
+<p>依存関係のないプロセス間での通信を実現。歴史的には他のマシンにあるプロセスと通信するため名前付きパイプの拡張であるため、他のマシンにあるプロセスと通信できる。</p>
+<h2 id=排他制御>排他制御</h2>
+<p>相互排除の状態をどうやって実現するか？</p>
+<h3 id=peterson-アルゴリズム>Peterson アルゴリズム</h3>
+<p>プロセス A と B の２つのプロセスがあるとする。</p>
+<p>下記の図はプロセス B から見たプロセスを示すもの
+<figure><img src=./peterson_algorithm.png alt="Peterson Algorithm" width=75%>
+</figure>
+</p>
+<p>３番目のプロセスの繰り返し確認をするというのは１ユニットが短いものであれば効率がいい場合もあるが、何度も確認するビジーウェイト(スピンロック)状態になり CPU がアイドル状態にならず効率が悪い。</p>
+<h3 id=セマフォオランダ語で信号>セマフォ(オランダ語で信号)</h3>
+<p>資源が何個使用可能かを記録する方式</p>
+<p>バイナリセマフォの例
+<figure><img src=./binary_semaphore.png alt=バイナリセマフォ width=75%>
+</figure>
+</p>
+<p>初期値は同時に使用可能なプロセス数。P 操作でセマフォを１減ずる。</p>
+<p>P 操作後クリティカルセクションが実行される。セマフォが０を下回る場合はブロックされ他のプロセスにプロセッサを譲る。ブロックされたプロセスは FIFO の待ち行列に並ぶ。</p>
+<p>V 操作で瞬間的にセマフォに１が加えられプロセス B が再開されクリティカルセッションが実行される。P 操作と V 操作は１セットで両方不可欠。</p>
+<h3 id=デッドロック>デッドロック</h3>
+<p>下記の図のように２つのプロセスで要求しているものが割り当てられずに処理が先に進まず膠着状態になっていること。
+<figure><img src=./deadlock.png alt=デッドロック width=75%>
+</figure>
+</p>
+<h3 id=デッドロック解決法>デッドロック解決法</h3>
+<h4 id=防止>防止</h4>
+<p>確保待ちにしない: 必要な資源の要求を一括して要求する。</p>
+<p>循環待ちにしない: リソースに対して順序づけを行い、その順序に従い要求する。</p>
+<h4 id=回避>回避</h4>
+<p>銀行家のアルゴリズム: 資源要求を満たしてもデッドロックが発生しない場合のみ割当。</p>
+<p>全てのプロセスが要求する可能性がある資源量、各プロセスが占有している資源量、システムに存在する資源量を把握する必要があるため現実的ではない。</p>
+<h4 id=回復>回復</h4>
+<ul>
+<li>デッドロックを検出し解消さる方策。循環を待ちを解消する</li>
+<li>強制終了させる</li>
+<li>ロールバックさせる ->チェックポイントリスタート</li>
+<li>同じ処理を同じ時間にしなおすとまたデッドロックが発生してしまうため時間をランダムにするなどしてずらす</li>
+</ul>
+<h3 id=シグナル>シグナル</h3>
+<figure><img src=./linux_signal.png alt=シグナル width=75%>
+</figure>
+<p>シグナルというものを OS から送ってプロセスを中断し何らかの処理を実行する。通常はデフォルトシグナルハンドラが設定されていてプロセスを強制終了する処理をしている。独自のハンドラを設定することもできる。</p>
+<h2 id=ソケット通信-1>ソケット通信</h2>
+<p>ネットワークを経由して通信することを目的としたプロセス間通信</p>
+<p>インターネットは TCP/IP と呼ぶ通信プロトコルを利用するがプログラムから利用するにはプログラムと TCP/IP の世界を結ぶ出入り口が必要になる。それがソケット(Socket)である。</p>
+<p>ソケットと INET のコンビによって世界中どんなマシンとも簡単に通信できるようになった。</p>
+<figure><img src=./socket.png alt=ソケット間通信 width=75%>
+</figure>
+<h3 id=コード>コード</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># クライアント側</span>
+<span style=color:#75715e># create an INET, STREAMing socket</span>
+<span style=color:#75715e># AF_INET - プロトコルファミリーの一種。ネットワーク経由で別のマシンと通信が可能</span>
+<span style=color:#75715e># TCPを用いる時はAF_INET, socket.SOCK_STREAMのオプションらしい</span>
+<span style=color:#f92672>import</span> socket
+
+PORT <span style=color:#f92672>=</span> <span style=color:#ae81ff>50000</span>
+BUFFER_SIZE <span style=color:#f92672>=</span> <span style=color:#ae81ff>1024</span>
+
+<span style=color:#75715e># ソケット作成</span>
+<span style=color:#66d9ef>with</span> socket<span style=color:#f92672>.</span>socket(socket<span style=color:#f92672>.</span>AF_INET, socket<span style=color:#f92672>.</span>SOCK_STREAM) <span style=color:#66d9ef>as</span> s:
+    <span style=color:#75715e># 接続要求</span>
+    s<span style=color:#f92672>.</span>connect((<span style=color:#e6db74>&#39;127.0.0.1&#39;</span>, PORT))
+    data <span style=color:#f92672>=</span> input(<span style=color:#e6db74>&#39;Please input &gt; &#39;</span>)
+    <span style=color:#75715e># データを送信し受信したものをdecodeし表示</span>
+    s<span style=color:#f92672>.</span>send(data<span style=color:#f92672>.</span>encode())
+    print(s<span style=color:#f92672>.</span>recv(BUFFER_SIZE)<span style=color:#f92672>.</span>decode())
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># サーバー側</span>
+<span style=color:#75715e>#「サーバーソケット」ができて、データの送受信を行いcloseする</span>
+<span style=color:#f92672>import</span> socket
+
+サーバ側の待受ポート番号を定義し<span style=color:#960050;background-color:#1e0010>、</span>ソケットから読み取る際のバッファサイズを指定
+PORT <span style=color:#f92672>=</span> <span style=color:#ae81ff>50000</span>
+<span style=color:#75715e># データを処理するために一時的に記憶する領域</span>
+BUFFER_SIZE <span style=color:#f92672>=</span> <span style=color:#ae81ff>1024</span>
+
+<span style=color:#75715e># ソケットを作成</span>
+<span style=color:#66d9ef>with</span> socket<span style=color:#f92672>.</span>socket(socket<span style=color:#f92672>.</span>AF_INET, socket<span style=color:#f92672>.</span>SOCK_STREAM) <span style=color:#66d9ef>as</span> s:
+    <span style=color:#75715e># portをバインド</span>
+    s<span style=color:#f92672>.</span>bind((<span style=color:#e6db74>&#39;127.0.0.1&#39;</span>, PORT))
+    <span style=color:#75715e># 通信を待ち受けている状態</span>
+    s<span style=color:#f92672>.</span>listen()
+    <span style=color:#66d9ef>while</span> <span style=color:#66d9ef>True</span>:
+        <span style=color:#75715e># 接続</span>
+        (connection, client) <span style=color:#f92672>=</span> s<span style=color:#f92672>.</span>accept()
+        <span style=color:#66d9ef>try</span>:
+            print(<span style=color:#e6db74>&#39;Client connected&#39;</span>, client)
+            <span style=color:#75715e># データを受信し大文字にした上で返信</span>
+            data <span style=color:#f92672>=</span> connection<span style=color:#f92672>.</span>recv(BUFFER_SIZE)
+            connection<span style=color:#f92672>.</span>send(data<span style=color:#f92672>.</span>upper())
+        <span style=color:#66d9ef>finally</span>:
+            connection<span style=color:#f92672>.</span>close()
+</code></pre></div><h3 id=参考文献>参考文献</h3>
+<p><a href=https://wa3.i-3-i.info/word12453.html>「分かりそう」で「分からない」でも「分かった」気になれる IT 用語辞典</a></p>
+<p><a href=https://docs.python.org/ja/3/howto/sockets.html>ソケットプログラミング HOWTO</a></p>
+<p><a href=https://techacademy.jp/magazine/19147>Python でソケット通信を行う方法【初心者向け】</a></p>
+<p><a href=https://qiita.com/chooyan_eng/items/087d2fd20294ed35e550>【TCP/IP】勉強がてら HTTP クライアントもどきを Python で作ってみる</a></p>
+<p><a href=https://ja.stackoverflow.com/questions/41723/tcp%E3%82%BD%E3%82%B1%E3%83%83%E3%83%88inet%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3%E3%82%BD%E3%82%B1%E3%83%83%E3%83%88%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6>TCP ソケット(INET ドメインソケット)について</a></p>
+<p><a href=https://linuxjm.osdn.jp/html/LDP_man-pages/man2/socket.2.html>SOCKET</a></p>
+<p><a href=https://employment.en-japan.com/engineerhub/entry/2020/02/13/103000>TCP/IP</a></p>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/ipc/ rel=tag>IPC</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/python/ rel=tag>Python</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/japanese/ rel=tag>Japanese</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
+</div>
+</div>
+<aside class=sidebar><div class="widget-search widget">
+<form class=widget-search__form role=search method=get action=https://google.com/search>
+<label>
+<input class=widget-search__field type=search placeholder=SEARCH… name=q aria-label=SEARCH…>
+</label>
+<input class=widget-search__submit type=submit value=Search>
+<input type=hidden name=sitesearch value=https://moonorange.github.io>
+</form>
+</div>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/golang/>Golang Basic(Golang基礎)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/web_security/>Web脆弱性</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/db/>DB Random Notes(DB関連)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/software_design/oop/>OOP Random Notes</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/redis/>Redis</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/oauth2/>OAuth2</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/linked_list/>Linked List</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/binary_tree/>Binary Tree</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/asynchronous_programming/>非同期処理(Asynchronous Programming)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/react-redux/>ReactとReduxについて(About React and Redux)</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese/ title=Japanese>Japanese</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=LinkedIn rel="noopener noreferrer" href=https://linkedin.com/in/keigo-k-70557314b target=_blank><svg class="widget-social__link-icon icon icon-linkedin" width="24" height="24" viewBox="0 0 352 352"><path d="M0 40v272c0 21.9 18.1 40 40 40h272c21.9.0 40-18.1 40-40V40c0-21.9-18.1-40-40-40H40C18.1.0.0 18.1.0 40zm312-8c4.6.0 8 3.4 8 8v272c0 4.6-3.4 8-8 8H40c-4.6.0-8-3.4-8-8V40c0-4.6 3.4-8 8-8H312zM59.5 87c0 15.2 12.3 27.5 27.5 27.5s27.5-12.3 27.5-27.5S102.2 59.5 87 59.5 59.5 71.8 59.5 87zM187 157h-1v-21h-45v152h47v-75c0-19.8 3.9-39 28.5-39 24.2.0 24.5 22.4 24.5 40v74h47v-83.5c0-40.9-8.7-72-56.5-72-23 0-38.2 12.6-44.5 24.5zM64 288h47.5V136H64V288z"/></svg>
+<span>LinkedIn</span>
+</a>
+</div>
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2022 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+</body>
+</html>

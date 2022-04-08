@@ -1,0 +1,425 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>awsでのwebサーバー構築について - Kei's blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="awsでのwebサーバー構築について">
+<meta name=twitter:description content="chapter 1 サーバーというのは、「Linux」や「WindowsServer」など、サーバー用の OS をインストールしたコンピュータのこと VPC AmazonVirtualPrivateCloud の略。ユー">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's blog</div>
+</div>
+</a>
+</div>
+<nav class=menu>
+<button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>Menu</span>
+</button>
+<ul class=menu__list>
+<li class="menu__item menu__item--active">
+<a class=menu__link href=/posts/public_cloud/aws_nw_server/>
+<span class=menu__text>awsでのwebサーバー構築について</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/binary_tree/>
+<span class=menu__text>Binary Tree</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/db/>
+<span class=menu__text>DB Random Notes(DB関連)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/programming_language/golang/>
+<span class=menu__text>Golang Basic(Golang基礎)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/linked_list/>
+<span class=menu__text>Linked List</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/oauth2/>
+<span class=menu__text>OAuth2</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/oop/>
+<span class=menu__text>OOP Random Notes</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/react-redux/>
+<span class=menu__text>ReactとReduxについて(About React and Redux)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/redis/>
+<span class=menu__text>Redis</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/web_security/>
+<span class=menu__text>Web脆弱性</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/os/>
+<span class=menu__text>オペレーティングシステム(OS)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns/>
+<span class=menu__text>デザインパターン</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns_2/>
+<span class=menu__text>デザインパターン２</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/network/>
+<span class=menu__text>ネットワークについて(About network)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/ipc/>
+<span class=menu__text>プロセス間通信(Inter process communication)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/ml/cnn/>
+<span class=menu__text>畳み込みニューラルネットワーク(CNN)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/array/>
+<span class=menu__text>配列(Array)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/asynchronous_programming/>
+<span class=menu__text>非同期処理(Asynchronous Programming)</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>awsでのwebサーバー構築について</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2020-02-12T00:00:00Z>February 12, 2020</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/public-cloud/ rel=category>Public Cloud</a>
+</span>
+</div></div>
+</header><div class="content post__content clearfix">
+<h1 id=chapter-1>chapter 1</h1>
+<p>サーバーというのは、「Linux」や「WindowsServer」など、サーバー用の OS をインストールしたコンピュータのこと</p>
+<h2 id=vpc>VPC</h2>
+<p>AmazonVirtualPrivateCloud の略。ユーザー専用のプライベートなクラウド環境を提供するサービスである。</p>
+<figure><img src=./vpc_structure.png alt="VPC structure" width=75%>
+</figure>
+<h2 id=nat>NAT</h2>
+<p>NAT は NetworkAddressTranslation の略で、内部だけで通用するアドレスを外部とも通信できるアドレスに変換する技術</p>
+<p>NAT を導入すると、「片方向だけの接続を許す」ことが実現できる。
+たとえば、DB サーバーからはインターネットに接続できるが、逆に、インターネットから DB サーバーには接続できないという環境を実現できる</p>
+<h1 id=chapter-2>chapter 2</h1>
+<h2 id=ip-アドレス>IP アドレス</h2>
+<p>TCP/IP で使われている通信先を特定するためのプロトコル。
+IP アドレスは、32 ビットで構成されている。</p>
+<figure><img src=./ip_address.png alt="IP Address" width=75%>
+</figure>
+<p>図のようにネットワーク部は同じネットワークに属する限りは同じ値
+ホスト部が割り当てたいサーバーやクライアント、ネットワーク機器に対する値となる。</p>
+<p>インターネットに接続する際に用いる IP アドレスのことを「パブリック IP アドレス」と言う。
+インターネットで使われないものをプライベート IP アドレスという</p>
+<figure><img src=./private_ip.png alt="private ip address" width=75%>
+</figure>
+<h2 id=ip-アドレスの表記方法>IP アドレスの表記方法</h2>
+<h3 id=cidr-表記classlessinterdomainrouting>CIDR 表記(ClasslessInterDomainRouting)</h3>
+<p>IP アドレスを 2 進数で表記したとき、「ネットワーク部のビット長」を「/ビット長」で示す方法のこと
+このビット長のことを「プレフィックス（prefix）」と言う。たとえば「192.168.1.0 ～ 192.168.1.255」の場合、プレフィックスは 24 ビット。
+CIDR 表記だと 192.168.1.0/24」と記述される。</p>
+<h3 id=サブネットマスク>サブネットマスク</h3>
+<p>「192.168.0.0 ～ 192.168.255.255」の場合、サブネットマスクは「255.255.0.0」で、「192.168.0.0/255.255.0.0」と表記する。</p>
+<h2 id=パケット>パケット</h2>
+<figure><img src=./packet.png alt=パケット width=75%>
+</figure>
+<h3 id=パケットフィルタリング>パケットフィルタリング</h3>
+<p>パケットフィルタリングは、流れるパケットを見て、通過の可否を決める仕組み。
+パケットには、「IP アドレス」のほか「ポート番号」も含まれる
+パケットフィルタリングは、「IP アドレス」と「ポート番号」など、パケットに付随する各種情報を見て、通過の可否を決める.</p>
+<h2 id=dns>DNS</h2>
+<p>ドメイン名を IP アドレスに変換するときに使われる仕組み
+DNS を用いて、あるドメイン名から、それに対応する IP アドレスを引き出すことを「名前解決」と呼ぶ</p>
+<h2 id=vpc-1>VPC</h2>
+<h3 id=vpc-を作成する>VPC を作成する</h3>
+<p>「IPv4CIDR ブロック」は、使用する IP アドレス範囲。「10.0.0.0/16」などと設定する。
+後ほどこちらのネットワーク内に db サーバーや api サーバー(ec2 インスタンス)を置く。</p>
+<h3 id=subnet-を作成する>subnet を作成する</h3>
+<p>上記で決めた範囲の CIDR ブロックをさらに細分化した CIDR ブロックのことを「サブネット（Subnet）」と言う。
+サブネットを作るとその部分だけでネットワークを分けることができる。</p>
+<p>物理的に分散させるため複数 Availability Zone(AZ)で subnet を作成する。地理的な要因で起こる障害に対応するため。既存のものでは３つ subnet を作っている。</p>
+<p>パブリックサブネットとプライベートサブネットがあり、パブリックはインターネットにアクセスすることを目的としたサブネットである。</p>
+<h3 id=internet-gatewayigを作成する>internet gateway(ig)を作成する</h3>
+<p>VPC とインターネットとの接続ポイントを作る。</p>
+<h3 id=route-tables-で-internet-gateway-につなげる>Route Tables で internet gateway につなげる</h3>
+<p>routes は下記の通りに</p>
+<p>Destination: 172.31.0.0/16
+Target: local</p>
+<p>Destination: 0.0.0.0/0
+Target: 作成した ig</p>
+<h2 id=rds>RDS</h2>
+<p>postgreSQL エンジンで作る。</p>
+<ul>
+<li>Additional configuration で databasename をつけておく(後ほどデータベースサーバーにつなぐ際に使用)</li>
+<li>standby instance は小規模だと必要ないが、ある程度の規模のサービスだとアクセスを分散して I/O のパフォーマンスを安定させられるので必要</li>
+</ul>
+<h2 id=ec2>EC2</h2>
+<p>Security Groups で Security Group を作る。
+Inbound で HTTP(80)、HTTPS(443)、SSH(22)を開ける。Source は everywhere(0.0.0.0/0)。
+Outbound は All traffic にする。</p>
+<ul>
+<li>EC2 インスタンスを Amazon ECS-Optimized Amazon Linux 2 AMI で作る.
+ecs に最適化された AMI である。ECS で AWS Marketplace で検索すれば出てくる。</li>
+<li>Auto-assign Public IP は disable にする。Public IP は固定にしたいので Elastic IP address (EIP) を使うため</li>
+<li>IAM は ecsInstanceRole</li>
+<li>先述の Security Group をアタッチして port を開ける。</li>
+<li>Elastic IPs で Allocate new address で EIP をつくった ec2 インスタンスに割り当てる。</li>
+</ul>
+<h2 id=route53-ドメイン取得>Route53 　ドメイン取得</h2>
+<p>任意のドメインを取得する。
+サブドメインが必要な場合はこちらで登録する</p>
+<figure><img src=./original_domain.png alt=独自ドメイン width=75%>
+</figure>
+<h2 id=acmcertificate-manager-ssl-証明書の発行>ACM(Certificate Manager) SSL 証明書の発行</h2>
+<p>取得したドメインの証明書をリクエストする</p>
+<ul>
+<li>DNS validation</li>
+<li>SSL の証明書の検証をするためのドメインを自動で作ってくれる</li>
+</ul>
+<h2 id=ec2-1>EC2</h2>
+<h3 id=target-groups>Target Groups</h3>
+<p>target group を作成する</p>
+<ul>
+<li>Protocol は HTTP</li>
+<li>Health checks は DRF の場合、path が"/&ldquo;で Success codes が 400</li>
+</ul>
+<h3 id=load-balancers>Load Balancers</h3>
+<ul>
+<li>internet facing</li>
+<li>Listeners は HTTPS</li>
+<li>Availability Zones は作っておいた subnet ３つ</li>
+<li>Certificate は acm から、作っておいた証明書を使う</li>
+</ul>
+<h3 id=route53-ドメインを-alb-に割り当て>Route53 ドメインを ALB に割り当て</h3>
+<p>作った ALB(Application Load Balancer)にドメインを割り当てる。</p>
+<h2 id=ecr-コンテナを-push>ECR 　コンテナを push</h2>
+<p>Amazon Elastic Container Registry (ECR) は、完全マネージド型の Docker コンテナレジストリです。このレジストリを使うと、開発者は Docker コンテナイメージを簡単に保存、管理、デプロイできます。</p>
+<p>ECR にイメージを push して登録</p>
+<h2 id=ecs>ECS</h2>
+<p>フルマネージド型のコンテナオーケストレーションサービス
+docker をローカルで使うのは簡単だが、複数のクラスタ(ec2 インスタンス群) 上で管理するのは大変
+それをマネージしてくれるのが ecs、コンテナの管理、配置などをよしなにしてくれる</p>
+<p>create cluster</p>
+<ul>
+<li>EC2 Linux + Networking template を使う</li>
+<li>Provisioning Model は On-Demand Instance</li>
+<li>Subnets は３つ共 attach する</li>
+</ul>
+<p>create new task definition</p>
+<ul>
+<li>Task Role は ecsTaskExecutionRole</li>
+<li>Task memory(MiB)と Task CPU(unit) はタスクが２つ走っても大丈夫なよう確保しておく
+(Add Container)</li>
+<li>add continer で ecr に push したコンテナを add する</li>
+<li>コンテナの hard limits(これを越えると OOMKiller が走り、コンテナが停止される)soft limits(ホストのメモリに余裕がある時は制限以上のメモリを使用する場合もあり)がある</li>
+<li>Port mappings は host は 80 で container port は DRF(Django Rest framework)だと 8000</li>
+<li>Environment variables で必要な環境変数を定義する</li>
+<li>Log configuration で log を出力するようにして置くとエラー対応がしやすい</li>
+</ul>
+<p>create service</p>
+<ul>
+<li>launch type は ec2</li>
+<li>Load balancer type は Application Load Balancer で作っておいた lg を指定する</li>
+<li>Add to Load Balancer で作っておいた tg を指定する</li>
+</ul>
+<p>Run new Task</p>
+<ul>
+<li>task definition を使って task を走らせる</li>
+</ul>
+<h2 id=テスト>テスト</h2>
+<p>ここまで出来たらドメインにアクセスして正常に表示されるかチェックする。
+出来ていない場合は Cloud Watch の Log gropus などで log を確認してデバッグする。</p>
+<h2 id=circle-ci-で自動デプロイ>Circle CI で自動デプロイ</h2>
+<p>kts_api や actaba_api の.circleci/config.yml を参考にして書く
+circle_sha1 でイメージ version をユニークに
+master ブランチのみデプロイ
+circle ci で aws のアクセス token などを登録、aws 系は全部必要になる</p>
+<h2 id=参考>参考</h2>
+<p><a href="https://www.amazon.co.jp/Amazon-Web-Services-%E5%9F%BA%E7%A4%8E%E3%81%8B%E3%82%89%E3%81%AE%E3%83%8D%E3%83%83%E3%83%88%E3%83%AF%E3%83%BC%E3%82%AF%EF%BC%86%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E6%A7%8B%E7%AF%89-%E6%94%B9%E8%A8%823%E7%89%88-%E5%A4%A7%E6%BE%A4-ebook/dp/B084QQ7TCF/ref=sr_1_5?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&dchild=1&keywords=aws&qid=1602238206&sr=8-5">Amazon Web Services 基礎からのネットワーク＆サーバー構築　改訂 3 版 Kindle 版</a></p>
+<p><a href=https://qiita.com/iwaseasahi/items/1687426add4124899fe3>AWS：無料で SSL 証明書を取得する方法</a></p>
+<p><a href=https://qiita.com/keitakn/items/4b2db95eae81044a779c>AWS のサービスでドメインを取得し ALB で SSL で接続出来るようにする</a></p>
+<p><a href=https://qiita.com/uzresk/items/6acc90e80b0a79b961ce>AWS ECS で Docker コンテナ管理入門（基本的な使い方、Blue/Green Deployment、AutoScaling などいろいろ試してみた）</a></p>
+<p><a href="https://qiita.com/NewGyu/items/9597ed2eda763bd504d7#:~:text=%25E3%2582%25AF%25E3%2583%25A9%25E3%2582%25B9%25E3%2582%25BF%25E3%2583%25BC%25E3%2581%25AFContainer%2520Instance%25E3%25">Amazon EC2 Container Service(ECS)の概念整理</a></p>
+<p><a href=https://qiita.com/omukaik/items/66ad4181eb13531f9c4a>ECS の CPU・メモリ設定と Docker コマンドの対応</a></p>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/aws/ rel=tag>AWS</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/japanese/ rel=tag>Japanese</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
+</div>
+</div>
+<aside class=sidebar><div class="widget-search widget">
+<form class=widget-search__form role=search method=get action=https://google.com/search>
+<label>
+<input class=widget-search__field type=search placeholder=SEARCH… name=q aria-label=SEARCH…>
+</label>
+<input class=widget-search__submit type=submit value=Search>
+<input type=hidden name=sitesearch value=https://moonorange.github.io>
+</form>
+</div>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/golang/>Golang Basic(Golang基礎)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/web_security/>Web脆弱性</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/db/>DB Random Notes(DB関連)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/software_design/oop/>OOP Random Notes</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/redis/>Redis</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/oauth2/>OAuth2</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/linked_list/>Linked List</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/binary_tree/>Binary Tree</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/asynchronous_programming/>非同期処理(Asynchronous Programming)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/react-redux/>ReactとReduxについて(About React and Redux)</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese/ title=Japanese>Japanese</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=LinkedIn rel="noopener noreferrer" href=https://linkedin.com/in/keigo-k-70557314b target=_blank><svg class="widget-social__link-icon icon icon-linkedin" width="24" height="24" viewBox="0 0 352 352"><path d="M0 40v272c0 21.9 18.1 40 40 40h272c21.9.0 40-18.1 40-40V40c0-21.9-18.1-40-40-40H40C18.1.0.0 18.1.0 40zm312-8c4.6.0 8 3.4 8 8v272c0 4.6-3.4 8-8 8H40c-4.6.0-8-3.4-8-8V40c0-4.6 3.4-8 8-8H312zM59.5 87c0 15.2 12.3 27.5 27.5 27.5s27.5-12.3 27.5-27.5S102.2 59.5 87 59.5 59.5 71.8 59.5 87zM187 157h-1v-21h-45v152h47v-75c0-19.8 3.9-39 28.5-39 24.2.0 24.5 22.4 24.5 40v74h47v-83.5c0-40.9-8.7-72-56.5-72-23 0-38.2 12.6-44.5 24.5zM64 288h47.5V136H64V288z"/></svg>
+<span>LinkedIn</span>
+</a>
+</div>
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2022 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+</body>
+</html>

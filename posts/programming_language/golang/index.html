@@ -1,0 +1,477 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>Golang Basic(Golang基礎) - Kei's blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Golang Basic(Golang基礎)">
+<meta name=twitter:description content="概要 Golang についての基礎的な情報をまとめる資料である。 Go とは？ Google が開発したプログラミング言語であり、2009 年に最初のバージョンがオープンソース">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's blog</div>
+</div>
+</a>
+</div>
+<nav class=menu>
+<button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>Menu</span>
+</button>
+<ul class=menu__list>
+<li class=menu__item>
+<a class=menu__link href=/posts/public_cloud/aws_nw_server/>
+<span class=menu__text>awsでのwebサーバー構築について</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/binary_tree/>
+<span class=menu__text>Binary Tree</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/db/>
+<span class=menu__text>DB Random Notes(DB関連)</span>
+</a>
+</li>
+<li class="menu__item menu__item--active">
+<a class=menu__link href=/posts/programming_language/golang/>
+<span class=menu__text>Golang Basic(Golang基礎)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/linked_list/>
+<span class=menu__text>Linked List</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/oauth2/>
+<span class=menu__text>OAuth2</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/oop/>
+<span class=menu__text>OOP Random Notes</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/react-redux/>
+<span class=menu__text>ReactとReduxについて(About React and Redux)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/middleware/redis/>
+<span class=menu__text>Redis</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/security/web_security/>
+<span class=menu__text>Web脆弱性</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/os/>
+<span class=menu__text>オペレーティングシステム(OS)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns/>
+<span class=menu__text>デザインパターン</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/software_design/design_patterns_2/>
+<span class=menu__text>デザインパターン２</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/network/>
+<span class=menu__text>ネットワークについて(About network)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/cs/ipc/>
+<span class=menu__text>プロセス間通信(Inter process communication)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/ml/cnn/>
+<span class=menu__text>畳み込みニューラルネットワーク(CNN)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/dsa/array/>
+<span class=menu__text>配列(Array)</span>
+</a>
+</li>
+<li class=menu__item>
+<a class=menu__link href=/posts/frontend/asynchronous_programming/>
+<span class=menu__text>非同期処理(Asynchronous Programming)</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>Golang Basic(Golang基礎)</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-12-11T00:00:00Z>December 11, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/programming-language/ rel=category>Programming Language</a>
+</span>
+</div></div>
+</header><div class="content post__content clearfix">
+<h1 id=概要>概要</h1>
+<p>Golang についての基礎的な情報をまとめる資料である。</p>
+<h2 id=go-とは>Go とは？</h2>
+<p>Google が開発したプログラミング言語であり、2009 年に最初のバージョンがオープンソースでリリースされた。</p>
+<p>以下のような特徴を持つ。</p>
+<ul>
+<li>強力でシンプルな言語設計と文法</li>
+<li>並行プログラミング</li>
+<li>豊富な標準ライブラリ群</li>
+<li>周辺ツールの充実</li>
+<li>シングルバイナリ、クロスコンパイル</li>
+</ul>
+<h3 id=強力でシンプルな言語設計と文法>強力でシンプルな言語設計と文法</h3>
+<p>スクリプト言語、LL のような書きやすさがあり冗長な記述が必要ない(型推論などもある)。</p>
+<p>型のある言語の厳密さ。e.g. 整数と浮動小数点の演算などをしようとするとコンパイルエラーとなる。</p>
+<p>機能を増やすことで言語を拡張していくことはない。言語拡張が他言語に比べ慎重でありシンプルに保たれるよう意識されている。</p>
+<h3 id=並行プログラミング>並行プログラミング</h3>
+<p>軽量なスレッドのようなものであるゴールーチンという機構を持つ。</p>
+<p>go キーワードをつけ関数を呼び出すだけで並行処理を実現できる。</p>
+<p>例：https://go.dev/play/p/yLva1AwfP06.go</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// 関数fを別のgoroutineで呼び出し
+</span><span style=color:#75715e></span><span style=color:#66d9ef>go</span> <span style=color:#a6e22e>f</span>()
+</code></pre></div><p>マルチスレッド間のデータのやり取りは難しいが、Go ではチャネルという機能を使って実現している。</p>
+<p>ゴールーチン間のデータのやり取りを安全に行えるよう設計されている。</p>
+<h3 id=標準ライブラリ一覧>標準ライブラリ一覧</h3>
+<ul>
+<li>fmt: 書式に関する処理</li>
+<li>net/http: HTTP サーバーなど</li>
+<li>archive, compress: zip や gzip など</li>
+<li>encoding: json, xml, csv など</li>
+<li>html/template: HTML テンプレート</li>
+<li>os, path/filepath: ファイル操作など</li>
+</ul>
+<h3 id=周辺ツールの充実>周辺ツールの充実</h3>
+<p>go tool として標準/準標準で様々なツールが提供されている。</p>
+<ul>
+<li>go build: コンパイルして実行可能ファイル（バイナリ）を生成</li>
+<li>go run: コンパイルから実行までを行う</li>
+<li>go test: xxx_test.go に書かれたテストの実行</li>
+<li>godoc: ドキュメント生成</li>
+<li>gofmt goimports: コードフォーマッター</li>
+<li>go vet: コードチェッカー、リンター</li>
+<li>gopls: Language Server Protocol の提供</li>
+</ul>
+<h3 id=シングルバイナリクロスコンパイル>シングルバイナリ、クロスコンパイル</h3>
+<p>クロスコンパイルできる。開発環境とは違う OS やアーキテクチャ向けのバイナリを作成できる。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># Linux(64ビット)向けにコンパイル</span>
+$ GOOS<span style=color:#f92672>=</span>linux GOARCH<span style=color:#f92672>=</span>amd64 go build
+</code></pre></div><p>シングルバイナリになるので動作環境を用意しなくて良い</p>
+<p>e.g. スクリプト言語で必要になるような処理系をインストールせずに非エンジニアの pc で動く</p>
+<h2 id=variable-definition>Variable definition</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span> = <span style=color:#ae81ff>0</span>
+
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>
+<span style=color:#a6e22e>n</span> = <span style=color:#ae81ff>0</span>
+
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>n</span> = <span style=color:#ae81ff>100</span>
+
+<span style=color:#75715e>// Omit var(only in function)
+</span><span style=color:#75715e></span><span style=color:#a6e22e>n</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>
+
+<span style=color:#66d9ef>var</span> (
+    <span style=color:#a6e22e>n</span> = <span style=color:#ae81ff>0</span>
+    <span style=color:#a6e22e>m</span> = <span style=color:#ae81ff>1</span>
+)
+</code></pre></div><h2 id=builtin-types>Builtin types</h2>
+<ul>
+<li>Built-in string type: string.</li>
+<li>Built-in boolean type: bool.</li>
+<li>Built-in numeric types:
+int8, uint8 (byte), int16, uint16, int32 (rune), uint32, int64, uint64, int, uint, uintptr.
+float32, float64.
+complex64, complex128.</li>
+</ul>
+<p>Note, byte is a built-in alias of uint8, and rune is a built-in alias of int32</p>
+<h2 id=constants>Constants</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span> = <span style=color:#ae81ff>0</span>
+
+<span style=color:#75715e>// 型のない定数
+</span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>n</span> = <span style=color:#ae81ff>0</span>
+
+<span style=color:#66d9ef>const</span> (
+    <span style=color:#a6e22e>x</span> = <span style=color:#ae81ff>0</span>
+    <span style=color:#a6e22e>y</span> = <span style=color:#ae81ff>1</span>
+)
+</code></pre></div><p>シフト演算 <code>1 &lt;&lt; 2</code> 4</p>
+<p>シフト演算とはビット列を左または右にずらすこと。</p>
+<p>上記の例だと 8 ビットだとして 00000001 を右に２つずらす(溢れたビットは捨てる)と 00000100 となり 10 進数で 4 となる。</p>
+<h2 id=コンポジット型>コンポジット型</h2>
+<p>複数のデータ型が集まって一つの型になっているもの</p>
+<ul>
+<li>構造体　　型の異なるデータ型を集めたデータ型</li>
+<li>配列　　　同じ型のデータを集めて並べたデータ型</li>
+<li>スライス　配列の一部を切り出したデータ型</li>
+<li>マップ　　キーと値をマッピングさせたデータ型</li>
+</ul>
+<h3 id=スライスと配列の違い>スライスと配列の違い</h3>
+<p>スライスとは配列の一部を取り出したデータ構造</p>
+<ul>
+<li>要素の型はすべて同じ</li>
+<li>ポインタ、len, cap を持つ</li>
+</ul>
+<h2 id=ポインタ>ポインタ</h2>
+<p>Go 言語ではポインタが使える。基本的には C と同じように使える。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>f</span>(<span style=color:#a6e22e>xp</span> <span style=color:#f92672>*</span><span style=color:#66d9ef>int</span>) {
+    <span style=color:#f92672>*</span><span style=color:#a6e22e>xp</span> = <span style=color:#ae81ff>100</span> <span style=color:#75715e>// put 100 to the xp pointer using *
+</span><span style=color:#75715e></span>}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>x</span> <span style=color:#66d9ef>int</span>
+    <span style=color:#a6e22e>f</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>x</span>) <span style=color:#75715e>// Get the x pointer by &amp;
+</span><span style=color:#75715e></span>    println(<span style=color:#a6e22e>x</span>)
+}
+</code></pre></div><p>内部でポインタが用いられているデータ型</p>
+<ul>
+<li>スライス</li>
+<li>マップ</li>
+<li>チャネル</li>
+</ul>
+<h2 id=メソッド>メソッド</h2>
+<p>レシーバと紐づけられた関数</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Receiver</span> <span style=color:#66d9ef>int</span>
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>x</span> <span style=color:#a6e22e>Receiver</span>) <span style=color:#a6e22e>String</span>() <span style=color:#66d9ef>string</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%x&#34;</span>, int(<span style=color:#a6e22e>x</span>))
+}
+
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>receiver</span> <span style=color:#a6e22e>Receiver</span> = <span style=color:#ae81ff>1</span>
+<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>receiver</span>.<span style=color:#a6e22e>String</span>())
+</code></pre></div><h2 id=レシーバ>レシーバ</h2>
+<p>メソッドに関連付けられた変数</p>
+<p>メソッド呼び出し時にはコピーが発生する</p>
+<p>レシーバに変更を与えたい場合はポインタにする</p>
+<h3 id=レシーバにできる型>レシーバにできる型</h3>
+<ul>
+<li>type で定義した型 ユーザ定義の型</li>
+<li>ポインタ型 レシーバに変更を与えたい場合に使う</li>
+<li>内部にポインタを持つ型 マップやスライスなど</li>
+</ul>
+<h2 id=パッケージ>パッケージ</h2>
+<p>関数や変数、定数、型を意味のある単位でまとめたもの</p>
+<p>Go のプラグラムはパッケージを組み合わせることで実現される</p>
+<p>先頭を大文字にした識別子が公開される</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>Hoge</span> <span style=color:#66d9ef>string</span> <span style=color:#75715e>// exported
+</span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>hoge</span> <span style=color:#66d9ef>string</span> <span style=color:#75715e>// not exported
+</span></code></pre></div><h3 id=gopath>GOPATH</h3>
+<ul>
+<li>Go のソースコードやビルドされたファイルが入るパスを設定できる</li>
+<li>インポートされるパッケージもここから検索される</li>
+</ul>
+<p>環境変数として設定されておりデフォルトの値がある。</p>
+<p>複数設定ができ、<code>go env GOPATH</code>で参照できる。</p>
+<h3 id=package-management>Package management</h3>
+<p>コマンド</p>
+<ul>
+<li>go mod init (go mod init モジュール名)</li>
+</ul>
+<p>指定したモジュール名で go.mod ファイルを作成する</p>
+<p>モジュール名を省略すると GOPATH から推測する</p>
+<ul>
+<li>go mod tidy
+使用していないパッケージの go.mod からの削除</li>
+</ul>
+<p>必要なパッケージのダウンロードと go.mod への追加</p>
+<ul>
+<li>
+<p>go mod why
+指定したパッケージがなぜ必要になったか表示</p>
+</li>
+<li>
+<p>go mod vendor
+依存するパッケージを vendor 以下にコピーする</p>
+</li>
+</ul>
+<h2 id=godoc>GoDoc</h2>
+<p>ソースコード上に書かれたコメントをドキュメントとして生成する。</p>
+<p><a href=https://pkg.go.dev/golang.org/x/tools/cmd/godoc>https://pkg.go.dev/golang.org/x/tools/cmd/godoc</a></p>
+<p>ドキュメント生成</p>
+<pre><code class=language-console data-lang=console>godoc -http=:6060
+</code></pre><h2 id=テスト>テスト</h2>
+<p>go test で単体テストを実行。</p>
+<p>_test.go というサフィックスの付いたファイルを
+対象にしてテストを実行</p>
+<h3 id=testing-package>testing package</h3>
+<p>テストを行う機能を提供するパッケージ</p>
+<p>使い方例</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Hex</span> <span style=color:#66d9ef>int</span>
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>h</span> <span style=color:#a6e22e>Hex</span>) <span style=color:#a6e22e>String</span>() <span style=color:#66d9ef>string</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%x&#34;</span>, int(<span style=color:#a6e22e>h</span>))
+}
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>mypkg_test</span>
+<span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;testing&#34;</span>
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestHex_String</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+    <span style=color:#a6e22e>expect</span> <span style=color:#f92672>:=</span> <span style=color:#e6db74>&#34;a&#34;</span>
+    <span style=color:#a6e22e>actual</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>mypkg</span>.<span style=color:#a6e22e>Hex</span>(<span style=color:#ae81ff>10</span>).<span style=color:#a6e22e>String</span>()
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>actual</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>expect</span> {
+        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>`expect=&#34;%s&#34; actual=&#34;%s&#34;`</span>, <span style=color:#a6e22e>expect</span>, <span style=color:#a6e22e>actual</span>)
+    }
+}
+</code></pre></div><h2 id=参考>参考</h2>
+<p><a href=https://gopherdojo.org/>Gopher 自習室</a></p>
+<p><a href=https://go101.org/>Go 101(a knowledge base for Go programming)</a></p>
+<p><a href=https://medium-company.com/%E3%82%B7%E3%83%95%E3%83%88%E6%BC%94%E7%AE%97/>シフト演算を分かりやすく解説</a></p>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/go/ rel=tag>Go</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/japanese/ rel=tag>Japanese</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
+</div>
+</div>
+<aside class=sidebar><div class="widget-search widget">
+<form class=widget-search__form role=search method=get action=https://google.com/search>
+<label>
+<input class=widget-search__field type=search placeholder=SEARCH… name=q aria-label=SEARCH…>
+</label>
+<input class=widget-search__submit type=submit value=Search>
+<input type=hidden name=sitesearch value=https://moonorange.github.io>
+</form>
+</div>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/golang/>Golang Basic(Golang基礎)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/web_security/>Web脆弱性</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/db/>DB Random Notes(DB関連)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/software_design/oop/>OOP Random Notes</a></li>
+<li class=widget__item><a class=widget__link href=/posts/middleware/redis/>Redis</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/oauth2/>OAuth2</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/linked_list/>Linked List</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/binary_tree/>Binary Tree</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/asynchronous_programming/>非同期処理(Asynchronous Programming)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/frontend/react-redux/>ReactとReduxについて(About React and Redux)</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese/ title=Japanese>Japanese</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=LinkedIn rel="noopener noreferrer" href=https://linkedin.com/in/keigo-k-70557314b target=_blank><svg class="widget-social__link-icon icon icon-linkedin" width="24" height="24" viewBox="0 0 352 352"><path d="M0 40v272c0 21.9 18.1 40 40 40h272c21.9.0 40-18.1 40-40V40c0-21.9-18.1-40-40-40H40C18.1.0.0 18.1.0 40zm312-8c4.6.0 8 3.4 8 8v272c0 4.6-3.4 8-8 8H40c-4.6.0-8-3.4-8-8V40c0-4.6 3.4-8 8-8H312zM59.5 87c0 15.2 12.3 27.5 27.5 27.5s27.5-12.3 27.5-27.5S102.2 59.5 87 59.5 59.5 71.8 59.5 87zM187 157h-1v-21h-45v152h47v-75c0-19.8 3.9-39 28.5-39 24.2.0 24.5 22.4 24.5 40v74h47v-83.5c0-40.9-8.7-72-56.5-72-23 0-38.2 12.6-44.5 24.5zM64 288h47.5V136H64V288z"/></svg>
+<span>LinkedIn</span>
+</a>
+</div>
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2022 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+</body>
+</html>
