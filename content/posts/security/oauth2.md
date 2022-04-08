@@ -1,6 +1,9 @@
 ---
 title: 'OAuth2'
 date: '2021-09-04'
+categories: ["Security"]
+tags: ["OAuth", "Japanese"]
+menu: main
 ---
 
 # はじめに

@@ -1,6 +1,9 @@
 ---
 title: 'Web脆弱性'
 date: '2021-10-31'
+categories: ["Security"]
+tags: ["Web Vulnerability", "Japanese"]
+menu: main
 ---
 
 ## CSRF(Cross Site Request Forgery)

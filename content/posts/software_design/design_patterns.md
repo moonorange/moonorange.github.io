@@ -1,6 +1,9 @@
 ---
 title: 'デザインパターン'
 date: '2020-08-05'
+categories: ["Software Design"]
+tags: ["OOP", "Design Pattern", "Japanese"]
+menu: main
 ---
 
 # デザインパターンとは
