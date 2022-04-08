@@ -1,7 +1,7 @@
 ---
 title: 'Linked List'
 date: '2021-05-14'
-categories: ["Data Structures and Algorithms"]
+categories: ["DSA"]
 tags: ["Linked List", "Python"]
 menu: main
 ---
