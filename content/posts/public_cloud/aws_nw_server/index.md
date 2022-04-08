@@ -2,8 +2,7 @@
 title: 'awsでのwebサーバー構築について'
 date: '2020-02-12'
 categories: ["Public Cloud"]
-tags: ["AWS", "Japanese"]
-menu: main
+tags: ["AWS", "Japanese Article"]
 ---
 
 # chapter 1

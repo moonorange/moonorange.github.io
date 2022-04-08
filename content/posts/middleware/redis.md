@@ -2,8 +2,7 @@
 title: 'Redis'
 date: '2021-09-21'
 categories: ["Middleware"]
-tags: ["Redis", "Japanese"]
-menu: main
+tags: ["Redis", "Japanese Article"]
 ---
 
 # Intro

@@ -3,7 +3,6 @@ title: 'Linked List'
 date: '2021-05-14'
 categories: ["DSA"]
 tags: ["Linked List", "Python"]
-menu: main
 ---
 
 # Introduction

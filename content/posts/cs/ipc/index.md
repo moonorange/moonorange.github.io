@@ -2,8 +2,7 @@
 title: 'プロセス間通信(Inter process communication)'
 date: '2021-01-13'
 categories: ["CS"]
-tags: ["IPC", "Python", "Japanese"]
-menu: main
+tags: ["IPC", "Python", "Japanese Article"]
 ---
 
 ## マルチプロセスについて

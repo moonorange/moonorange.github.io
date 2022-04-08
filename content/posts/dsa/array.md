@@ -2,8 +2,7 @@
 title: '配列(Array)'
 date: '2020-08-17'
 categories: ["DSA"]
-tags: ["Array", "C++", "Japanese"]
-menu: main
+tags: ["Array", "C++", "Japanese Article"]
 ---
 
 # 実行時間

@@ -2,8 +2,7 @@
 title: 'Golang Basic(Golang基礎)'
 date: '2021-12-11'
 categories: ["Programming Language"]
-tags: ["Go", "Japanese"]
-menu: main
+tags: ["Go", "Japanese Article"]
 ---
 
 # 概要

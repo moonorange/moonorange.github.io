@@ -2,8 +2,7 @@
 title: DB Random Notes(DB関連)
 date: '2021-10-23'
 categories: ["Middleware"]
-tags: ["DB", "Japanese"]
-menu: main
+tags: ["DB", "Japanese Article"]
 ---
 
 ## RAID

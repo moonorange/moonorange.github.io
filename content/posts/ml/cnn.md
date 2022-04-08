@@ -2,8 +2,7 @@
 title: '畳み込みニューラルネットワーク(CNN)'
 date: '2020-04-24'
 categories: ["ML"]
-tags: ["CNN", "Japanese"]
-menu: main
+tags: ["CNN", "Japanese Article"]
 ---
 
 # CNN とは

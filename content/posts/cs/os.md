@@ -2,8 +2,7 @@
 title: 'オペレーティングシステム(OS)'
 date: '2020-05-24'
 categories: ["CS"]
-tags: ["OS", "Japanese"]
-menu: main
+tags: ["OS", "Japanese Article"]
 ---
 
 # Operating System とコンピューターシステム

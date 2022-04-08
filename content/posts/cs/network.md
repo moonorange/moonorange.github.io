@@ -2,8 +2,7 @@
 title: 'ネットワークについて(About network)'
 date: '2021-01-13'
 categories: ["CS"]
-tags: ["Network", "Japanese"]
-menu: main
+tags: ["Network", "Japanese Article"]
 ---
 
 # TCP/IP

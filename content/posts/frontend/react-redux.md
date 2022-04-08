@@ -2,8 +2,7 @@
 title: 'ReactとReduxについて(About React and Redux)'
 date: '2021-03-26'
 categories: ["Frontend"]
-tags: ["React", "Redux", "JavaScript", "Japanese"]
-menu: main
+tags: ["React", "Redux", "JavaScript", "Japanese Article"]
 ---
 
 # 概要
