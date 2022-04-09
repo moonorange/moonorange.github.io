@@ -3,11 +3,11 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>awsでのwebサーバー構築について - Kei's blog</title>
+<title>awsでのインフラ構築について - Kei's blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="awsでのwebサーバー構築について">
+<meta name=twitter:title content="awsでのインフラ構築について">
 <meta name=twitter:description content="chapter 1 サーバーというのは、「Linux」や「WindowsServer」など、サーバー用の OS をインストールしたコンピュータのこと VPC AmazonVirtualPrivateCloud の略。ユー">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
@@ -36,7 +36,7 @@
 <main class=main role=main>
 <article class=post>
 <header class=post__header>
-<h1 class=post__title>awsでのwebサーバー構築について</h1>
+<h1 class=post__title>awsでのインフラ構築について</h1>
 <div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
 <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2020-02-12T00:00:00Z>February 12, 2020</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/public-cloud/ rel=category>Public Cloud</a>
@@ -232,8 +232,9 @@ docker をローカルで使うのは簡単だが、複数のクラスタ(ec2 �
 <p>ここまで出来たらドメインにアクセスして正常に表示されるかチェックする。
 出来ていない場合は Cloud Watch の Log gropus などで log を確認してデバッグする。</p>
 <h2 id=circle-ci-で自動デプロイ>Circle CI で自動デプロイ</h2>
-<p>kts_api や actaba_api の.circleci/config.yml を参考にして書く
-circle_sha1 でイメージ version をユニークに
+<p>.circleci/config.yml を書く
+参考　<a href=https://qiita.com/saki-engineering/items/d35ea75e95ffa77e307a>https://qiita.com/saki-engineering/items/d35ea75e95ffa77e307a</a></p>
+<p>circle_sha1 でイメージ version をユニークに
 master ブランチのみデプロイ
 circle ci で aws のアクセス token などを登録、aws 系は全部必要になる</p>
 <h2 id=参考>参考</h2>
