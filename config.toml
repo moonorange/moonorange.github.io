@@ -37,7 +37,7 @@ paginate = 10
     home = "right"
     list = "right"
     single = "right"
-    widgets = ["search", "recent", "categories", "taglist", "social"]
+    widgets = ["recent", "categories", "taglist", "social"]
 
 [Params.widgets]
   recent_num = 5 # Set the number of articles in the "Recent articles" widget
