@@ -40,6 +40,42 @@ Depth First Traversals:
 
 (c) Postorder (Left, Right, Root) : 4 5 2 3 1
 
+Inorder Traversal Implementation
+The other two depth first traversal implementation are almost the same.
+
+```python
+from binarytree import tree
+from binary_tree import TreeNode
+from typing import List
+
+
+class Solution:
+    # recursive solution
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        ans = []
+        self.traverse(root, ans)
+        return ans
+
+    def traverse(self, root: TreeNode, ans: List[int]):
+        if root:
+            self.traverse(root.left, ans)
+            ans.append(root.val)
+            self.traverse(root.right, ans)
+
+    # iterative solution
+    def inorderTraversal2(self, root: TreeNode):
+        res, stack = [], []
+        while True:
+            while root:
+                stack.append(root)
+                root = root.left
+            if not stack:
+                return res
+            node = stack.pop()
+            res.append(node.val)
+            root = node.right
+```
+
 Breadth first traversals:
 
 Level order traversal of a tree is breadth first traversal for the tree.
@@ -48,8 +84,8 @@ Level order traversal of a tree is breadth first traversal for the tree.
 
 ```python
 # Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
+from itertools import chain
 def levelOrder(self, root: TreeNode) -> List[List[int]]:
-	from itertools import chain
 	if not root:
 		return []
 	ans, same_lev = [], [root]
@@ -58,6 +94,28 @@ def levelOrder(self, root: TreeNode) -> List[List[int]]:
 		tmp = chain.from_iterable(map(lambda node: [node.left, node.right], same_lev))
 		same_lev = [leaf for leaf in tmp if leaf]
 	return ans
+
+
+from binary_tree import TreeNode
+from typing import List
+import queue
+
+# Implementation using queue
+def bfs(self, root: TreeNode) -> List[int]:
+    ans = []
+    my_queue = queue.Queue()
+    my_queue.put(root)
+
+    while not my_queue.empty():
+        root = my_queue.get()
+        ans.append(root.val)
+
+        if root.left:
+            my_queue.put(root.left)
+
+        if root.right:
+            my_queue.put(root.right)
+    return ans
 ```
 
 # Reference
