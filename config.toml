@@ -1,8 +1,7 @@
 # Page url
 baseURL = "https://moonorange.github.io"
 
-languageCode = "en"
-DefaultContentLanguage = "en"
+languageCode = "en-us"
 HasCJKLanguage = true
 enableRobotsTXT = true
 
@@ -10,27 +9,26 @@ enableRobotsTXT = true
 title = "Kei's blog"
 
 theme = "mainroad"
-paginate = 20
+paginate = 10
 
-# 自己紹介
 [Author]
     name = "Keigo Kida"
     bio = "Software Engineer living in Japan"
     avatar = "img/avatar.jpeg"
 
 [Params]
+    description = "Kei's personal blog about tech"
     customCSS = ["css/custom.css"]
     copyright = "Keigo Kida"
     readmore = true
     authorbox = true
     post_meta = ["date", "categories"]
     twitter_cards = true
+    toc = true # Enable Table of Contents
 
-# ページのテーマカラー
 [Params.style.vars]
   highlightColor = "#00008b"
 
-# SNS等のユーザー名
 [Params.widgets.social]
   github = "moonorange"
   linkedin = "keigo-k-70557314b"
@@ -40,3 +38,6 @@ paginate = 20
     list = "right"
     single = "right"
     widgets = ["search", "recent", "categories", "taglist", "social"]
+
+[Params.widgets]
+  recent_num = 5 # Set the number of articles in the "Recent articles" widget

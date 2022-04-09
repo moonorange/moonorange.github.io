@@ -11,7 +11,7 @@ The linked list is a linear data structure.
 
 There are two types of linked lists, the singly linked list and the doubly linked list.
 
-## Linked list
+## Singly Linked list
 
 The linked list elements are not stored at a contiguous location; the elements are linked using pointers.
 
