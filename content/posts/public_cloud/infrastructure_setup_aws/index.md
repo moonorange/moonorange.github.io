@@ -1,5 +1,5 @@
 ---
-title: 'awsでのwebサーバー構築について'
+title: 'awsでのインフラ構築について'
 date: '2020-02-12'
 categories: ["Public Cloud"]
 tags: ["AWS", "Japanese Article"]
@@ -196,7 +196,9 @@ Run new Task
 
 ## Circle CI で自動デプロイ
 
-kts_api や actaba_api の.circleci/config.yml を参考にして書く
+.circleci/config.yml を書く
+参考　<https://qiita.com/saki-engineering/items/d35ea75e95ffa77e307a>
+
 circle_sha1 でイメージ version をユニークに
 master ブランチのみデプロイ
 circle ci で aws のアクセス token などを登録、aws 系は全部必要になる
