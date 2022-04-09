@@ -2,7 +2,7 @@
 title: Tree
 date: '2022-04-08'
 categories: ["DSA"]
-tags: ["Tree", "Trie"]
+tags: ["Tree", "Trie", "English Article"]
 ---
 
 # Tree

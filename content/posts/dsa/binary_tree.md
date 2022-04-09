@@ -2,7 +2,7 @@
 title: 'Binary Tree'
 date: '2021-05-13'
 categories: ["DSA"]
-tags: ["Tree", "Python"]
+tags: ["Tree", "Python", "English Article"]
 ---
 
 # Overview

@@ -2,7 +2,7 @@
 title: 'OOP Random Notes'
 date: '2021-10-03'
 categories: ["Software Design"]
-tags: ["OOP", "Python", "Design Pattern"]
+tags: ["OOP", "Python", "Design Pattern", "English Article"]
 
 ---
 
