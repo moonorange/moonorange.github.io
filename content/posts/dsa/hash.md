@@ -1,6 +1,6 @@
 ---
 title: 'Hash Set and Hash Table'
-date: '2021-05-15'
+date: '2021-11-15'
 categories: ["DSA"]
 tags: ["Hash Set", "Hash Table", "Python", "English Article"]
 ---
@@ -19,24 +19,25 @@ HashSet
 ```python
 class MyHashSet:
     def hash(self, key):
+        # Multiplicative hashing
         return ((key * 10000019) % (1 << 20)) >> 5
 
     def __init__(self):
-        self.hashmap = [[] for _ in range(1 << 15)]
+        self.hashset = [[] for _ in range(1 << 15)]
 
     def add(self, key):
         idx = self.hash(key)
-        if key not in self.hashmap[idx]:
-            self.hashmap[idx].append(key)
+        if key not in self.hashset[idx]:
+            self.hashset[idx].append(key)
 
     def remove(self, key):
         idx = self.hash(key)
-        if key in self.hashmap[idx]:
-            self.hashmap[idx].remove(key)
+        if key in self.hashset[idx]:
+            self.hashset[idx].remove(key)
 
     def contains(self, key):
         idx = self.hash(key)
-        return key in self.hashmap[idx]
+        return key in self.hashset[idx]
 ```
 
 HashMap
