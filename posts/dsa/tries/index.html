@@ -9,7 +9,7 @@
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Tries">
 <meta name=twitter:description content="Tries It is commonly used to represent a dictionary for looking up words in a vocabulary
-Implementation https://leetcode.com/problems/implement-trie-prefix-tree/
+ Implementation https://leetcode.com/problems/implement-trie-prefix-tree/
 Trie() Initializes the trie object. void insert(String word) Inserts the string word into the trie. boolean search(String word) Returns true if the string word is in the trie (i.e., was inserted before), and false otherwise. boolean startsWith(String prefix) Returns true if there is a previously inserted string word that has the prefix prefix, and false otherwise.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
@@ -51,13 +51,15 @@ Trie() Initializes the trie object. void insert(String word) Inserts the string 
 <nav id=TableOfContents>
 <ul>
 <li><a href=#implementation>Implementation</a></li>
-<li><a href=#reference>Reference</a></li>
+<li><a href=#references>References</a></li>
 </ul>
 </nav>
 </div>
 </div><div class="content post__content clearfix">
 <h1 id=tries>Tries</h1>
 <p>It is commonly used to represent a dictionary for looking up words in a vocabulary</p>
+<figure><img src=./trie_example.png alt="Query Suggestion" width=100%>
+</figure>
 <h2 id=implementation>Implementation</h2>
 <p><a href=https://leetcode.com/problems/implement-trie-prefix-tree/>https://leetcode.com/problems/implement-trie-prefix-tree/</a></p>
 <p>Trie() Initializes the trie object.
@@ -99,14 +101,56 @@ boolean startsWith(String prefix) Returns true if there is a previously inserted
         self<span style=color:#f92672>.</span>is_word <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>
         self<span style=color:#f92672>.</span>children <span style=color:#f92672>=</span> {}
 
-
-
 <span style=color:#75715e># Your Trie object will be instantiated and called as such:</span>
 <span style=color:#75715e># obj = Trie()</span>
 <span style=color:#75715e># obj.insert(word)</span>
 <span style=color:#75715e># param_2 = obj.search(word)</span>
 <span style=color:#75715e># param_3 = obj.startsWith(prefix)</span>
-</code></pre></div><h2 id=reference>Reference</h2>
+</code></pre></div><p>Implementation to return all words starting with the given prefix.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>TrieNode</span>:
+    <span style=color:#66d9ef>def</span> __init__(self, char: str):
+        self<span style=color:#f92672>.</span>char <span style=color:#f92672>=</span> char
+        self<span style=color:#f92672>.</span>is_word <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>
+        self<span style=color:#f92672>.</span>children <span style=color:#f92672>=</span> {}
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Trie</span>:
+    <span style=color:#66d9ef>def</span> __init__(self):
+        self<span style=color:#f92672>.</span>root <span style=color:#f92672>=</span> TrieNode(<span style=color:#e6db74>&#34;&#34;</span>)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>insert</span>(self, words: str):
+        curr <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>root
+        <span style=color:#66d9ef>for</span> c <span style=color:#f92672>in</span> words:
+            <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> c <span style=color:#f92672>in</span> curr<span style=color:#f92672>.</span>children:
+                curr<span style=color:#f92672>.</span>children[c] <span style=color:#f92672>=</span> TrieNode(c)
+            curr <span style=color:#f92672>=</span> curr<span style=color:#f92672>.</span>children[c]
+        curr<span style=color:#f92672>.</span>is_word <span style=color:#f92672>=</span> <span style=color:#66d9ef>True</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_node</span>(self, words):
+        curr <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>root
+        <span style=color:#66d9ef>for</span> c <span style=color:#f92672>in</span> words:
+            <span style=color:#66d9ef>if</span> c <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> curr<span style=color:#f92672>.</span>children: <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>None</span>
+            curr <span style=color:#f92672>=</span> curr<span style=color:#f92672>.</span>children[c]
+        <span style=color:#66d9ef>return</span> curr
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dfs</span>(self, node, prefix):
+        <span style=color:#66d9ef>if</span> node<span style=color:#f92672>.</span>is_word:
+            print(<span style=color:#e6db74>&#34;prefix in dfs:&#34;</span>, prefix)
+            self<span style=color:#f92672>.</span>output<span style=color:#f92672>.</span>append((prefix <span style=color:#f92672>+</span> node<span style=color:#f92672>.</span>char))
+
+        <span style=color:#66d9ef>for</span> child <span style=color:#f92672>in</span> node<span style=color:#f92672>.</span>children<span style=color:#f92672>.</span>values():
+            self<span style=color:#f92672>.</span>dfs(child, prefix <span style=color:#f92672>+</span> node<span style=color:#f92672>.</span>char)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>search</span>(self, prefix):
+        self<span style=color:#f92672>.</span>output <span style=color:#f92672>=</span> []
+
+        node <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>get_node(prefix)
+        <span style=color:#66d9ef>if</span> node <span style=color:#f92672>is</span> <span style=color:#66d9ef>None</span>: <span style=color:#66d9ef>return</span> []
+        print(<span style=color:#e6db74>&#34;node:&#34;</span>, node<span style=color:#f92672>.</span>char, prefix[:<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>])
+        self<span style=color:#f92672>.</span>dfs(node, prefix[:<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>])
+
+        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>output
+</code></pre></div><h2 id=references>References</h2>
 <p><a href=https://albertauyeung.github.io/2020/06/15/python-trie.html/>Implementing Trie in Python</a></p>
 </div>
 <footer class=post__footer>
