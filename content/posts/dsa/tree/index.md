@@ -35,6 +35,7 @@ This is the super-set of all other types of trees.
 ### Binary Tree
 
 Binary Tree is the type of tree in which each parent can have at most two children.
+<https://moonorange.github.io/posts/dsa/binary_tree/>
 
 ### Binary Search Tree
 
@@ -58,11 +59,13 @@ In N-ary Tree, the maximum number of children that a node can have is limited to
 
 It is commonly used to represent a dictionary for looking up words in a vocabulary
 
-For example, when implementing a search bar with auto-completion or query suggestion, tries is needed to look up words quickly starting with the characters input by the user.
+For example, when implementing a search bar with auto-completion or query suggestion, "trie" is needed to look up words starting with the characters input by the user quickly
 
 {{<figure src="./query_suggestion.png" alt="Query Suggestion" width="100%">}}
 
-# Ref
+<https://moonorange.github.io/posts/dsa/ties>
+
+## Reference
 
 [Types of Trees in Data Structure](https://www.thecrazyprogrammer.com/2019/09/types-of-trees-in-data-structure.html)
 

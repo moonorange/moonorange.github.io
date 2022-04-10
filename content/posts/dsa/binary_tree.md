@@ -15,11 +15,11 @@ A Binary Tree is one of the most typical tree structures. As the name suggests, 
 
 ![binary tree](https://media.geeksforgeeks.org/wp-content/cdn-uploads/binary-tree-to-DLL.png)
 
-A Binary Tree node contains following parts.
+A Binary Tree node contains the following parts.
 
 Data
-Pointer to left child
-Pointer to right child
+Pointer to a left child
+Pointer to a right child
 
 ```python
 # Definition for a binary tree node.
@@ -41,7 +41,7 @@ Depth First Traversals:
 (c) Postorder (Left, Right, Root) : 4 5 2 3 1
 
 Inorder Traversal Implementation
-The other two depth first traversal implementation are almost the same.
+The other two Depth First Traversal implementations are almost the same.
 
 ```python
 from binarytree import tree
@@ -76,7 +76,7 @@ class Solution:
             root = node.right
 ```
 
-Breadth first traversals:
+"Breadth First Traversals":
 
 Level order traversal of a tree is breadth first traversal for the tree.
 
