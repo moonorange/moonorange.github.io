@@ -94,7 +94,6 @@ class Trie:
 
     def dfs(self, node, prefix):
         if node.is_word:
-            print("prefix in dfs:", prefix)
             self.output.append((prefix + node.char))
 
         for child in node.children.values():
@@ -105,12 +104,10 @@ class Trie:
 
         node = self.get_node(prefix)
         if node is None: return []
-        print("node:", node.char, prefix[:-1])
         self.dfs(node, prefix[:-1])
 
         return self.output
 ```
-
 
 ## References
 
