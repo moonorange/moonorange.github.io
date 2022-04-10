@@ -99,7 +99,7 @@ class MyHashMap:
 
 
 
-# Ref
+# References
 
 [Introduction to Data Structure
 Hash Table](https://leetcode.com/explore/learn/card/hash-table/182/practical-applications/)

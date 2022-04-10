@@ -9,7 +9,7 @@ tags: ["Tree", "Python", "English Article"]
 
 A tree is a frequently-used data structure to simulate a hierarchical tree structure.
 
-Each node of the tree will have a root value and a list of references to other nodes that are called child nodes. From graph view, a tree can also be defined as a directed acyclic graph that has N nodes and N-1 edges.
+Each node of the tree will have a root value and a list of References to other nodes that are called child nodes. From graph view, a tree can also be defined as a directed acyclic graph that has N nodes and N-1 edges.
 
 A Binary Tree is one of the most typical tree structures. As the name suggests, a binary tree is a tree data structure in which each node has at most two children, which are referred to as the left child and the right child.
 
@@ -118,7 +118,7 @@ def bfs(self, root: TreeNode) -> List[int]:
     return ans
 ```
 
-# Reference
+# References
 
 [Binary Tree Data Structure](https://www.geeksforgeeks.org/binary-tree-data-structure/)
 

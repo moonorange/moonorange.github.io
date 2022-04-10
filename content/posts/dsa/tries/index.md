@@ -9,6 +9,8 @@ tags: ["Trie", "Python", "English Article"]
 
 It is commonly used to represent a dictionary for looking up words in a vocabulary
 
+{{<figure src="./trie_example.png" alt="Query Suggestion" width="100%">}}
+
 ## Implementation
 
 <https://leetcode.com/problems/implement-trie-prefix-tree/>
@@ -54,8 +56,6 @@ class TrieNode:
         self.is_word = False
         self.children = {}
 
-
-
 # Your Trie object will be instantiated and called as such:
 # obj = Trie()
 # obj.insert(word)
@@ -63,6 +63,55 @@ class TrieNode:
 # param_3 = obj.startsWith(prefix)
 ```
 
-## Reference
+Implementation to return all words starting with the given prefix.
+
+```python
+
+class TrieNode:
+    def __init__(self, char: str):
+        self.char = char
+        self.is_word = False
+        self.children = {}
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode("")
+
+    def insert(self, words: str):
+        curr = self.root
+        for c in words:
+            if not c in curr.children:
+                curr.children[c] = TrieNode(c)
+            curr = curr.children[c]
+        curr.is_word = True
+
+    def get_node(self, words):
+        curr = self.root
+        for c in words:
+            if c not in curr.children: return None
+            curr = curr.children[c]
+        return curr
+
+    def dfs(self, node, prefix):
+        if node.is_word:
+            print("prefix in dfs:", prefix)
+            self.output.append((prefix + node.char))
+
+        for child in node.children.values():
+            self.dfs(child, prefix + node.char)
+
+    def search(self, prefix):
+        self.output = []
+
+        node = self.get_node(prefix)
+        if node is None: return []
+        print("node:", node.char, prefix[:-1])
+        self.dfs(node, prefix[:-1])
+
+        return self.output
+```
+
+
+## References
 
 [Implementing Trie in Python](https://albertauyeung.github.io/2020/06/15/python-trie.html/)

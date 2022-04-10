@@ -63,9 +63,9 @@ For example, when implementing a search bar with auto-completion or query sugges
 
 {{<figure src="./query_suggestion.png" alt="Query Suggestion" width="100%">}}
 
-<https://moonorange.github.io/posts/dsa/ties>
+[Implementation](https://moonorange.github.io/posts/dsa/ties)
 
-## Reference
+## References
 
 [Types of Trees in Data Structure](https://www.thecrazyprogrammer.com/2019/09/types-of-trees-in-data-structure.html)
 
