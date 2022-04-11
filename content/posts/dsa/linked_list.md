@@ -113,42 +113,41 @@ Advantages over singly linked list
 
 Disadvantages over singly linked list
 
-1. Every node of DLL requires extra space for a previous pointer. It is possible to implement DLL with a single pointer though (See [this](https://www.geeksforgeeks.org/xor-linked-list-a-memory-efficient-doubly-linked-list-set-1/)).
+1. Every node of DLL requires extra space for a previous pointer. It is possible to implement DLL with a single pointer though (See [XOR Linked List – A Memory Efficient Doubly Linked List | Set 1](https://www.geeksforgeeks.org/xor-linked-list-a-memory-efficient-doubly-linked-list-set-1/)).
 2. All operations require an extra pointer previous to be maintained. For example, in insertion, we need to modify previous pointers together with next pointers. For example in following functions for insertions at different positions, we need 1 or 2 extra steps to set a previous pointer.
 
 ```python
 class Node(object):
     def __init__(self, val):
-  self.val: int = val
-  self.prev: Node = None
-  self.next: Node = None
+        self.val: int = val
+        self.prev: Node = None
+        self.next: Node = None
 
 class DoublyLinkedList:
     def __init__(self):
-  """
-  Initialize your data structure here.
-  """
-  self.head: Node = None
-  self.tail: Node = None
-  self.size: int = 0
+        """
+        Initialize your data structure here.
+        """
+        self.head: Node = None
+        self.tail: Node = None
+        self.size: int = 0
 
     def get(self, index: int) -> int:
-  """
-  Get the value of the index-th node in the linked list. If the index is invalid, return -1.
-  """
-  if index < 0 or index >= self.size:
-   return - 1
-  current = self.head
-  for _ in range(index):
-   current = current.next
-  return current.val
+        """
+        Get the value of the index-th node in the linked list. If the index is invalid, return -1.
+        """
+        if index < 0 or index >= self.size:
+        return - 1
+        current = self.head
+        for _ in range(index):
+        current = current.next
+        return current.val
 
     def addAtHead(self, val: int) -> None:
         """
         Add a node of value val before the first element of the linked list. After the insertion,           the new node will be the first node of the linked list.
         """
         self.addAtIndex(0, val)
-
 
     def addAtTail(self, val: int) -> None:
         """
@@ -193,7 +192,7 @@ class DoublyLinkedList:
         self.size -= 1
 ```
 
-# References
+## References
 
 [Linked List Data Structure](https://www.geeksforgeeks.org/data-structures/linked-list/)
 

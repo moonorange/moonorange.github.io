@@ -35,7 +35,8 @@ This is the super-set of all other types of trees.
 ### Binary Tree
 
 Binary Tree is the type of tree in which each parent can have at most two children.
-<https://moonorange.github.io/posts/dsa/binary_tree/>
+
+Check [Binary Tree](/posts/dsa/binary_tree/) for more details
 
 ### Binary Search Tree
 
@@ -47,9 +48,9 @@ In BST, the value of the left node must be smaller than the parent node, and the
 
 AVL Tree is a self-balancing binary tree.
 
-In AVL tree, the heights of children's node differ at most 1, i.e., the valid balancing factor in AVL tree are 1, 0 and -1. When a new node added to a tree and tree becomes unbalanced, rotation is done to make a tree balanced.
+In AVL tree, the heights of children's node differ at most 1 (i.e., the valid balancing factor in AVL tree are 1, 0 and -1). When a new node added to a tree and tree becomes unbalanced, rotation is done to make a tree balanced.
 
-![](https://www.thecrazyprogrammer.com/wp-content/uploads/2019/09/AVL-Tree.png?ezimgfmt=ng:webp/ngcb1)
+![AVL Tree](https://www.thecrazyprogrammer.com/wp-content/uploads/2019/09/AVL-Tree.png?ezimgfmt=ng:webp/ngcb1)
 
 ### N-ary Tree
 
@@ -63,7 +64,7 @@ For example, when implementing a search bar with auto-completion or query sugges
 
 {{<figure src="./query_suggestion.png" alt="Query Suggestion" width="100%">}}
 
-[Implementation](https://moonorange.github.io/posts/dsa/ties)
+Check [Tries](/posts/dsa/tries/) for the implementation
 
 ## References
 
