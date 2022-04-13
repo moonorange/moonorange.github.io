@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Heap on Kei's Blog</title><link>https://moonorange.github.io/tags/heap/</link><description>Recent content in Heap on Kei's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 13 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://moonorange.github.io/tags/heap/index.xml" rel="self" type="application/rss+xml"/><item><title>Heap</title><link>https://moonorange.github.io/posts/dsa/heap/</link><pubDate>Wed, 13 Apr 2022 00:00:00 +0000</pubDate><guid>https://moonorange.github.io/posts/dsa/heap/</guid><description>Heap Heap is a special Tree-based data structure in which tree is a complete binary tree. There are mainly two types of heaps.
+Types of heap Min Heap
+In min heap, all elements are smaller than their children. The root node will be the smallest element.
+Max Heap
+In max heap, all elements are bigger than their children. The root node will be the biggest element.
+Reference Heap Data Structure Data Structures: Heaps</description></item></channel></rss>
