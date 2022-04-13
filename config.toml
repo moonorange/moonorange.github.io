@@ -6,7 +6,7 @@ HasCJKLanguage = true
 enableRobotsTXT = true
 
 # Blog title
-title = "Kei's Page"
+title = "Kei's Blog"
 
 theme = "mainroad"
 paginate = 10
