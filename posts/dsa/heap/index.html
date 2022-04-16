@@ -8,12 +8,9 @@
 <meta name=description content>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Heap">
-<meta name=twitter:description content="Heap Heap is a special Tree-based data structure in which tree is a complete binary tree. There are mainly two types of heaps.
-Types of heap Min Heap
-In min heap, all elements are smaller than their children. The root node will be the smallest element.
-Max Heap
-In max heap, all elements are bigger than their children. The root node will be the biggest element.
- Reference Heap Data Structure Data Structures: Heaps">
+<meta name=twitter:description content="Heap Heap is a special Tree-based data structure in which tree is a complete binary tree. Heaps are basically are binary trees with more properties and specifications and there are mainly two types of heaps.
+Rules
+ A heap must be a complete binary tree.  All of the levels of the tree must be completely filled except maybe the last one. The last level has all keys as left as possible    Types of heap Min Heap">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -54,6 +51,7 @@ In max heap, all elements are bigger than their children. The root node will be 
 <nav id=TableOfContents>
 <ul>
 <li><a href=#types-of-heap>Types of heap</a></li>
+<li><a href=#implementation>Implementation</a></li>
 <li><a href=#reference>Reference</a></li>
 </ul>
 </nav>
@@ -61,7 +59,16 @@ In max heap, all elements are bigger than their children. The root node will be 
 </div><div class="content post__content clearfix">
 <h1 id=heap>Heap</h1>
 <p>Heap is a special Tree-based data structure in which tree is a complete binary tree.
-There are mainly two types of heaps.</p>
+Heaps are basically are binary trees with more properties and specifications and there are mainly two types of heaps.</p>
+<p>Rules</p>
+<ul>
+<li>A heap must be a complete binary tree.
+<ul>
+<li>All of the levels of the tree must be completely filled except maybe the last one.</li>
+<li>The last level has all keys as left as possible</li>
+</ul>
+</li>
+</ul>
 <h2 id=types-of-heap>Types of heap</h2>
 <p><code>Min Heap</code></p>
 <p>In min heap, all elements are smaller than their children. The root node will be the smallest element.</p>
@@ -69,9 +76,12 @@ There are mainly two types of heaps.</p>
 <p>In max heap, all elements are bigger than their children. The root node will be the biggest element.</p>
 <figure><img src=./minmax_heap.png alt="Query Suggestion" width=100%>
 </figure>
+<h2 id=implementation>Implementation</h2>
 <h2 id=reference>Reference</h2>
 <p><a href=https://www.geeksforgeeks.org/heap-data-structure/>Heap Data Structure</a>
-<a href="https://www.youtube.com/watch?v=t0Cq6tVNRBA">Data Structures: Heaps</a></p>
+<a href="https://www.youtube.com/watch?v=t0Cq6tVNRBA">Data Structures: Heaps</a>
+<a href=https://medium.com/basecs/learning-to-love-heaps-cef2b273a238>Learning to Love Heaps</a>
+<a href=https://www.educative.io/edpresso/heap-implementation-in-python>Heap implementation in Python</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
