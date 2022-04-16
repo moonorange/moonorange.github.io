@@ -1,6 +1,6 @@
 ---
 title: 'Binary Tree'
-date: '2021-05-13'
+date: '2022-4-16'
 categories: ["DSA"]
 tags: ["Tree", "Python", "English Article"]
 ---
@@ -30,9 +30,39 @@ class TreeNode:
 		self.right = right
 ```
 
-![](https://media.geeksforgeeks.org/wp-content/cdn-uploads/2009/06/tree12.gif)
+## Types of binary tree
 
-Depth First Traversals:
+There are many types of binary tree
+
+### Full Binary Tree
+
+`All nodes except leaf nodes` have two children.
+
+{{<figure src="./full_bt.png" alt="Full Binary tree" width="75%">}}
+
+### Complete Binary Tree
+
+All the levels are completely filled except possibly the last level and the last level has all keys `as left as possible.`
+
+{{<figure src="./complete_bt.png" alt="Complete Binary tree" width="75%">}}
+
+### Perfect Binary Tree
+
+All the internal nodes have two children and the all leaf nodes are at the same level.
+
+{{<figure src="./perfect_bt.png" alt="Perfect Binary tree" width="75%">}}
+
+### Balanced Binary Tree
+
+`The height of the tree is O(Log n)` where n is the number of nodes.
+
+### A degenerate (or pathological) tree
+
+Every internal node has `only one child.`
+
+{{<figure src="./pathological_bt.png" alt="Pathological tree" width="75%">}}
+
+## Depth First Traversals
 
 (a) Inorder (Left, Root, Right) : 4 2 5 1 3
 
@@ -40,7 +70,7 @@ Depth First Traversals:
 
 (c) Postorder (Left, Right, Root) : 4 5 2 3 1
 
-`Implementation`
+### Implementation
 
 ```python
 from binarytree import tree
@@ -134,3 +164,5 @@ def bfs(self, root: TreeNode) -> List[int]:
 [Binary Tree Data Structure](https://www.geeksforgeeks.org/binary-tree-data-structure/)
 
 [Introduction to Data Structure Binary Tree](https://leetcode.com/explore/learn/card/data-structure-tree/134/traverse-a-tree/931/)
+
+[Binary Tree | Set 3 (Types of Binary Tree](<https://www.geeksforgeeks.org/binary-tree-set-3-types-of-binary-tree/)
