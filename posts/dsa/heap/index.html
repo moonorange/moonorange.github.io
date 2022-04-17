@@ -77,7 +77,93 @@ Heaps are basically are binary trees with more properties and specifications and
 <figure><img src=./minmax_heap.png alt="Query Suggestion" width=100%>
 </figure>
 <h2 id=implementation>Implementation</h2>
-<h2 id=reference>Reference</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># A Binary Heap is a Complete Binary Tree. A binary heap is typically represented as array. The representation is done as:</span>
+
+<span style=color:#75715e># The root element will be at Arr[0].</span>
+<span style=color:#75715e># Below table shows indexes of other nodes for the ith node, i.e., Arr[i]:</span>
+<span style=color:#75715e># Arr[(i-1)/2] Returns the parent_idx node</span>
+<span style=color:#75715e># Arr[(2*i)+1] Returns the left child node</span>
+<span style=color:#75715e># Arr[(2*i)+2] Returns the right child node</span>
+
+<span style=color:#f92672>import</span> sys
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MinHeap</span>:
+    <span style=color:#66d9ef>def</span> __init__(self, maxsize):
+        self<span style=color:#f92672>.</span>maxsize <span style=color:#f92672>=</span> maxsize
+        <span style=color:#75715e># Initialize the first value with the smallest value</span>
+        <span style=color:#75715e># With this first value, calculation to get parent_idx and children gets a little simpler</span>
+        self<span style=color:#f92672>.</span>heap_list <span style=color:#f92672>=</span> [<span style=color:#ae81ff>0</span>] <span style=color:#f92672>*</span> (maxsize <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>)
+        self<span style=color:#f92672>.</span>heap_list[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>=</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span> <span style=color:#f92672>*</span> sys<span style=color:#f92672>.</span>maxsize
+        self<span style=color:#f92672>.</span>size <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        <span style=color:#75715e># Actual root index</span>
+        self<span style=color:#f92672>.</span>ROOT_IDX <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>parent_idx</span>(self, idx):
+        <span style=color:#66d9ef>return</span> idx <span style=color:#f92672>//</span> <span style=color:#ae81ff>2</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>left_child_idx</span>(self, idx):
+        <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> idx
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>right_child_idx</span>(self, idx):
+        <span style=color:#66d9ef>return</span> (<span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> idx) <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>is_leaf</span>(self, idx):
+        <span style=color:#75715e># If left child index is bigger than self.size, it means there is no child as this is a complete binary tree</span>
+        <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> idx <span style=color:#f92672>&gt;</span> self<span style=color:#f92672>.</span>size
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>swap</span>(self, fi, si):
+        self<span style=color:#f92672>.</span>heap_list[fi], self<span style=color:#f92672>.</span>heap_list[si] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>heap_list[si], self<span style=color:#f92672>.</span>heap_list[fi]
+
+    <span style=color:#75715e># Heapify the value in the given idx from top to bottom</span>
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>min_heapify</span>(self, idx):
+        li <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>left_child_idx(idx)
+        ri <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>right_child_idx(idx)
+        curr <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>heap_list[idx]
+        <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> self<span style=color:#f92672>.</span>is_leaf(idx):
+            l, r <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>heap_list[li], self<span style=color:#f92672>.</span>heap_list[ri]
+            <span style=color:#66d9ef>if</span> l <span style=color:#f92672>&lt;</span> curr <span style=color:#f92672>or</span> r <span style=color:#f92672>&lt;</span> curr:
+                <span style=color:#66d9ef>if</span> l <span style=color:#f92672>&lt;</span> r:
+                    self<span style=color:#f92672>.</span>swap(idx, li)
+                    self<span style=color:#f92672>.</span>min_heapify(li)
+                <span style=color:#66d9ef>else</span>:
+                    self<span style=color:#f92672>.</span>swap(idx, ri)
+                    self<span style=color:#f92672>.</span>min_heapify(ri)
+
+ 	<span style=color:#75715e># O(Log n)</span>
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>insert</span>(self, new_el):
+        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>size <span style=color:#f92672>&gt;=</span> self<span style=color:#f92672>.</span>maxsize:
+            print(<span style=color:#e6db74>&#34;Heap maxsize exceeded&#34;</span>)
+            <span style=color:#66d9ef>return</span>
+        self<span style=color:#f92672>.</span>size <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+        self<span style=color:#f92672>.</span>heap_list[self<span style=color:#f92672>.</span>size] <span style=color:#f92672>=</span> new_el
+        tail_idx <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>size
+        pi <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>parent_idx(tail_idx)
+        <span style=color:#75715e># Heapify the inserted value from bottom to top while it&#39;s bigger than the parent</span>
+        <span style=color:#66d9ef>while</span> self<span style=color:#f92672>.</span>heap_list[tail_idx] <span style=color:#f92672>&lt;</span> self<span style=color:#f92672>.</span>heap_list[pi]:
+            self<span style=color:#f92672>.</span>swap(tail_idx, pi)
+            tail_idx <span style=color:#f92672>=</span> pi
+            pi <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>parent_idx(tail_idx)
+
+	<span style=color:#75715e># O(Log n)</span>
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>extract_min</span>(self):
+        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>size <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>1</span>:
+            print(<span style=color:#e6db74>&#34;Empty Heap&#34;</span>)
+            <span style=color:#66d9ef>return</span>
+        min_ele <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>heap_list[self<span style=color:#f92672>.</span>ROOT_IDX]
+        <span style=color:#75715e># Swap the root with the last element</span>
+        self<span style=color:#f92672>.</span>heap_list[self<span style=color:#f92672>.</span>ROOT_IDX] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>heap_list[self<span style=color:#f92672>.</span>size]
+        self<span style=color:#f92672>.</span>size <span style=color:#f92672>-=</span> <span style=color:#ae81ff>1</span>
+		<span style=color:#75715e># Heapify heap_list from top to bottom</span>
+        self<span style=color:#f92672>.</span>min_heapify(self<span style=color:#f92672>.</span>ROOT_IDX)
+        <span style=color:#66d9ef>return</span> min_ele
+
+	<span style=color:#75715e># O(1)</span>
+	<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_min</span>(self):
+        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>size <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>1</span>:
+            print(<span style=color:#e6db74>&#34;Empty Heap&#34;</span>)
+            <span style=color:#66d9ef>return</span>
+        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>heap_list[self<span style=color:#f92672>.</span>ROOT_IDX]
+</code></pre></div><h2 id=reference>Reference</h2>
 <p><a href=https://www.geeksforgeeks.org/heap-data-structure/>Heap Data Structure</a>
 <a href="https://www.youtube.com/watch?v=t0Cq6tVNRBA">Data Structures: Heaps</a>
 <a href=https://medium.com/basecs/learning-to-love-heaps-cef2b273a238>Learning to Love Heaps</a>
