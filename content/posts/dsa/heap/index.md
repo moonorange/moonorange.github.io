@@ -2,7 +2,7 @@
 title: 'Heap'
 date: '2022-04-13'
 categories: ["DSA"]
-tags: ["Heap", "Python", "English Article"]
+tags: ["Heap", "Tree", "Python", "English Article"]
 ---
 
 # Heap

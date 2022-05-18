@@ -15,7 +15,8 @@ It is commonly used to represent a dictionary for looking up words in a vocabula
 
 <https://leetcode.com/problems/implement-trie-prefix-tree/>
 
-Trie() Initializes the trie object.
+
+> Trie() Initializes the trie object.
 void insert(String word) Inserts the string word into the trie.
 boolean search(String word) Returns true if the string word is in the trie (i.e., was inserted before), and false otherwise.
 boolean startsWith(String prefix) Returns true if there is a previously inserted string word that has the prefix, and false otherwise.
