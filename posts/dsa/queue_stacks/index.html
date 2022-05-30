@@ -51,6 +51,8 @@ package queue import &#34;sync&#34; type node struct { data interface{} next *no
 <ul>
 <li><a href=#queue>Queue</a></li>
 <li><a href=#stack>Stack</a></li>
+<li><a href=#circular-queue>Circular Queue</a></li>
+<li><a href=#reference>Reference</a></li>
 </ul>
 </nav>
 </div>
@@ -191,7 +193,14 @@ package queue import &#34;sync&#34; type node struct { data interface{} next *no
  }
  <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>count</span><span style=color:#f92672>++</span>
 }
-</code></pre></div>
+</code></pre></div><h2 id=circular-queue>Circular Queue</h2>
+<p>Circular Queue is an extend version of regular queue where the last element is connected to the first element so that it makes a circle</p>
+<p>Dequeueing elements from fixed sized regular queue makes empty space in memory. That&rsquo;s where circular queue was invented so that it reuses the empty memory as the rear has the pointer to the first element.$class</p>
+<figure><img src=https://www.simplilearn.com/ice9/free_resources_article_thumb/Circular_link_resolving_problem_of_MemoryWastage.png alt="Circular Queue" width=100%>
+</figure>
+<h2 id=reference>Reference</h2>
+<p><a href=https://leetcode.com/explore/learn/card/queue-stack/228/first-in-first-out-data-structure/1337/>Design Circular Queue</a></p>
+<p><a href=https://www.simplilearn.com/tutorials/data-structure-tutorial/circular-queue-in-data-structure>Circular Queue in Data Structure: Overview, Implementation Using Array and Linked List</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
