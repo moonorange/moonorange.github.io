@@ -151,4 +151,16 @@ func (s *Stack) Push(value interface{}) {
 }
 ```
 
+## Circular Queue
 
+Circular Queue is an extend version of regular queue where the last element is connected to the first element so that it makes a circle
+
+Dequeueing elements from fixed sized regular queue makes empty space in memory. That's where circular queue was invented so that it reuses the empty memory as the rear has the pointer to the first element.$class
+
+{{<figure src="https://www.simplilearn.com/ice9/free_resources_article_thumb/Circular_link_resolving_problem_of_MemoryWastage.png" alt="Circular Queue" width="100%">}}
+
+## Reference
+
+[Design Circular Queue](https://leetcode.com/explore/learn/card/queue-stack/228/first-in-first-out-data-structure/1337/)
+
+[Circular Queue in Data Structure: Overview, Implementation Using Array and Linked List](https://www.simplilearn.com/tutorials/data-structure-tutorial/circular-queue-in-data-structure)
