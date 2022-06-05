@@ -159,6 +159,69 @@ Dequeueing elements from fixed sized regular queue makes empty space in memory. 
 
 {{<figure src="https://www.simplilearn.com/ice9/free_resources_article_thumb/Circular_link_resolving_problem_of_MemoryWastage.png" alt="Circular Queue" width="100%">}}
 
+```python
+# https://leetcode.com/explore/learn/card/queue-stack/228/first-in-first-out-data-structure/1337/
+
+class MyCircularQueue:
+
+    def __init__(self, k: int):
+        self.queue = [None] * k
+        self.head = -1
+        self.tail = -1
+        self.size = k
+
+    def enQueue(self, value: int) -> bool:
+        if self.isFull():
+            return False
+        # move head to 0 as the element will be enqueued 
+        if self.isEmpty():
+            self.head = 0
+
+        # Tail will be 0th index when tail is at the end of the queue as it circulates    
+        self.tail = (self.tail + 1) % self.size
+        self.queue[self.tail] = value
+        return True
+
+    def deQueue(self) -> bool:
+        if self.isEmpty():
+            return False
+        # If there there is only one element in the queue
+        if self.head == self.tail:
+            self.head = -1
+            self.tail = -1
+            return True
+        # Circulates head pointer to the 0th index if it reaches the last element
+        self.head = (self.head + 1) % self.size
+        return True
+
+    def Front(self) -> int:
+        if self.isEmpty():
+            return -1
+        return self.queue[self.head]
+
+    def Rear(self) -> int:
+        if self.isEmpty():
+            return -1
+        return self.queue[self.tail]
+    
+    def isEmpty(self) -> bool:
+        return self.head == -1
+
+    def isFull(self) -> bool:
+        return (self.tail + 1) % self.size == self.head
+ 
+
+
+# Your MyCircularQueue object will be instantiated and called as such:
+# obj = MyCircularQueue(k)
+# param_1 = obj.enQueue(value)
+# param_2 = obj.deQueue()
+# param_3 = obj.Front()
+# param_4 = obj.Rear()
+# param_5 = obj.isEmpty()
+# param_6 = obj.isFull()
+```
+
 ## Reference
 
 [Design Circular Queue](https://leetcode.com/explore/learn/card/queue-stack/228/first-in-first-out-data-structure/1337/)
