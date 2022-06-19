@@ -30,7 +30,7 @@ def bfs(root, target):
             curr = q.popleft
             if curr == target: return step
             # Search all adjacent nodes of current node and append them to queue
-            for neighbor in the adjacent nodes in curr:
+            for neighbor in (the adjacent nodes of curr):
                 if neighbor in visited continue:
 
                 q.append(neighbor)
@@ -45,3 +45,5 @@ def bfs(root, target):
 # Reference
 
 [BFS (幅優先探索) 超入門！ 〜 キューを鮮やかに使いこなす 〜](https://qiita.com/drken/items/996d80bcae64649a6580#1-4-bfs-%E3%81%AE%E8%A8%88%E7%AE%97%E9%87%8F)
+
+[5.1 Graph Traversals - BFS & DFS -Breadth First Search and Depth First Search](https://www.youtube.com/watch?v=pcKY4hjDrxk)
