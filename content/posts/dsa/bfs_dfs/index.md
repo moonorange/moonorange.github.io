@@ -5,9 +5,9 @@ categories: ["DSA"]
 tags: ["English Article", "BFS", "DFS"]
 ---
 
-# BFS Templates
+# BFS Template
 
-Write a template in a python-ish pseudo-code for bfs
+A template in a python-ish pseudo-code for bfs
 
 
 {{<figure src="https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-image-store.s3.ap-northeast-1.amazonaws.com%2F0%2F182963%2F0d83198d-9e0a-0fb9-ddff-f7b64f1673b7.png?ixlib=rb-4.0.0&auto=format&gif-q=60&q=75&w=1400&fit=max&s=5515e347dc5d77374a2c577794b1eaa1" alt="Queue and BFS" width="100%">}}
@@ -41,6 +41,25 @@ def bfs(root, target):
     # Return -1 if there is no target node
     return -1
 ```
+
+# DFS Template
+
+A template in a python-ish pseudo-code for dfs
+
+
+```python
+# Recursion
+
+def dfs(self, curr: int, target: int, visited: Set[int]):
+    # Termination condition
+    return True if curr == target
+    for next_node in (each neighbor of curr):
+        if next_node is not in visited:
+            visited.add(next_node)
+            self.dfs(next_node, target, visited)
+    return False
+```
+
 
 # Reference
 
