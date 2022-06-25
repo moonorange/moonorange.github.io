@@ -8,7 +8,7 @@
 <meta name=description content>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="BFS and DFS">
-<meta name=twitter:description content="BFS Templates Write a template in a python-ish pseudo-code for bfs from collections import deque def bfs(root, target): step = 0 # Enqueue root node in queue q = deque([root]) # Set to store visited nodes visited = set(q) while q: size = len(q) # Iterated the nodes which are already in the queue for _ in range(size): # Pop the first node in the queue curr = q.popleft if">
+<meta name=twitter:description content="BFS Template A template in a python-ish pseudo-code for bfs from collections import deque def bfs(root, target): step = 0 # Enqueue root node in queue q = deque([root]) # Set to store visited nodes visited = set(q) while q: size = len(q) # Iterated the nodes which are already in the queue for _ in range(size): # Pop the first node in the queue curr = q.popleft if curr">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -44,8 +44,8 @@
 </div></div>
 </header>
 <div class="content post__content clearfix">
-<h1 id=bfs-templates>BFS Templates</h1>
-<p>Write a template in a python-ish pseudo-code for bfs</p>
+<h1 id=bfs-template>BFS Template</h1>
+<p>A template in a python-ish pseudo-code for bfs</p>
 <figure><img src="https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-image-store.s3.ap-northeast-1.amazonaws.com%2F0%2F182963%2F0d83198d-9e0a-0fb9-ddff-f7b64f1673b7.png?ixlib=rb-4.0.0&auto=format&gif-q=60&q=75&w=1400&fit=max&s=5515e347dc5d77374a2c577794b1eaa1" alt="Queue and BFS" width=100%>
 </figure>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>
@@ -75,6 +75,18 @@
 
     <span style=color:#75715e># Return -1 if there is no target node</span>
     <span style=color:#66d9ef>return</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>
+</code></pre></div><h1 id=dfs-template>DFS Template</h1>
+<p>A template in a python-ish pseudo-code for dfs</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Recursion</span>
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dfs</span>(self, curr: int, target: int, visited: Set[int]):
+    <span style=color:#75715e># Termination condition</span>
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span> <span style=color:#66d9ef>if</span> curr <span style=color:#f92672>==</span> target
+    <span style=color:#66d9ef>for</span> next_node <span style=color:#f92672>in</span> (each neighbor of curr):
+        <span style=color:#66d9ef>if</span> next_node <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> visited:
+            visited<span style=color:#f92672>.</span>add(next_node)
+            self<span style=color:#f92672>.</span>dfs(next_node, target, visited)
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
 </code></pre></div><h1 id=reference>Reference</h1>
 <p><a href=https://qiita.com/drken/items/996d80bcae64649a6580#1-4-bfs-%E3%81%AE%E8%A8%88%E7%AE%97%E9%87%8F>BFS (幅優先探索) 超入門！ 〜 キューを鮮やかに使いこなす 〜</a></p>
 <p><a href="https://www.youtube.com/watch?v=pcKY4hjDrxk">5.1 Graph Traversals - BFS & DFS -Breadth First Search and Depth First Search</a></p>
