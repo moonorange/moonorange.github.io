@@ -3,19 +3,24 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>Tags - Kei's Blog</title>
+<title>Random Notes for system design - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Tags">
-<meta name=twitter:description content="Kei's personal blog about tech">
+<meta name=twitter:title content="Random Notes for system design">
+<meta name=twitter:description content="NoSQL database NoSQL databases are non tabular databases.
+Features
+ Flexible schema Horizontal scaling Fast queries due to the data model Ease of use for developers  Types The main types are document, key-value, wide-column, and graph.
+Document databases Document databases store data in documents similar to JSON objects.
+Particular elements can be indexed for faster querying.
+They have the flexibility to rework their document structures as needed.
+Use cases include e-commerce platforms, trading platforms, and mobile app development.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 <link rel=stylesheet href=/css/style.css>
 <link rel=stylesheet href=/css/custom.css>
-<link rel=alternate type=application/rss+xml href=/tags/index.xml title="Kei's Blog">
 <link rel="shortcut icon" href=/favicon.ico>
 </head>
 <body class=body>
@@ -34,53 +39,84 @@
 </header>
 <div class="wrapper flex">
 <div class=primary>
-<main class="main list" role=main>
-<header class=main__header>
-<h1 class=main__title>Tags</h1>
-</header><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/tags/c++/ rel=bookmark>
-C++
-</a>
-</h2>
-<div class="list__meta meta">
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>Random Notes for system design</h1>
+<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2020-08-17T00:00:00Z>August 17, 2020</time></div></div>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-06-27T00:00:00Z>June 27, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/system-design/ rel=category>System Design</a>
+</span>
+</div></div>
 </header>
-<div class="content list__excerpt post__content clearfix">
+<div class="post__toc toc">
+<div class=toc__title>Page content</div>
+<div class=toc__menu>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#types>Types</a>
+<ul>
+<li><a href=#document-databases>Document databases</a></li>
+<li><a href=#key-value-databases>Key-Value databases</a></li>
+<li><a href=#wide-column-storescolumns-oriented-databases>Wide-column stores(Columns-Oriented Databases)</a></li>
+<li><a href=#graph-databases>Graph databases</a></li>
+</ul>
+</li>
+</ul>
+</nav>
 </div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/tags/os/ rel=bookmark>
-OS
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2020-05-24T00:00:00Z>May 24, 2020</time></div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
+</div><div class="content post__content clearfix">
+<h1 id=nosql-database>NoSQL database</h1>
+<p>NoSQL databases are non tabular databases.</p>
+<p>Features</p>
+<ul>
+<li>Flexible schema</li>
+<li>Horizontal scaling</li>
+<li>Fast queries due to the data model</li>
+<li>Ease of use for developers</li>
+</ul>
+<h2 id=types>Types</h2>
+<p>The main types are document, key-value, wide-column, and graph.</p>
+<h3 id=document-databases>Document databases</h3>
+<p>Document databases store data in documents similar to JSON objects.</p>
+<p>Particular elements can be indexed for faster querying.</p>
+<p>They have the flexibility to rework their document structures as needed.</p>
+<p>Use cases include e-commerce platforms, trading platforms, and mobile app development.</p>
+<h3 id=key-value-databases>Key-Value databases</h3>
+<p>Key-Value databases store data as a key value pair.</p>
+<p>Use cases include shopping carts, user preferences, and user profiles.</p>
+<h3 id=wide-column-storescolumns-oriented-databases>Wide-column stores(Columns-Oriented Databases)</h3>
+<p>Wide-column stores store data in table, rows, and dynamic columns.</p>
+<p>A Colum store is organized as a set of columns.</p>
+<p>Columnar database can aggregate the value of a given column quickly</p>
+<p>Use cases include analytics.</p>
+<p>Writing data requires a lot of costs as that triggers multiple write events on disk.</p>
+<h3 id=graph-databases>Graph databases</h3>
+<p>Graph databases store data in nodes and edges. Nodes typically store information about people, places, and things, while edges store information about the relationships between the nodes.</p>
+<p>It is optimized to capture and search the connections and relations between data elements, overcoming the overhead associated with JOINing multiple tables in SQL.</p>
+<p>Use cases include fraud detection, social networks, and knowledge graphs.</p>
 </div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/tags/cnn/ rel=bookmark>
-CNN
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2020-04-24T00:00:00Z>April 24, 2020</time></div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
+</li>
+</ul>
 </div>
+</footer>
 </article>
 </main>
-<div class=pagination>
-<a class="pagination__item pagination__item--prev btn" href=/tags/page/3/>«</a>
-<span class="pagination__item pagination__item--current">4/4</span>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
 </div>
 </div>
 <aside class=sidebar>

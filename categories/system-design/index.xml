@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>System Design on Kei's Blog</title><link>https://moonorange.github.io/categories/system-design/</link><description>Recent content in System Design on Kei's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 27 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://moonorange.github.io/categories/system-design/index.xml" rel="self" type="application/rss+xml"/><item><title>Random Notes for system design</title><link>https://moonorange.github.io/posts/software_design/system_design/</link><pubDate>Mon, 27 Jun 2022 00:00:00 +0000</pubDate><guid>https://moonorange.github.io/posts/software_design/system_design/</guid><description>NoSQL database NoSQL databases are non tabular databases.
+Features
+Flexible schema Horizontal scaling Fast queries due to the data model Ease of use for developers Types The main types are document, key-value, wide-column, and graph.
+Document databases Document databases store data in documents similar to JSON objects.
+Particular elements can be indexed for faster querying.
+They have the flexibility to rework their document structures as needed.
+Use cases include e-commerce platforms, trading platforms, and mobile app development.</description></item></channel></rss>
