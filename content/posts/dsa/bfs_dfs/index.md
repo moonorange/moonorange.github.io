@@ -49,7 +49,6 @@ A template in a python-ish pseudo-code for dfs
 
 ```python
 # Recursion
-
 def dfs(self, curr: int, target: int, visited: Set[int]):
     # Termination condition
     return True if curr == target
@@ -60,6 +59,32 @@ def dfs(self, curr: int, target: int, visited: Set[int]):
     return False
 ```
 
+It seems like we don't have to use any stacks when we implement DFS recursively. But actually, we are using the implicit stack provided by the system, also known as the Call Stack.
+
+{{<figure src="./callstack.jpeg" alt="Call Stack" width="100%">}}
+
+If the depth of recursion is too much, you will end up suffering from stack overflow.
+
+In that case, you have to implement dfs using explicit stack.
+
+```python
+
+# Iteration
+
+def dfs(self, root: int, target: int) {
+    visited = set()
+    stack = [root]
+    while stack:
+        cur = stack.pop()
+        return True if cur == target
+        for next in (the neighbors of cur):
+            if next is not in visited:
+                visited.add(next)
+                stack.append(next)
+
+    return False
+}
+```
 
 # Reference
 
