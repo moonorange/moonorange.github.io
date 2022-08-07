@@ -35,7 +35,11 @@ Directed graphs contain ordered pairs of vertices while undirected graphs contai
 
 The number of edges connected to/from a node is called `degree`.
 
-In directed graph, the number of edges to a node is called indegree, whereas the number of edges from a node is called outdegree.
+In directed graph, the number of edges to a node is called `indegree`, whereas the number of edges from a node is called `outdegree`.
+
+The image below illustrates indegree(red color) and outdegree(blue color)
+
+{{<figure src="./indegree_outdegree.png" alt="Directed Graph" width="100%">}}
 
 ## Reference
 
