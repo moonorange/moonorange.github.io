@@ -28,25 +28,23 @@ Particular elements can be indexed for faster querying.
 They have the flexibility to rework their document structures as needed.
 
 Use cases include e-commerce platforms, trading platforms, and mobile app development.
+e.g. MongoDB, CouchDB, and DynamoDB
 
 ### Key-Value databases
 
 Key-Value databases store data as a key value pair.
 
 Use cases include shopping carts, user preferences, and user profiles.
+e.g. Redis and Memcached
 
 ### Wide-column stores(Columns-Oriented Databases)
 
 Wide-column stores store data in table, rows, and dynamic columns.
 
-A Colum store is organized as a set of columns.
-
-Columnar database can aggregate the value of a given column quickly
-
-Use cases include analytics.
-
 Writing data requires a lot of costs as that triggers multiple write events on disk.
 
+Use cases include analytics and IoT.
+e.g. Cassandra and HBase
 
 ### Graph databases
 
@@ -55,3 +53,4 @@ Graph databases store data in nodes and edges. Nodes typically store information
 It is optimized to capture and search the connections and relations between data elements, overcoming the overhead associated with JOINing multiple tables in SQL.
 
 Use cases include fraud detection, social networks, and knowledge graphs.
+e.g. Neo4j and JanusGraph
