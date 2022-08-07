@@ -69,8 +69,7 @@ In that case, you have to implement dfs using explicit stack.
 
 ```python
 
-# Iteration
-
+# Iteration2
 def dfs(self, root: int, target: int) {
     visited = set()
     stack = [root]

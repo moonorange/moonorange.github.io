@@ -25,6 +25,9 @@ paginate = 10
     post_meta = ["date", "categories"]
     twitter_cards = true
     toc = true # Enable Table of Contents
+    mathjax = true # Enable MathJax
+    mathjaxPath = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js" # Specify MathJax path
+    mathjaxConfig = "TeX-AMS-MML_HTMLorMML" # Specify MathJax config
 
 [Params.style.vars]
   highlightColor = "#00008b"
