@@ -14,7 +14,7 @@ G can be defines as follows
 $$G=\left(V,E\right)$$
 
 ordered pair:
-$$(a, b) \neq \left(b,a\right) \text{where} \,\, a \neq b$$
+$$(a, b) \neq \left(b,a\right) \text{where} \,\, a \neq b$$g
 
 {{<figure src="./graph.png" alt="Graph" width="100%">}}
 
