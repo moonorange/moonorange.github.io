@@ -13,10 +13,29 @@ G can be defines as follows
 
 $$G=\left(V,E\right)$$
 
-ordered pair:
-$$(a, b) \neq \left(b,a\right) \text{where} \,\, a \neq b$$g
+ordered pair
+
+$$(a, b) \neq \left(b,a\right) \text{where} \,\, a \neq b$$
 
 {{<figure src="./graph.png" alt="Graph" width="100%">}}
+
+## Graph terminology
+
+There are two type of graph, the one is `directed graph` and the other is `undirected graph`.
+
+Directed graphs contain ordered pairs of vertices while undirected graphs contain unordered pairs of vertices.
+
+`Directed Graph`
+
+{{<figure src="./directed_graph.png" alt="Directed Graph" width="100%">}}
+
+`Undirected Graph`
+
+{{<figure src="./undirected_graph.png" alt="Directed Graph" width="100%">}}
+
+The number of edges connected to/from a node is called `degree`.
+
+In directed graph, the number of edges to a node is called indegree, whereas the number of edges from a node is called outdegree.
 
 ## Reference
 

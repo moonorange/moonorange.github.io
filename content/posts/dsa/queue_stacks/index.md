@@ -155,7 +155,7 @@ func (s *Stack) Push(value interface{}) {
 
 Circular Queue is an extend version of regular queue where the last element is connected to the first element so that it makes a circle
 
-Dequeueing elements from fixed sized regular queue makes empty space in memory. That's where circular queue was invented so that it reuses the empty memory as the rear has the pointer to the first element.$class
+Dequeueing elements from fixed sized regular queue makes empty space in memory. That's where circular queue was invented so that it reuses the empty memory as the rear has the pointer to the first element.
 
 {{<figure src="https://www.simplilearn.com/ice9/free_resources_article_thumb/Circular_link_resolving_problem_of_MemoryWastage.png" alt="Circular Queue" width="100%">}}
 
@@ -173,11 +173,11 @@ class MyCircularQueue:
     def enQueue(self, value: int) -> bool:
         if self.isFull():
             return False
-        # move head to 0 as the element will be enqueued 
+        # move head to 0 as the element will be enqueued
         if self.isEmpty():
             self.head = 0
 
-        # Tail will be 0th index when tail is at the end of the queue as it circulates    
+        # Tail will be 0th index when tail is at the end of the queue as it circulates
         self.tail = (self.tail + 1) % self.size
         self.queue[self.tail] = value
         return True
@@ -203,13 +203,13 @@ class MyCircularQueue:
         if self.isEmpty():
             return -1
         return self.queue[self.tail]
-    
+
     def isEmpty(self) -> bool:
         return self.head == -1
 
     def isFull(self) -> bool:
         return (self.tail + 1) % self.size == self.head
- 
+
 
 
 # Your MyCircularQueue object will be instantiated and called as such:
