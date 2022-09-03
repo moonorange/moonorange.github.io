@@ -9,8 +9,10 @@
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="GCP random notes">
 <meta name=twitter:description content="Decision Tree Summarize decision trees to decide which gcp services you should use in a certain circumstance.
-Compute option GCP offers a multiple compute services. Here is a list of those services and how customizable/managed they are.
- Decision Tree  References Choosing the right compute option in GCP: a decision tree">
+Compute option GCP offers a multiple compute services.
+Here is a list of those services and how customizable/managed they are.
+ Decision Tree  Firebase When you&rsquo;re a mobile or html developer and want the least of amount of server-side code possible, you should choose Firebase.
+Firebase provides Database, Storage, Functions/Services, and Hosting with a little code.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -63,14 +65,26 @@ Compute option GCP offers a multiple compute services. Here is a list of those s
 <h2 id=decision-tree>Decision Tree</h2>
 <p>Summarize decision trees to decide which gcp services you should use in a certain circumstance.</p>
 <h3 id=compute-option>Compute option</h3>
-<p>GCP offers a multiple compute services.
-Here is a list of those services and how customizable/managed they are.</p>
+<p>GCP offers a multiple compute services.</p>
+<p>Here is a list of those services and how customizable/managed they are.</p>
 <figure><img src=./gcp_compute_services.png alt="Compute Options Decision Tree" width=75%>
 </figure>
-<p>Decision Tree
+<h4 id=decision-tree-1>Decision Tree</h4>
 <figure><img src=./compute_options_dt.png alt="Compute Options Decision Tree" width=75%>
 </figure>
-</p>
+<h5 id=firebase>Firebase</h5>
+<p>When you&rsquo;re a mobile or html developer and want the least of amount of server-side code possible, you should choose Firebase.</p>
+<p>Firebase provides Database, Storage, Functions/Services, and Hosting with a little code.</p>
+<h5 id=cloud-functions>Cloud Functions</h5>
+<p>If your application is an event-driven app and you want the least server-side code, you should use Cloud Functions.</p>
+<p>Cloud Functions is like a AWS Lambda. Only pay for when your functions are running.</p>
+<h5 id=app-engine>App Engine</h5>
+<p>If you don&rsquo;t want to separate codes into many independent tasks and still want serverless services, you can use App Engine.</p>
+<h5 id=cloud-run>Cloud Run</h5>
+<p>With Cloud Run, you can use any language, any library, any binary.</p>
+<p>You can use Cloud Run if you use a container.</p>
+<h5 id=gke>GKE</h5>
+<p>If you use Kubernetes for you container orchestration tool, you can use GKE.</p>
 <h2 id=references>References</h2>
 <p><a href=https://cloud.google.com/blog/products/compute/choosing-the-right-compute-option-in-gcp-a-decision-tree>Choosing the right compute option in GCP: a decision tree</a></p>
 </div>
