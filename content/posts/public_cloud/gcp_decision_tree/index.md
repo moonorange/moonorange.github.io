@@ -1,5 +1,5 @@
 ---
-title: 'GCP random notes'
+title: 'GCP Decision Tree'
 date: '2022-09-03'
 categories: ["Public Cloud"]
 tags: ["GCP", "English Article"]
