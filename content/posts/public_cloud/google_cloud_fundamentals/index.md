@@ -57,6 +57,14 @@ Custom rolesはカスタマイズ性が高いロールを自分で作ること�
 
 サービスアカウントは他のリソースと同じように扱え、サービスアカウントにIAMロールを適用することができる。(e.g. Aさんはサービスアカウントを編集できるが、Bさんは見るだけなど)
 
+## Google Cloud Platformの操作
+
+主に4つの操作インターフェースがある。
+
+- Cloud Platform Console(web user interface)
+- Cloud Shell and Cloud SDK(Command-line Interface)
+- Cloud Console Mobile App(For IOS and Android)
+- REST-based API(For custom applications)
 
 ## 参考
 
