@@ -59,6 +59,8 @@
 </li>
 <li><a href=#google-cloud-platformの操作>Google Cloud Platformの操作</a></li>
 <li><a href=#vpc>VPC</a></li>
+<li><a href=#compute-engine>Compute Engine</a></li>
+<li><a href=#cloud-load-balancing>Cloud Load Balancing</a></li>
 <li><a href=#参考>参考</a></li>
 </ul>
 </nav>
@@ -109,6 +111,16 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <p>VPCはグローバルスコープであり、世界中どのRegionにもサブネットを持てる。</p>
 <p>サブネットはRegion内の複数ゾーンをまたぐこともできる。</p>
 <p>サブネットのサイズは動的に割り当てるIP範囲を拡大するだけで、増やせ、構成済みのVMが影響を受けることはない。</p>
+<p>単に2つのVPC間にピアリング関係を確立したい場合は"VPCピアリング"が使える。</p>
+<p>一方IAM機能を活用して、別プロジェクトのVPCに対して誰が何をできるかを制御するには、&ldquo;Shared VPC"を使う。</p>
+<h2 id=compute-engine>Compute Engine</h2>
+<p>永続はストーレッジは２種類。標準とSSD。</p>
+<p>バッチ処理などの動いたり、止まったりするようなワークロードには、プリエンプティブルVMを使うとコストを節約できる。</p>
+<p>プリエンプティブルVMは使われていないときは、リソースを解放して止まる。</p>
+<h2 id=cloud-load-balancing>Cloud Load Balancing</h2>
+<p>完全分散型のマネージドサービス。</p>
+<p>管理対象のVM内で実行されないので、スケーリングも管理も不要。</p>
+<p>HTTPS, HTTP, TCP, SSL, UDPなどの全てのトラフィックに対応している。</p>
 <h2 id=参考>参考</h2>
 <p><a href=https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1>Google Cloud Fundamentals: Core Infrastructure </a></p>
 </div>
