@@ -61,6 +61,8 @@
 <li><a href=#vpc>VPC</a></li>
 <li><a href=#compute-engine>Compute Engine</a></li>
 <li><a href=#cloud-load-balancing>Cloud Load Balancing</a></li>
+<li><a href=#cloud-big-table>Cloud Big Table</a></li>
+<li><a href=#cloud-spanner>Cloud Spanner</a></li>
 <li><a href=#参考>参考</a></li>
 </ul>
 </nav>
@@ -109,7 +111,7 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 </ul>
 <h2 id=vpc>VPC</h2>
 <p>VPCはグローバルスコープであり、世界中どのRegionにもサブネットを持てる。</p>
-<p>サブネットはRegion内の複数ゾーンをまたぐこともできる。</p>
+<p>サブネットはRegion内の複数ゾーンをまたぐこともできる。つまりリージョンスコープである。</p>
 <p>サブネットのサイズは動的に割り当てるIP範囲を拡大するだけで、増やせ、構成済みのVMが影響を受けることはない。</p>
 <p>単に2つのVPC間にピアリング関係を確立したい場合は"VPCピアリング"が使える。</p>
 <p>一方IAM機能を活用して、別プロジェクトのVPCに対して誰が何をできるかを制御するには、&ldquo;Shared VPC"を使う。</p>
@@ -121,8 +123,19 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <p>完全分散型のマネージドサービス。</p>
 <p>管理対象のVM内で実行されないので、スケーリングも管理も不要。</p>
 <p>HTTPS, HTTP, TCP, SSL, UDPなどの全てのトラフィックに対応している。</p>
+<h2 id=cloud-big-table>Cloud Big Table</h2>
+<p>マネージドなNoSQLデータベースサービスである。</p>
+<p>単一の参照キーを持つようなデータに適しており、ユースケースとしては購買履歴、トランザクション履歴などのタイムシリーズデータ、ユーザー間のコネクションなどのグラフデータの保存が考えられる。</p>
+<p>IoTの使用履歴や財務分析データなど。</p>
+<p>データは処理中、保存時にも暗号化される。</p>
+<h2 id=cloud-spanner>Cloud Spanner</h2>
+<p>グローバルに分散された強整合性を備えたデータベース。</p>
+<p>RDBの構造とNoSQLの水平スケーラビリティを兼ね備えている。</p>
+<figure><img src=./large_spanner.max-2200x2200.png alt="Cloud hierarchy" width=75%>
+</figure>
 <h2 id=参考>参考</h2>
 <p><a href=https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1>Google Cloud Fundamentals: Core Infrastructure </a></p>
+<p><a href=https://cloud.google.com/blog/ja/topics/developers-practitioners/what-cloud-spanner>Cloud Spanner とは</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
