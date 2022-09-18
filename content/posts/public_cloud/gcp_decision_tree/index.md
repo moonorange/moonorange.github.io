@@ -61,6 +61,10 @@ You can decide depending on whether it`s Internal or External, Regional or Globa
 
 {{<figure src="./choose-lb.svg" alt="Cloud Load Balancer Decision Tree" width="75%">}}
 
+### Databases
+
+{{<figure src="./which_database_gcp.jpeg" alt="GCP Databases" width="75%">}}
+
 ## References
 
 [Choosing the right compute option in GCP: a decision tree](https://cloud.google.com/blog/products/compute/choosing-the-right-compute-option-in-gcp-a-decision-tree)

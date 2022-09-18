@@ -72,7 +72,7 @@ Custom rolesはカスタマイズ性が高いロールを自分で作ること�
 
 VPCはグローバルスコープであり、世界中どのRegionにもサブネットを持てる。
 
-サブネットはRegion内の複数ゾーンをまたぐこともできる。
+サブネットはRegion内の複数ゾーンをまたぐこともできる。つまりリージョンスコープである。
 
 サブネットのサイズは動的に割り当てるIP範囲を拡大するだけで、増やせ、構成済みのVMが影響を受けることはない。
 
@@ -96,6 +96,27 @@ VPCはグローバルスコープであり、世界中どのRegionにもサブ�
 
 HTTPS, HTTP, TCP, SSL, UDPなどの全てのトラフィックに対応している。
 
+## Cloud Big Table
+
+マネージドなNoSQLデータベースサービスである。
+
+単一の参照キーを持つようなデータに適しており、ユースケースとしては購買履歴、トランザクション履歴などのタイムシリーズデータ、ユーザー間のコネクションなどのグラフデータの保存が考えられる。
+
+IoTの使用履歴や財務分析データなど。
+
+データは処理中、保存時にも暗号化される。
+
+## Cloud Spanner
+
+グローバルに分散された強整合性を備えたデータベース。
+
+RDBの構造とNoSQLの水平スケーラビリティを兼ね備えている。
+
+
+{{<figure src="./large_spanner.max-2200x2200.png" alt="Cloud hierarchy" width="75%">}}
+
 ## 参考
 
 [Google Cloud Fundamentals: Core Infrastructure ](https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1)
+
+[Cloud Spanner とは](https://cloud.google.com/blog/ja/topics/developers-practitioners/what-cloud-spanner)
