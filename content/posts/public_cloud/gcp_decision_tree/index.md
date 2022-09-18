@@ -55,8 +55,16 @@ You can use Cloud Run if you use a container.
 
 If you use Kubernetes for you container orchestration tool, you can use GKE.
 
+### Cloud Load Balancer
+
+You can decide depending on whether it`s Internal or External, Regional or Global as well as traffic type.
+
+{{<figure src="./choose-lb.svg" alt="Cloud Load Balancer Decision Tree" width="75%">}}
+
 ## References
 
 [Choosing the right compute option in GCP: a decision tree](https://cloud.google.com/blog/products/compute/choosing-the-right-compute-option-in-gcp-a-decision-tree)
 
 [Where Should I Run My Stuff Choosing Google Cloud Compute Option](https://cloud.google.com/blog/ja/topics/developers-practitioners/where-should-i-run-my-stuff-choosing-google-cloud-compute-option)
+
+[Choose a load balancer ](https://cloud.google.com/load-balancing/docs/choosing-load-balancer)

@@ -76,6 +76,26 @@ VPCはグローバルスコープであり、世界中どのRegionにもサブ�
 
 サブネットのサイズは動的に割り当てるIP範囲を拡大するだけで、増やせ、構成済みのVMが影響を受けることはない。
 
+単に2つのVPC間にピアリング関係を確立したい場合は"VPCピアリング"が使える。
+
+一方IAM機能を活用して、別プロジェクトのVPCに対して誰が何をできるかを制御するには、"Shared VPC"を使う。
+
+## Compute Engine
+
+永続はストーレッジは２種類。標準とSSD。
+
+バッチ処理などの動いたり、止まったりするようなワークロードには、プリエンプティブルVMを使うとコストを節約できる。
+
+プリエンプティブルVMは使われていないときは、リソースを解放して止まる。
+
+## Cloud Load Balancing
+
+完全分散型のマネージドサービス。
+
+管理対象のVM内で実行されないので、スケーリングも管理も不要。
+
+HTTPS, HTTP, TCP, SSL, UDPなどの全てのトラフィックに対応している。
+
 ## 参考
 
 [Google Cloud Fundamentals: Core Infrastructure ](https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1)
