@@ -57,6 +57,8 @@
 <li><a href=#サービスアカウント>サービスアカウント</a></li>
 </ul>
 </li>
+<li><a href=#google-cloud-platformの操作>Google Cloud Platformの操作</a></li>
+<li><a href=#vpc>VPC</a></li>
 <li><a href=#参考>参考</a></li>
 </ul>
 </nav>
@@ -86,7 +88,8 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <li>Custom rolesをマネージしなければならない</li>
 <li>projectかorganizationレベルでしか適用できない。フォルダには適用できない</li>
 </ul>
-<p>同じリソースに対して、階層の上位と階層の下位でIAMポリシーを適用した場合、より制限の緩い方が適用される。</p>
+<p>同じリソースに対して、階層の上位と階層の下位でIAMポリシーを適用した場合、より上位ポリシーの方が制限が緩い場合は、制限の緩い方が適用される。
+上位ポリシーの方が制限が厳しい場合は、厳しい方が優先される。</p>
 <blockquote>
 <p>たとえば、プロジェクトに適用されているポリシーにより、ユーザー Jane に Cloud Storage バケットの変更権限が付与されているとします。一方、組織レベルのポリシーでは、彼女は Cloud Storage バケットを表示できるだけで、変更はできません。この場合、より制限の緩いポリシーが適用されます。したがって、Jane はバケットを変更できます。</p>
 </blockquote>
@@ -94,6 +97,18 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <p>サーバー間のインタラクションにルールを適用したい場合はservice accountを使う。</p>
 <p>例えばVMからしか、Cloud Storageを操作できないようにVMにサービスアカウントを付与するなど。</p>
 <p>サービスアカウントは他のリソースと同じように扱え、サービスアカウントにIAMロールを適用することができる。(e.g. Aさんはサービスアカウントを編集できるが、Bさんは見るだけなど)</p>
+<h2 id=google-cloud-platformの操作>Google Cloud Platformの操作</h2>
+<p>主に4つの操作インターフェースがある。</p>
+<ul>
+<li>Cloud Platform Console(web user interface)</li>
+<li>Cloud Shell and Cloud SDK(Command-line Interface)</li>
+<li>Cloud Console Mobile App(For IOS and Android)</li>
+<li>REST-based API(For custom applications)</li>
+</ul>
+<h2 id=vpc>VPC</h2>
+<p>VPCはグローバルスコープであり、世界中どのRegionにもサブネットを持てる。</p>
+<p>サブネットはRegion内の複数ゾーンをまたぐこともできる。</p>
+<p>サブネットのサイズは動的に割り当てるIP範囲を拡大するだけで、増やせ、構成済みのVMが影響を受けることはない。</p>
 <h2 id=参考>参考</h2>
 <p><a href=https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1>Google Cloud Fundamentals: Core Infrastructure </a></p>
 </div>
