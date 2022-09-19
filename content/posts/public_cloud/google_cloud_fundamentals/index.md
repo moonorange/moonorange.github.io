@@ -177,8 +177,54 @@ API管理ツール。
 - Cloud EndpointsはGCPで実行されるアプリをサポート()
 - ApigeeはGCP外部のバックエンドサービスも対応(レガシーシステムをマイクロサービスに徐々に移行していくときなどに使える)
 
+- gcloud app - App Engine deploymentsをマネージする。
+
+
+## Cloud Monitoring, Cloud Trace, Cloud Logging
+
+モニタリングやロギングができるサービス。AWSで言うCloud Watch
+
+本番アプリのソースコードにアクセスできる場合は、本番アプリの任意の場所の状態をデバッグできる。
+
+## Dataproc
+
+DataProcはマネージドなSpark, Hadoopサービスである。
+
+ユースケースとしてはバッチ処理、クエリー、ストリーミング、機械学習などに活用できる。
+
+### Hadoop
+
+Hadoopとは大規模データの蓄積、分析を分散処理技術によって実現するオープンソースのミドルウェア
+
+Hadoopの特長3つ
+
+- 単純なサーバーの追加によってスケーラビリティを実現
+- 非定型データの格納を想定した処理の柔軟性を実現
+- 構成するサーバーは専用ハードウェアや特別なスペックを必要としない
+
+
+#### Hadoop MapReduceアプリケーション
+
+- map処理: 入力データに対して何らかの処理をし、キーバリュー形式でデータを意味づける
+- reduce処理: map処理のキーごとに集約されたデータに対して何らかの処理を実行し結果を得る
+
+
+### Spark
+
+SparkはHadoopのいくつかの欠点を補う形で登場した。
+
+Hadoopは以下のような欠点を持っていた。
+
+- 個々のコンピューターのメモリをうまく活用する設計ではなかった
+- 同じ処理を複数行う場合に都度ストーレッジへのアクセスが発生
+- 同じデータを何回も扱う場合も都度ストーレッジへのアクセスが発生
+
+Sparkは"Resilient Distributed Datasets"という分散共有メモリの仕組みがあることで、インメモリで実行できるようになった。
+
 ## 参考
 
 [Google Cloud Fundamentals: Core Infrastructure ](https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1)
 
 [Cloud Spanner とは](https://cloud.google.com/blog/ja/topics/developers-practitioners/what-cloud-spanner)
+
+[分散処理技術「Hadoop」とは](https://oss.nttdata.com/hadoop/hadoop.html)
