@@ -170,6 +170,13 @@ Sandboxの制限は下記
 
 {{<figure src="./app_engine_comparison.png" alt="App Engine" width="75%">}}
 
+## Google Cloud EndpointsとApigee Edge
+
+API管理ツール。
+
+- Cloud EndpointsはGCPで実行されるアプリをサポート()
+- ApigeeはGCP外部のバックエンドサービスも対応(レガシーシステムをマイクロサービスに徐々に移行していくときなどに使える)
+
 ## 参考
 
 [Google Cloud Fundamentals: Core Infrastructure ](https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1)
