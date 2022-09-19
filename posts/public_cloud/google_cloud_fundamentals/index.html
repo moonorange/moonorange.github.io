@@ -63,6 +63,7 @@
 <li><a href=#cloud-load-balancing>Cloud Load Balancing</a></li>
 <li><a href=#cloud-big-table>Cloud Big Table</a></li>
 <li><a href=#cloud-spanner>Cloud Spanner</a></li>
+<li><a href=#kubernetes>Kubernetes</a></li>
 <li><a href=#参考>参考</a></li>
 </ul>
 </nav>
@@ -133,7 +134,18 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <p>RDBの構造とNoSQLの水平スケーラビリティを兼ね備えている。</p>
 <figure><img src=./large_spanner.max-2200x2200.png alt="Cloud hierarchy" width=75%>
 </figure>
-<h2 id=参考>参考</h2>
+<h2 id=kubernetes>Kubernetes</h2>
+<p>オープンソースのコンテナオーケストレーター</p>
+<figure><img src=./kubernetes_engine.png.png alt="Kubernetes Engine" width=75%>
+</figure>
+<p>&ldquo;cluster"という一連のノードにコンテナをデプロイできる。システム全体をコントロールする"master"とコンテナを走らせる"node"のセットである。</p>
+<p>&ldquo;node"とはKubernetesではコンピューティングインスタンスであり、Google CloudではCompute Engine内のVMインスタンスである。</p>
+<p>&ldquo;pod"とはKubernetesの"最小デプロイ単位"であり、クラスタで実行中のプロセスのようなものである。
+通常はpod一つにコンテナ一つだが、強い依存関係を持つコンテナが複数ある場合は単一のポッドにパッケージ化することがある。</p>
+<p>&ldquo;Service"とはロードバランシングを代表する際の基本的な手法である。つまりPublic IPを持つロードバランサをサービスに対して紐づけることができる。</p>
+<p>&ldquo;Service"は一連のpodをグループ化し、安定したエンドポイントを提供するものである。</p>
+<pre><code>gcloud container clusters - deploy and teardown Google Kubernetes Engine clusters
+</code></pre><h2 id=参考>参考</h2>
 <p><a href=https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1>Google Cloud Fundamentals: Core Infrastructure </a></p>
 <p><a href=https://cloud.google.com/blog/ja/topics/developers-practitioners/what-cloud-spanner>Cloud Spanner とは</a></p>
 </div>
