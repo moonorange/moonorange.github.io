@@ -118,7 +118,7 @@ RDBの構造とNoSQLの水平スケーラビリティを兼ね備えている。
 
 オープンソースのコンテナオーケストレーター
 
-{{<figure src="./kubernetes_engine.png.png" alt="Kubernetes Engine" width="75%">}}
+{{<figure src="./kubernetes_engine.png" alt="Kubernetes Engine" width="75%">}}
 
 "cluster"という一連のノードにコンテナをデプロイできる。システム全体をコントロールする"master"とコンテナを走らせる"node"のセットである。
 
@@ -131,10 +131,44 @@ RDBの構造とNoSQLの水平スケーラビリティを兼ね備えている。
 
 "Service"は一連のpodをグループ化し、安定したエンドポイントを提供するものである。
 
-```
-gcloud container clusters - deploy and teardown Google Kubernetes Engine clusters
-```
+### コマンドラインツール
 
+- gcloud container clusters - GKEコンテナをデプロイしたり、削除したりする
+- kubectl - Kubernetes clustersを操作する
+
+
+## App Engine
+
+フルマネージドなPaaSサービス。
+
+インフラを気にせず、コードのみに集中できる。
+
+NoSQL database, In-memory cache, Load Balancing, Health check, logging, user authenticationなどのwebサービスに必要なサービスが組み込まれている。
+
+ワークロードが変動しやすく、予測できないwebアプリやモバイルアプリのバックエンドに適している。
+
+アプリをローカルでテストし、App Engineサービスにデプロイできる。
+
+### App Engine　二つの環境
+
+App Engineはスタンダードとフレキシブルの二つの環境を提供する。
+
+スタンダード環境はシンプルな環境でデプロイが簡単できめ細かいスケーリングが可能。
+
+App Engineの2つの環境で1日のフリーquotaが存在するが、Standardだと使用量の少ないアプリは無料で実行できる場合がある。
+
+スタンダード環境はランタイムの制限があり、コードはSandboxというもので実行される。
+
+Sandboxの制限は下記
+- Local filesへの書き込みはできない
+- リクエストタイムアウトが60秒
+- third-party　softwareは入れられない
+
+上記のような制約を受けたくない場合はフレキシブル環境を採用する。
+
+違いは下記の表にある。
+
+{{<figure src="./app_engine_comparison.png" alt="App Engine" width="75%">}}
 
 ## 参考
 
