@@ -73,6 +73,14 @@
 <li><a href=#app-engine二つの環境>App Engine　二つの環境</a></li>
 </ul>
 </li>
+<li><a href=#google-cloud-endpointsとapigee-edge>Google Cloud EndpointsとApigee Edge</a></li>
+<li><a href=#cloud-monitoring-cloud-trace-cloud-logging>Cloud Monitoring, Cloud Trace, Cloud Logging</a></li>
+<li><a href=#dataproc>Dataproc</a>
+<ul>
+<li><a href=#hadoop>Hadoop</a></li>
+<li><a href=#spark>Spark</a></li>
+</ul>
+</li>
 <li><a href=#参考>参考</a></li>
 </ul>
 </nav>
@@ -179,9 +187,51 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <p>違いは下記の表にある。</p>
 <figure><img src=./app_engine_comparison.png alt="App Engine" width=75%>
 </figure>
+<h2 id=google-cloud-endpointsとapigee-edge>Google Cloud EndpointsとApigee Edge</h2>
+<p>API管理ツール。</p>
+<ul>
+<li>
+<p>Cloud EndpointsはGCPで実行されるアプリをサポート()</p>
+</li>
+<li>
+<p>ApigeeはGCP外部のバックエンドサービスも対応(レガシーシステムをマイクロサービスに徐々に移行していくときなどに使える)</p>
+</li>
+<li>
+<p>gcloud app - App Engine deploymentsをマネージする。</p>
+</li>
+</ul>
+<h2 id=cloud-monitoring-cloud-trace-cloud-logging>Cloud Monitoring, Cloud Trace, Cloud Logging</h2>
+<p>モニタリングやロギングができるサービス。AWSで言うCloud Watch</p>
+<p>本番アプリのソースコードにアクセスできる場合は、本番アプリの任意の場所の状態をデバッグできる。</p>
+<h2 id=dataproc>Dataproc</h2>
+<p>DataProcはマネージドなSpark, Hadoopサービスである。</p>
+<p>ユースケースとしてはバッチ処理、クエリー、ストリーミング、機械学習などに活用できる。</p>
+<h3 id=hadoop>Hadoop</h3>
+<p>Hadoopとは大規模データの蓄積、分析を分散処理技術によって実現するオープンソースのミドルウェア</p>
+<p>Hadoopの特長3つ</p>
+<ul>
+<li>単純なサーバーの追加によってスケーラビリティを実現</li>
+<li>非定型データの格納を想定した処理の柔軟性を実現</li>
+<li>構成するサーバーは専用ハードウェアや特別なスペックを必要としない</li>
+</ul>
+<h4 id=hadoop-mapreduceアプリケーション>Hadoop MapReduceアプリケーション</h4>
+<ul>
+<li>map処理: 入力データに対して何らかの処理をし、キーバリュー形式でデータを意味づける</li>
+<li>reduce処理: map処理のキーごとに集約されたデータに対して何らかの処理を実行し結果を得る</li>
+</ul>
+<h3 id=spark>Spark</h3>
+<p>SparkはHadoopのいくつかの欠点を補う形で登場した。</p>
+<p>Hadoopは以下のような欠点を持っていた。</p>
+<ul>
+<li>個々のコンピューターのメモリをうまく活用する設計ではなかった</li>
+<li>同じ処理を複数行う場合に都度ストーレッジへのアクセスが発生</li>
+<li>同じデータを何回も扱う場合も都度ストーレッジへのアクセスが発生</li>
+</ul>
+<p>Sparkは"Resilient Distributed Datasets"という分散共有メモリの仕組みがあることで、インメモリで実行できるようになった。</p>
 <h2 id=参考>参考</h2>
 <p><a href=https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1>Google Cloud Fundamentals: Core Infrastructure </a></p>
 <p><a href=https://cloud.google.com/blog/ja/topics/developers-practitioners/what-cloud-spanner>Cloud Spanner とは</a></p>
+<p><a href=https://oss.nttdata.com/hadoop/hadoop.html>分散処理技術「Hadoop」とは</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
