@@ -112,8 +112,29 @@ IoTの使用履歴や財務分析データなど。
 
 RDBの構造とNoSQLの水平スケーラビリティを兼ね備えている。
 
-
 {{<figure src="./large_spanner.max-2200x2200.png" alt="Cloud hierarchy" width="75%">}}
+
+## Kubernetes
+
+オープンソースのコンテナオーケストレーター
+
+{{<figure src="./kubernetes_engine.png.png" alt="Kubernetes Engine" width="75%">}}
+
+"cluster"という一連のノードにコンテナをデプロイできる。システム全体をコントロールする"master"とコンテナを走らせる"node"のセットである。
+
+"node"とはKubernetesではコンピューティングインスタンスであり、Google CloudではCompute Engine内のVMインスタンスである。
+
+"pod"とはKubernetesの"最小デプロイ単位"であり、クラスタで実行中のプロセスのようなものである。
+通常はpod一つにコンテナ一つだが、強い依存関係を持つコンテナが複数ある場合は単一のポッドにパッケージ化することがある。
+
+"Service"とはロードバランシングを代表する際の基本的な手法である。つまりPublic IPを持つロードバランサをサービスに対して紐づけることができる。
+
+"Service"は一連のpodをグループ化し、安定したエンドポイントを提供するものである。
+
+```
+gcloud container clusters - deploy and teardown Google Kubernetes Engine clusters
+```
+
 
 ## 参考
 
