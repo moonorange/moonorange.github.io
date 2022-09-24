@@ -95,15 +95,15 @@
 <p>OTPベースの二要素認証の代替として安全性を高めたもの
 秘密鍵がユーザーのデバイスに保存されネットワークに晒されない。</p>
 <h2 id=gcpの階層構造>GCPの階層構造</h2>
-<p>全てのGCPリソースはプロジェクトにまとめられる。</p>
+<p><code>全てのGCPリソースはプロジェクトにまとめられる</code></p>
 <p>オプションでフォルダでプロジェクトをまとめることができる。</p>
 <p>フォルダの下にフォルダを作ることもできる。
-フォルダを使う際には組織ノードを作る必要がある。</p>
+<code>フォルダを使う際には組織ノードを作る必要</code>がある。</p>
 <figure><img src=./cloud-hierarchy.svg alt="Cloud hierarchy" width=75%>
 </figure>
 <h2 id=iam>IAM</h2>
-<p>誰が何をできるかを定義するサービス
-Primitive, Predefined, Customの３種類のロールタイプがある。</p>
+<p><code>誰が何をできるか</code>を定義するサービス
+<code>Primitive</code>, <code>Predefined</code>, <code>Custom</code>の３種類のロールタイプがある。</p>
 <p>Primitiveロールはプロジェクトに適用し、プロジェクト内のすべてのリソースに影響する。</p>
 <p>Custom rolesはカスタマイズ性が高いロールを自分で作ることができる。</p>
 <ul>
@@ -116,7 +116,7 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <p>たとえば、プロジェクトに適用されているポリシーにより、ユーザー Jane に Cloud Storage バケットの変更権限が付与されているとします。一方、組織レベルのポリシーでは、彼女は Cloud Storage バケットを表示できるだけで、変更はできません。この場合、より制限の緩いポリシーが適用されます。したがって、Jane はバケットを変更できます。</p>
 </blockquote>
 <h3 id=サービスアカウント>サービスアカウント</h3>
-<p>サーバー間のインタラクションにルールを適用したい場合はservice accountを使う。</p>
+<p>サーバー間のインタラクションにルールを適用したい場合は<code>service account</code>を使う。</p>
 <p>例えばVMからしか、Cloud Storageを操作できないようにVMにサービスアカウントを付与するなど。</p>
 <p>サービスアカウントは他のリソースと同じように扱え、サービスアカウントにIAMロールを適用することができる。(e.g. Aさんはサービスアカウントを編集できるが、Bさんは見るだけなど)</p>
 <h2 id=google-cloud-platformの操作>Google Cloud Platformの操作</h2>
@@ -130,9 +130,9 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <h2 id=vpc>VPC</h2>
 <p>VPCはグローバルスコープであり、世界中どのRegionにもサブネットを持てる。</p>
 <p>サブネットはRegion内の複数ゾーンをまたぐこともできる。つまりリージョンスコープである。</p>
-<p>サブネットのサイズは動的に割り当てるIP範囲を拡大するだけで、増やせ、構成済みのVMが影響を受けることはない。</p>
-<p>単に2つのVPC間にピアリング関係を確立したい場合は"VPCピアリング"が使える。</p>
-<p>一方IAM機能を活用して、別プロジェクトのVPCに対して誰が何をできるかを制御するには、&ldquo;Shared VPC"を使う。</p>
+<p>サブネットのサイズは動的に割り当てるIP範囲を拡大するだけで増やせ、構成済みのVMが影響を受けることはない。</p>
+<p>単に2つのVPC間にピアリング関係を確立したい場合は<code>VPCピアリング</code>が使える。</p>
+<p>一方IAM機能を活用して、別プロジェクトのVPCに対して誰が何をできるかを制御するには、<code>Shared VPC</code>を使う。</p>
 <h2 id=compute-engine>Compute Engine</h2>
 <p>永続はストーレッジは２種類。標準とSSD。</p>
 <p>バッチ処理などの動いたり、止まったりするようなワークロードには、プリエンプティブルVMを使うとコストを節約できる。</p>
@@ -147,7 +147,7 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <p>IoTの使用履歴や財務分析データなど。</p>
 <p>データは処理中、保存時にも暗号化される。</p>
 <h2 id=cloud-spanner>Cloud Spanner</h2>
-<p>グローバルに分散された強整合性を備えたデータベース。</p>
+<p><code>グローバルに分散された強整合性</code>を備えたデータベース。</p>
 <p>RDBの構造とNoSQLの水平スケーラビリティを兼ね備えている。</p>
 <figure><img src=./large_spanner.max-2200x2200.png alt="Cloud hierarchy" width=75%>
 </figure>
@@ -155,12 +155,12 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <p>オープンソースのコンテナオーケストレーター</p>
 <figure><img src=./kubernetes_engine.png alt="Kubernetes Engine" width=75%>
 </figure>
-<p>&ldquo;cluster"という一連のノードにコンテナをデプロイできる。システム全体をコントロールする"master"とコンテナを走らせる"node"のセットである。</p>
-<p>&ldquo;node"とはKubernetesではコンピューティングインスタンスであり、Google CloudではCompute Engine内のVMインスタンスである。</p>
-<p>&ldquo;pod"とはKubernetesの"最小デプロイ単位"であり、クラスタで実行中のプロセスのようなものである。
+<p><code>cluster</code>という一連のノードにコンテナをデプロイできる。システム全体をコントロールする<code>master</code>とコンテナを走らせる<code>node</code>のセットである。</p>
+<p><code>node</code>とはKubernetesではコンピューティングインスタンスであり、Google CloudではCompute Engine内のVMインスタンスである。</p>
+<p><code>pod</code>とはKubernetesの<code>最小デプロイ単位</code>であり、クラスタで実行中のプロセスのようなものである。
 通常はpod一つにコンテナ一つだが、強い依存関係を持つコンテナが複数ある場合は単一のポッドにパッケージ化することがある。</p>
-<p>&ldquo;Service"とはロードバランシングを代表する際の基本的な手法である。つまりPublic IPを持つロードバランサをサービスに対して紐づけることができる。</p>
-<p>&ldquo;Service"は一連のpodをグループ化し、安定したエンドポイントを提供するものである。</p>
+<p><code>Service</code>とはロードバランシングを代表する際の基本的な手法である。つまりPublic IPを持つロードバランサをサービスに対して紐づけることができる。</p>
+<p>Serviceは一連のpodをグループ化し、安定したエンドポイントを提供するものである。</p>
 <h3 id=コマンドラインツール>コマンドラインツール</h3>
 <ul>
 <li>gcloud container clusters - GKEコンテナをデプロイしたり、削除したりする</li>
@@ -173,7 +173,7 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <p>ワークロードが変動しやすく、予測できないwebアプリやモバイルアプリのバックエンドに適している。</p>
 <p>アプリをローカルでテストし、App Engineサービスにデプロイできる。</p>
 <h3 id=app-engine二つの環境>App Engine　二つの環境</h3>
-<p>App Engineはスタンダードとフレキシブルの二つの環境を提供する。</p>
+<p>App Engineは<code>スタンダード</code>と<code>フレキシブル</code>の二つの環境を提供する。</p>
 <p>スタンダード環境はシンプルな環境でデプロイが簡単できめ細かいスケーリングが可能。</p>
 <p>App Engineの2つの環境で1日のフリーquotaが存在するが、Standardだと使用量の少ないアプリは無料で実行できる場合がある。</p>
 <p>スタンダード環境はランタイムの制限があり、コードはSandboxというもので実行される。</p>
@@ -227,7 +227,7 @@ Primitive, Predefined, Customの３種類のロールタイプがある。</p>
 <li>同じ処理を複数行う場合に都度ストーレッジへのアクセスが発生</li>
 <li>同じデータを何回も扱う場合も都度ストーレッジへのアクセスが発生</li>
 </ul>
-<p>Sparkは"Resilient Distributed Datasets"という分散共有メモリの仕組みがあることで、インメモリで実行できるようになった。</p>
+<p>Sparkは<code>Resilient Distributed Datasets</code>という分散共有メモリの仕組みがあることで、インメモリで実行できるようになった。</p>
 <h2 id=参考>参考</h2>
 <p><a href=https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1>Google Cloud Fundamentals: Core Infrastructure </a></p>
 <p><a href=https://cloud.google.com/blog/ja/topics/developers-practitioners/what-cloud-spanner>Cloud Spanner とは</a></p>
