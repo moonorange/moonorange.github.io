@@ -41,6 +41,9 @@ The image below illustrates indegree(red color) and outdegree(blue color)
 
 {{<figure src="./indegree_outdegree.png" alt="Directed Graph" width="100%">}}
 
+
+`Weighted Graph` has weight/cost associated with every edge, while `Unweighted Graph` has the same weight in all edges.
+
 ## Reference
 
 [Data structures: Introduction to graphs](https://www.youtube.com/watch?v=gXgEDyodOJU)
