@@ -31,6 +31,7 @@ def bfs(root, target):
             if curr == target: return step
             # Search all adjacent nodes of current node and append them to queue
             for neighbor in (the adjacent nodes of curr):
+                # Skip if we already visited the node
                 if neighbor in visited continue:
 
                 q.append(neighbor)
@@ -69,7 +70,7 @@ In that case, you have to implement dfs using explicit stack.
 
 ```python
 
-# Iteration2
+# Iteration
 def dfs(self, root: int, target: int) {
     visited = set()
     stack = [root]

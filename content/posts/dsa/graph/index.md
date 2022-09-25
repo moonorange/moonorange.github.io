@@ -44,8 +44,12 @@ The image below illustrates indegree(red color) and outdegree(blue color)
 
 `Weighted Graph` has weight/cost associated with every edge, while `Unweighted Graph` has the same weight in all edges.
 
+Check [BFS and DFS](/posts/dsa/bfs_dfs/) for graph traversal
+
 ## Reference
 
 [Data structures: Introduction to graphs](https://www.youtube.com/watch?v=gXgEDyodOJU)
 
 [グラフ理論入門](https://dev.classmethod.jp/articles/graph-theory/)
+
+[5.1 Graph Traversals - BFS & DFS -Breadth First Search and Depth First Search](https://www.youtube.com/watch?v=pcKY4hjDrxk)
