@@ -3,12 +3,15 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>OAuth2 - Kei's Blog</title>
+<title>Dijkstra’s Shortest Path Algorithm - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="OAuth2">
-<meta name=twitter:description content="はじめに OAuth2.0 とはサードパーティアプリケーションによる HTTP サービスへの限定的アクセスを可能にする認可フレームワークである。 The OAuth 2.0 authorization framework enables a third-party application to obtain limited">
+<meta name=twitter:title content="Dijkstra’s Shortest Path Algorithm">
+<meta name=twitter:description content="What is Dijkstra’s Algorithm Dijkstra&rsquo;s Algorithm is the algorithm to find the shortest path between any two vertices in a graph.
+Dijkstra&rsquo;s Algorithm will find the shortest path from a given starting vertex to every other vertices in a graph.
+ References Dijkstra Algorithm - Single Source Shortest Path - Greedy Method
+Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -36,10 +39,10 @@
 <main class=main role=main>
 <article class=post>
 <header class=post__header>
-<h1 class=post__title>OAuth2</h1>
+<h1 class=post__title>Dijkstra’s Shortest Path Algorithm</h1>
 <div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-09-04T00:00:00Z>September 04, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/security/ rel=category>Security</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-09-28T00:00:00Z>September 28, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
 </span>
 </div></div>
 </header>
@@ -48,110 +51,29 @@
 <div class=toc__menu>
 <nav id=TableOfContents>
 <ul>
-<li><a href=#前提>前提</a></li>
-<li><a href=#用語登場人物>用語、登場人物</a>
-<ul>
-<li><a href=#4-つのロールの関係>4 つのロールの関係</a></li>
-</ul>
-</li>
-<li><a href=#oauth-のエンドポイント>OAuth のエンドポイント</a>
-<ul>
-<li><a href=#認可エンドポイント>認可エンドポイント</a></li>
-<li><a href=#リダイレクトエンドポイント>リダイレクトエンドポイント</a></li>
-<li><a href=#トークンエンドポイント>トークンエンドポイント</a></li>
-</ul>
-</li>
-<li><a href=#oauth-のトークン>OAuth のトークン</a>
-<ul>
-<li><a href=#アクセストークン>アクセストークン</a></li>
-</ul>
-</li>
-<li><a href=#参考>参考</a></li>
+<li><a href=#what-is-dijkstras-algorithm>What is Dijkstra’s Algorithm</a></li>
+<li><a href=#references>References</a></li>
 </ul>
 </nav>
 </div>
 </div><div class="content post__content clearfix">
-<h1 id=はじめに>はじめに</h1>
-<p>OAuth2.0 とはサードパーティアプリケーションによる HTTP サービスへの限定的アクセスを可能にする認可フレームワークである。</p>
-<p><code>The OAuth 2.0 authorization framework enables a third-party application to obtain limited access to an HTTP service,</code></p>
-<p>本ブログでは具体例を交えて OAuth2.0 の概観を理解することを目的とする。</p>
-<h2 id=前提>前提</h2>
-<p>具体例として画像編集アプリを使う。
-この画像編集アプリは機能として編集した画像を Google Photo に upload することができるシンプルなアプリである。</p>
-<p>OAuth2.0 の定義を例に当てはめると下記のようになる。</p>
-<p>サードパーティアプリケーション
-画像編集アプリ</p>
-<p>HTTP サービス
-Google Photo API のこと</p>
-<p>限定的なアクセス
-画像編集アプリは Google Photo の user のデータに対して全ての処理が許されるわけではなく、upload することのみが許されるべきである。
-そのため画像編集アプリは user の許可を得た限定的な操作のみ行えるということである。</p>
-<p>認可フレームワーク
-Google Photo API は全てのアクセスに対して有効なものかどうかを確認する。その際にアクセストークンと呼ばれるものが使われる。
-認可フレームワークとはアクセストークンの発行方法についてのルールという事ができる。</p>
-<h2 id=用語登場人物>用語、登場人物</h2>
-<p>リソースオーナー
-画像編集アプリでいうところの User。自らの Google Photo に対する所有権を持つ。</p>
-<p>リソースサーバー
-データや機能を提供するサービスのこと。多くの場合は API などを指す。例では Google Photo のこと。</p>
-<p>サードパーティプリ、クライアント
-画像編集アプリのこと。リソースサーバーにアクセスして何らかの処理をするもの。</p>
-<p>認可サーバー
-アクセストークンを発行するサーバー。例では Google Photo の OAuth API。</p>
-<h3 id=4-つのロールの関係>4 つのロールの関係</h3>
-<figure><img src=./oauth_roles.png alt=OAuth_Roles width=75%>
+<h2 id=what-is-dijkstras-algorithm>What is Dijkstra’s Algorithm</h2>
+<p>Dijkstra&rsquo;s Algorithm is the algorithm to find the shortest path between any two vertices in a graph.</p>
+<p>Dijkstra&rsquo;s Algorithm will find the shortest path from a given starting vertex to every other vertices in a graph.</p>
+<figure><img src=./dijkstra.png alt="Dijkstra’s Algorithm" width=75%>
 </figure>
-<ol>
-<li>クライアントは認可サーバーに対して<code>リソースへのアクセス権</code>を要求</li>
-<li>認可サーバーは<code>クライアントへのアクセス圏の移譲</code>についてリソースオーナーの意思を確認する</li>
-<li>リソースオーナーはアクセス権の移譲について同意</li>
-<li>認可サーバーはアクセス権が移譲された証(アクセストークン)を発行</li>
-<li>クライアントはアクセストークンを持ってリソースへアクセスを試みる</li>
-</ol>
-<h2 id=oauth-のエンドポイント>OAuth のエンドポイント</h2>
-<p>OAuth のフローには認可エンドポイント、トークンエンドポイント、リダイレクトエンドポイントの 3 つの重要なエンドポイントがある。</p>
-<h3 id=認可エンドポイント>認可エンドポイント</h3>
-<p>認可エンドポイントとは認可サーバーによって提供されるエンドポイントで認可コードの発行が主な役割。
-ユーザー名とパスワードの入力などによってリソースオーナーの認証が行なわれ、リソースへのアクセス権をクライアントに移譲すること同意を求められる。
-同意が取れれば認可コードがリダイレクトエンドポイントに送られる。
-Google, Facebook を用いてログインをなどをする際に飛ばされる各サービスのログイン画面。</p>
-<h3 id=リダイレクトエンドポイント>リダイレクトエンドポイント</h3>
-<p>リダイレクトエンドポイントはクライアントが提供する認可サーバーから認可コードを受け取るために使われるものである。
-認可サーバーはリソースオーナーの権限移譲の同意が行われるとステータスコード 302 のレスポンスを返してブラウザをリダイレクトエンドポイントに認可コードの値と一緒にリダイレクトする。</p>
-<h3 id=トークンエンドポイント>トークンエンドポイント</h3>
-<p>トークンエンドポイントは認可サーバーによって提供される。
-認可コードを受け取ったクライアントはそれと共に必要なパラメーターを渡してトークンエンドポイントにリクエストを投げることでアクセストークンを取得できる。
-トークンエンドポイントでは Basic 認証によってクライアントのアイデンティがクライアント ID とクライアントシークレットを用いて確認される。
-クライアントシークレットは認可サーバーにクライアントを事前登録する際に発行される。</p>
-<h2 id=oauth-のトークン>OAuth のトークン</h2>
-<p>OAuth に関連するトークンとしてアクセストークンとリフレッシュトークンがある。
-また認可コードもトークンの一種と言える。</p>
-<h3 id=アクセストークン>アクセストークン</h3>
-<p>アクセストークンはクライアントからリソースサーバーに対するアクセスに利用される。
-アクセストークンにはリソースに対する権限が紐づいており、リソースサーバーはリクエストの内容とアクセストークンの権限が一致している場合、アクセスを許可する。
-OAuth のアクセストークンは Bearer Token であるためリソースサーバーはアクセストークンの送信元を確認しない。つまりアクセストークンを持ってさえいればリソースにアクセスする事が可能になる。
-アクセストークンの重要な属性としてスコープと有効期限というものがある。</p>
-<h4 id=スコープ>スコープ</h4>
-<p>スコープとはアクセストークンに紐づくアクセス圏を細かくコントロールするための仕組みである。
-例えば Google PhotoAPI の場合であれば写真の閲覧権限、編集権限などをスコープとしてアクセス権限に紐づける。</p>
-<p>アクセストークンに紐づけたい<code>スコープの指定はクライアントから認可サーバーへのリクエスト時点</code>で既に行われる。
-スコープを適切に設定することでアクセストークンが流出した際の影響を最小限にとどめることができる。</p>
-<h4 id=有効期限>有効期限</h4>
-<p>アクセストークンには有効期限があり、有効期限を過ぎたアクセストークンを付与したアクセスはリソースサーバーによって拒否される。
-アクセストークンの有効期限は後述のリフレッシュトークンに比べ短い時間に設定される事が多い。</p>
-<h2 id=参考>参考</h2>
-<p><a href=https://booth.pm/ja/items/1296585>雰囲気で OAuth2.0 を使っているエンジニアが OAuth2.0 を整理して、手を動かしながら学べる本</a></p>
-<p><a href="https://www.youtube.com/watch?v=996OiexHze0">OAuth 2.0 and OpenID Connect (in plain English)</a></p>
-<p><a href=https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth>What the Heck is OAuth?</a></p>
+<h2 id=references>References</h2>
+<p><a href="https://www.youtube.com/watch?v=XB4MIexjvY0">Dijkstra Algorithm - Single Source Shortest Path - Greedy Method</a></p>
+<p><a href="https://www.youtube.com/watch?v=pVfj6mxhdMw">Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
 <ul class=tags__list>
 <li class=tags__item>
-<a class="tags__link btn" href=/tags/oauth/ rel=tag>OAuth</a>
+<a class="tags__link btn" href=/tags/graph/ rel=tag>Graph</a>
 </li>
 <li class=tags__item>
-<a class="tags__link btn" href=/tags/japanese-article/ rel=tag>Japanese Article</a>
+<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
 </li>
 </ul>
 </div>
