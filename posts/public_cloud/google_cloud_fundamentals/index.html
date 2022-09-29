@@ -81,6 +81,7 @@
 <li><a href=#spark>Spark</a></li>
 </ul>
 </li>
+<li><a href=#cloud-dataflow>Cloud Dataflow</a></li>
 <li><a href=#参考>参考</a></li>
 </ul>
 </nav>
@@ -228,6 +229,11 @@
 <li>同じデータを何回も扱う場合も都度ストーレッジへのアクセスが発生</li>
 </ul>
 <p>Sparkは<code>Resilient Distributed Datasets</code>という分散共有メモリの仕組みがあることで、インメモリで実行できるようになった。</p>
+<h2 id=cloud-dataflow>Cloud Dataflow</h2>
+<p>リアルタイムデータや、データのサイズとrateが予測できない場合はDataflowが使える。</p>
+<p>リソース管理が完全マネージドであり、高機能なデータパイプラインを構築できる。</p>
+<p>ETLツールであり、fraud detectionや金融サービスなどのユースケースが考えられる。</p>
+<p>また外部サービスを含む複数のサービスをオーケストレイトできるためパーソナライズされたゲームのUXを提供するリアルタイムアプリなどに使える。</p>
 <h2 id=参考>参考</h2>
 <p><a href=https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1>Google Cloud Fundamentals: Core Infrastructure </a></p>
 <p><a href=https://cloud.google.com/blog/ja/topics/developers-practitioners/what-cloud-spanner>Cloud Spanner とは</a></p>
@@ -266,9 +272,9 @@ Software Engineer living in Japan
 <ul class=widget__list>
 <li class=widget__item><a class=widget__link href=/posts/dsa/dijkstra/>Dijkstra’s Shortest Path Algorithm</a></li>
 <li class=widget__item><a class=widget__link href=/posts/dsa/topological_sort/>Topological Sort</a></li>
+<li class=widget__item><a class=widget__link href=/posts/public_cloud/essential_cloud_infrastructure_foundation/>Essential Cloud Infrastructure: Foundation</a></li>
 <li class=widget__item><a class=widget__link href=/posts/public_cloud/google_cloud_fundamentals/>Google Cloud Fundamentals</a></li>
 <li class=widget__item><a class=widget__link href=/posts/public_cloud/gcp_decision_tree/>GCP Decision Tree</a></li>
-<li class=widget__item><a class=widget__link href=/posts/dsa/graph/>Intro to Graphs</a></li>
 </ul>
 </div>
 </div>
