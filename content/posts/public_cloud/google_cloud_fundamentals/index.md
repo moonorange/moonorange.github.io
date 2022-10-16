@@ -222,6 +222,17 @@ Hadoopは以下のような欠点を持っていた。
 
 Sparkは`Resilient Distributed Datasets`という分散共有メモリの仕組みがあることで、インメモリで実行できるようになった。
 
+
+## Cloud Dataflow
+
+リアルタイムデータや、データのサイズとrateが予測できない場合はDataflowが使える。
+
+リソース管理が完全マネージドであり、高機能なデータパイプラインを構築できる。
+
+ETLツールであり、fraud detectionや金融サービスなどのユースケースが考えられる。
+
+また外部サービスを含む複数のサービスをオーケストレイトできるためパーソナライズされたゲームのUXを提供するリアルタイムアプリなどに使える。
+
 ## 参考
 
 [Google Cloud Fundamentals: Core Infrastructure ](https://www.coursera.org/learn/gcp-fundamentals-jp/home/week/1)
