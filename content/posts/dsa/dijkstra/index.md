@@ -34,6 +34,72 @@ Repeat
 
 Until all vertices visited
 
+
+```python
+from graph import Graph
+import sys
+
+nodes = [
+    "Reykjavik",
+    "Oslo",
+    "Moscow",
+    "London",
+    "Rome",
+    "Berlin",
+    "Belgrade",
+    "Athens",
+]
+
+init_graph = {}
+for node in nodes:
+    init_graph[node] = {}
+init_graph["Reykjavik"]["Oslo"] = 5
+init_graph["Reykjavik"]["London"] = 4
+init_graph["Oslo"]["Berlin"] = 1
+init_graph["Oslo"]["Moscow"] = 3
+init_graph["Moscow"]["Belgrade"] = 5
+init_graph["Moscow"]["Athens"] = 4
+init_graph["Athens"]["Belgrade"] = 1
+init_graph["Rome"]["Berlin"] = 2
+init_graph["Rome"]["Athens"] = 2
+
+graph = Graph(nodes, init_graph)
+
+
+def dijkstra_algorithm(graph, start_node):
+    unvisited = set(graph.get_nodes())
+    shortest_path = {}
+    previous_nodes = {}
+
+    inf = sys.maxsize
+    # Initialize shortest path with max
+    for node in unvisited:
+        shortest_path[node] = inf
+    # Let the starting node 0
+    shortest_path[start_node] = 0
+
+    while unvisited:
+        current_min_node = None
+        for node in unvisited:
+
+            if current_min_node is None:
+                current_min_node = node
+            elif shortest_path[node] < shortest_path[current_min_node]:
+                current_min_node = node
+
+        neighbors = graph.get_outgoing_edges(current_min_node)
+        for neighbor in neighbors:
+            temp = shortest_path[current_min_node] + graph.value(
+                current_min_node, neighbor
+            )
+            if temp < shortest_path[neighbor]:
+                shortest_path[neighbor] = temp
+                previous_nodes[neighbor] = current_min_node
+        unvisited.remove(current_min_node)
+    return previous_nodes, shortest_path
+```
+
+
 ## References
 
 [Dijkstra Algorithm - Single Source Shortest Path - Greedy Method](https://www.youtube.com/watch?v=XB4MIexjvY0)
