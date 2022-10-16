@@ -79,7 +79,68 @@ Let the distance of a start vertex from the start vertex 0.">
 <li>Add the current vertex to the list of visited vertices</li>
 </ul>
 <p>Until all vertices visited</p>
-<h2 id=references>References</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> graph <span style=color:#f92672>import</span> Graph
+<span style=color:#f92672>import</span> sys
+
+nodes <span style=color:#f92672>=</span> [
+    <span style=color:#e6db74>&#34;Reykjavik&#34;</span>,
+    <span style=color:#e6db74>&#34;Oslo&#34;</span>,
+    <span style=color:#e6db74>&#34;Moscow&#34;</span>,
+    <span style=color:#e6db74>&#34;London&#34;</span>,
+    <span style=color:#e6db74>&#34;Rome&#34;</span>,
+    <span style=color:#e6db74>&#34;Berlin&#34;</span>,
+    <span style=color:#e6db74>&#34;Belgrade&#34;</span>,
+    <span style=color:#e6db74>&#34;Athens&#34;</span>,
+]
+
+init_graph <span style=color:#f92672>=</span> {}
+<span style=color:#66d9ef>for</span> node <span style=color:#f92672>in</span> nodes:
+    init_graph[node] <span style=color:#f92672>=</span> {}
+init_graph[<span style=color:#e6db74>&#34;Reykjavik&#34;</span>][<span style=color:#e6db74>&#34;Oslo&#34;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>
+init_graph[<span style=color:#e6db74>&#34;Reykjavik&#34;</span>][<span style=color:#e6db74>&#34;London&#34;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>4</span>
+init_graph[<span style=color:#e6db74>&#34;Oslo&#34;</span>][<span style=color:#e6db74>&#34;Berlin&#34;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>
+init_graph[<span style=color:#e6db74>&#34;Oslo&#34;</span>][<span style=color:#e6db74>&#34;Moscow&#34;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>
+init_graph[<span style=color:#e6db74>&#34;Moscow&#34;</span>][<span style=color:#e6db74>&#34;Belgrade&#34;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>
+init_graph[<span style=color:#e6db74>&#34;Moscow&#34;</span>][<span style=color:#e6db74>&#34;Athens&#34;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>4</span>
+init_graph[<span style=color:#e6db74>&#34;Athens&#34;</span>][<span style=color:#e6db74>&#34;Belgrade&#34;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>
+init_graph[<span style=color:#e6db74>&#34;Rome&#34;</span>][<span style=color:#e6db74>&#34;Berlin&#34;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>
+init_graph[<span style=color:#e6db74>&#34;Rome&#34;</span>][<span style=color:#e6db74>&#34;Athens&#34;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>
+
+graph <span style=color:#f92672>=</span> Graph(nodes, init_graph)
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dijkstra_algorithm</span>(graph, start_node):
+    unvisited <span style=color:#f92672>=</span> set(graph<span style=color:#f92672>.</span>get_nodes())
+    shortest_path <span style=color:#f92672>=</span> {}
+    previous_nodes <span style=color:#f92672>=</span> {}
+
+    inf <span style=color:#f92672>=</span> sys<span style=color:#f92672>.</span>maxsize
+    <span style=color:#75715e># Initialize shortest path with max</span>
+    <span style=color:#66d9ef>for</span> node <span style=color:#f92672>in</span> unvisited:
+        shortest_path[node] <span style=color:#f92672>=</span> inf
+    <span style=color:#75715e># Let the starting node 0</span>
+    shortest_path[start_node] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+
+    <span style=color:#66d9ef>while</span> unvisited:
+        current_min_node <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+        <span style=color:#66d9ef>for</span> node <span style=color:#f92672>in</span> unvisited:
+
+            <span style=color:#66d9ef>if</span> current_min_node <span style=color:#f92672>is</span> <span style=color:#66d9ef>None</span>:
+                current_min_node <span style=color:#f92672>=</span> node
+            <span style=color:#66d9ef>elif</span> shortest_path[node] <span style=color:#f92672>&lt;</span> shortest_path[current_min_node]:
+                current_min_node <span style=color:#f92672>=</span> node
+
+        neighbors <span style=color:#f92672>=</span> graph<span style=color:#f92672>.</span>get_outgoing_edges(current_min_node)
+        <span style=color:#66d9ef>for</span> neighbor <span style=color:#f92672>in</span> neighbors:
+            temp <span style=color:#f92672>=</span> shortest_path[current_min_node] <span style=color:#f92672>+</span> graph<span style=color:#f92672>.</span>value(
+                current_min_node, neighbor
+            )
+            <span style=color:#66d9ef>if</span> temp <span style=color:#f92672>&lt;</span> shortest_path[neighbor]:
+                shortest_path[neighbor] <span style=color:#f92672>=</span> temp
+                previous_nodes[neighbor] <span style=color:#f92672>=</span> current_min_node
+        unvisited<span style=color:#f92672>.</span>remove(current_min_node)
+    <span style=color:#66d9ef>return</span> previous_nodes, shortest_path
+</code></pre></div><h2 id=references>References</h2>
 <p><a href="https://www.youtube.com/watch?v=XB4MIexjvY0">Dijkstra Algorithm - Single Source Shortest Path - Greedy Method</a></p>
 <p><a href="https://www.youtube.com/watch?v=pVfj6mxhdMw">Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm</a></p>
 </div>
