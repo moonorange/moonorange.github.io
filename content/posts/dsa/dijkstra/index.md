@@ -34,6 +34,7 @@ Repeat
 
 Until all vertices visited
 
+Implementation in Python
 
 ```python
 from graph import Graph
@@ -78,30 +79,38 @@ def dijkstra_algorithm(graph, start_node):
     # Let the starting node 0
     shortest_path[start_node] = 0
 
+    # while there is any unvisited node
     while unvisited:
         current_min_node = None
+        # Find the node with the lowest value
+        # It will get the starting node as its value is 0 for the first time
         for node in unvisited:
-
             if current_min_node is None:
                 current_min_node = node
             elif shortest_path[node] < shortest_path[current_min_node]:
                 current_min_node = node
 
+        # Get outgoing edges from the current min node
         neighbors = graph.get_outgoing_edges(current_min_node)
         for neighbor in neighbors:
+            # shortest path to the current min node + distance from current min node to neighbor
             temp = shortest_path[current_min_node] + graph.value(
                 current_min_node, neighbor
             )
             if temp < shortest_path[neighbor]:
+                # If it's the shorter path, update the shortest path table
                 shortest_path[neighbor] = temp
+                # Update the previous node table as well
                 previous_nodes[neighbor] = current_min_node
+        # Once you have checked all neighbor for the current min node, remove current min node from unvisited set
         unvisited.remove(current_min_node)
     return previous_nodes, shortest_path
 ```
-
 
 ## References
 
 [Dijkstra Algorithm - Single Source Shortest Path - Greedy Method](https://www.youtube.com/watch?v=XB4MIexjvY0)
 
 [Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm](https://www.youtube.com/watch?v=pVfj6mxhdMw)
+
+[Implementing Dijkstra’s Algorithm in Python](https://www.udacity.com/blog/2021/10/implementing-dijkstras-algorithm-in-python.html)
