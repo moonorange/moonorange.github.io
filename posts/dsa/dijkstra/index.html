@@ -79,6 +79,7 @@ Let the distance of a start vertex from the start vertex 0.">
 <li>Add the current vertex to the list of visited vertices</li>
 </ul>
 <p>Until all vertices visited</p>
+<p>Implementation in Python</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> graph <span style=color:#f92672>import</span> Graph
 <span style=color:#f92672>import</span> sys
 
@@ -121,28 +122,36 @@ graph <span style=color:#f92672>=</span> Graph(nodes, init_graph)
     <span style=color:#75715e># Let the starting node 0</span>
     shortest_path[start_node] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
 
+    <span style=color:#75715e># while there is any unvisited node</span>
     <span style=color:#66d9ef>while</span> unvisited:
         current_min_node <span style=color:#f92672>=</span> <span style=color:#66d9ef>None</span>
+        <span style=color:#75715e># Find the node with the lowest value</span>
+        <span style=color:#75715e># It will get the starting node as its value is 0 for the first time</span>
         <span style=color:#66d9ef>for</span> node <span style=color:#f92672>in</span> unvisited:
-
             <span style=color:#66d9ef>if</span> current_min_node <span style=color:#f92672>is</span> <span style=color:#66d9ef>None</span>:
                 current_min_node <span style=color:#f92672>=</span> node
             <span style=color:#66d9ef>elif</span> shortest_path[node] <span style=color:#f92672>&lt;</span> shortest_path[current_min_node]:
                 current_min_node <span style=color:#f92672>=</span> node
 
+        <span style=color:#75715e># Get outgoing edges from the current min node</span>
         neighbors <span style=color:#f92672>=</span> graph<span style=color:#f92672>.</span>get_outgoing_edges(current_min_node)
         <span style=color:#66d9ef>for</span> neighbor <span style=color:#f92672>in</span> neighbors:
+            <span style=color:#75715e># shortest path to the current min node + distance from current min node to neighbor</span>
             temp <span style=color:#f92672>=</span> shortest_path[current_min_node] <span style=color:#f92672>+</span> graph<span style=color:#f92672>.</span>value(
                 current_min_node, neighbor
             )
             <span style=color:#66d9ef>if</span> temp <span style=color:#f92672>&lt;</span> shortest_path[neighbor]:
+                <span style=color:#75715e># If it&#39;s the shorter path, update the shortest path table</span>
                 shortest_path[neighbor] <span style=color:#f92672>=</span> temp
+                <span style=color:#75715e># Update the previous node table as well</span>
                 previous_nodes[neighbor] <span style=color:#f92672>=</span> current_min_node
+        <span style=color:#75715e># Once you have checked all neighbor for the current min node, remove current min node from unvisited set</span>
         unvisited<span style=color:#f92672>.</span>remove(current_min_node)
     <span style=color:#66d9ef>return</span> previous_nodes, shortest_path
 </code></pre></div><h2 id=references>References</h2>
 <p><a href="https://www.youtube.com/watch?v=XB4MIexjvY0">Dijkstra Algorithm - Single Source Shortest Path - Greedy Method</a></p>
 <p><a href="https://www.youtube.com/watch?v=pVfj6mxhdMw">Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm</a></p>
+<p><a href=https://www.udacity.com/blog/2021/10/implementing-dijkstras-algorithm-in-python.html>Implementing Dijkstra’s Algorithm in Python</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
