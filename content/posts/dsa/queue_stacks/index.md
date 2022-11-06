@@ -2,7 +2,7 @@
 title: 'Stack and Queue'
 date: '2022-05-21'
 categories: ["DSA"]
-tags: ["Stack", "Queue", "English Article"]
+tags: ["Stack", "Queue", "English Article", "Go"]
 ---
 
 ## Queue
