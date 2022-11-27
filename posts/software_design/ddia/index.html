@@ -3,19 +3,23 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>Programming Language - Kei's Blog</title>
+<title>Designing Data-Intensive Applications - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Programming Language">
-<meta name=twitter:description content="Kei's personal blog about tech">
+<meta name=twitter:title content="Designing Data-Intensive Applications">
+<meta name=twitter:description content="What&rsquo;s this article about This is my notes of a book called Designing Data-Intensive Applications.
+Chapter3 Storage and Retrieval
+SSTables and LSM Trees Sorted String Tables and Log-Structured Merge Trees are still used in some database.
+As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.
+B-Trees The B-Tree is the most widely used indexing structure.
+It stores data in a balanced tree like image below, thus searching data can be done in O(logN).">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 <link rel=stylesheet href=/css/style.css>
 <link rel=stylesheet href=/css/custom.css>
-<link rel=alternate type=application/rss+xml href=/categories/programming-language/index.xml title="Kei's Blog">
 <link rel="shortcut icon" href=/favicon.ico>
 </head>
 <body class=body>
@@ -34,30 +38,74 @@
 </header>
 <div class="wrapper flex">
 <div class=primary>
-<main class="main list" role=main>
-<header class=main__header>
-<h1 class=main__title>Programming Language</h1>
-</header><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/programming_language/golang/ rel=bookmark>
-Golang Basic(Golang基礎)
-</a>
-</h2>
-<div class="list__meta meta">
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>Designing Data-Intensive Applications</h1>
+<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-12-11T00:00:00Z>December 11, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/programming-language/ rel=category>Programming Language</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-11-26T00:00:00Z>November 26, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/software-design/ rel=category>Software Design</a>
 </span>
 </div></div>
 </header>
-<div class="content list__excerpt post__content clearfix">
-概要 Golang についての基礎的な情報をまとめる資料である。 Go とは？ Google が開発したプログラミング言語であり、2009 年に最初のバージョンがオープンソース
+<div class="post__toc toc">
+<div class=toc__title>Page content</div>
+<div class=toc__menu>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#whats-this-article-about>What&rsquo;s this article about</a></li>
+<li><a href=#chapter3>Chapter3</a>
+<ul>
+<li><a href=#sstables-and-lsm-trees>SSTables and LSM Trees</a></li>
+<li><a href=#b-trees>B-Trees</a></li>
+</ul>
+</li>
+</ul>
+</nav>
 </div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/programming_language/golang/>Read more…</a>
+</div><div class="content post__content clearfix">
+<h2 id=whats-this-article-about>What&rsquo;s this article about</h2>
+<p>This is my notes of a book called <code>Designing Data-Intensive Applications</code>.</p>
+<h2 id=chapter3>Chapter3</h2>
+<p>Storage and Retrieval</p>
+<h3 id=sstables-and-lsm-trees>SSTables and LSM Trees</h3>
+<p>Sorted String Tables and Log-Structured Merge Trees are still used in some database.</p>
+<p>As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.</p>
+<h3 id=b-trees>B-Trees</h3>
+<p>The B-Tree is the most widely used indexing structure.</p>
+<p>It stores data in a balanced tree like image below, thus searching data can be done in O(logN).</p>
+<figure><img src=./b_tree_branches.png alt=B-Tree width=75%>
+</figure>
+<p>Each B-Tree parent page has references to child pages, and the number of references that a parent page can have is called <code>branching factor</code>, which is 6 in the case above but typically several hundred.</p>
 </div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/distributed-system/ rel=tag>Distributed System</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/db/ rel=tag>DB</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
+</li>
+</ul>
+</div>
+</footer>
 </article>
 </main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
+</div>
 </div>
 <aside class=sidebar>
 <div class="widget-recent widget">
@@ -167,5 +215,6 @@ Golang Basic(Golang基礎)
 </footer>
 </div>
 <script async defer src=/js/menu.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>
