@@ -58,6 +58,8 @@ It stores data in a balanced tree like image below, thus searching data can be d
 <ul>
 <li><a href=#sstables-and-lsm-trees>SSTables and LSM Trees</a></li>
 <li><a href=#b-trees>B-Trees</a></li>
+<li><a href=#index>Index</a></li>
+<li><a href=#in-memory-database>In-Memory Database</a></li>
 </ul>
 </li>
 </ul>
@@ -77,6 +79,13 @@ It stores data in a balanced tree like image below, thus searching data can be d
 <figure><img src=./b_tree_branches.png alt=B-Tree width=75%>
 </figure>
 <p>Each B-Tree parent page has references to child pages, and the number of references that a parent page can have is called <code>branching factor</code>, which is 6 in the case above but typically several hundred.</p>
+<h3 id=index>Index</h3>
+<p>Primary index is index that resolves references to primary key that can identify each record.</p>
+<p>Secondary index, whereas, is not necessary references to unique keys.</p>
+<h3 id=in-memory-database>In-Memory Database</h3>
+<p>In-memory database archives durability by writing data to disks.</p>
+<p>Redis has weak durability as it writes to disks asynchronously.</p>
+<p>The reason why in-memory database has advantages on performance is not because it doesn&rsquo;t need to read from disks, but because they don&rsquo;t need to encode data in a form that can be written to disks.</p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
