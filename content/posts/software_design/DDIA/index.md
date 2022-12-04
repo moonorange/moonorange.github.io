@@ -43,3 +43,25 @@ In-memory database archives durability by writing data to disks.
 Redis has weak durability as it writes to disks asynchronously.
 
 The reason why in-memory database has advantages on performance is not because it doesn't need to read from disks, but because they don't need to encode data in a form that can be written to disks.
+
+### OLTP and OLAP
+
+OLTP is online transaction processing, and OLAP is online analytic processing.
+
+The difference is not clear-cut, but here are some main characteristics of these two.
+
+#### OLTP
+
+- Main Read Pattern: Small number of records per query, fetched by key
+- Main Write Pattern: Random-Access, low-latency writes from user input
+- Primary used by: End user
+- What data represents: Latest state of data
+- Dataset Size: Gigabytes to Terabytes
+
+#### OLAP
+
+- Main Read Pattern: Aggregate over large number of records
+- Main Write Pattern: Bulk import or event stream
+- Primary used by: Internal analyst
+- What data represents: History of events
+- Dataset Size: Terabytes to Petabytes
