@@ -60,6 +60,7 @@ It stores data in a balanced tree like image below, thus searching data can be d
 <li><a href=#b-trees>B-Trees</a></li>
 <li><a href=#index>Index</a></li>
 <li><a href=#in-memory-database>In-Memory Database</a></li>
+<li><a href=#oltp-and-olap>OLTP and OLAP</a></li>
 </ul>
 </li>
 </ul>
@@ -86,6 +87,25 @@ It stores data in a balanced tree like image below, thus searching data can be d
 <p>In-memory database archives durability by writing data to disks.</p>
 <p>Redis has weak durability as it writes to disks asynchronously.</p>
 <p>The reason why in-memory database has advantages on performance is not because it doesn&rsquo;t need to read from disks, but because they don&rsquo;t need to encode data in a form that can be written to disks.</p>
+<h3 id=oltp-and-olap>OLTP and OLAP</h3>
+<p>OLTP is online transaction processing, and OLAP is online analytic processing.</p>
+<p>The difference is not clear-cut, but here are some main characteristics of these two.</p>
+<h4 id=oltp>OLTP</h4>
+<ul>
+<li>Main Read Pattern: Small number of records per query, fetched by key</li>
+<li>Main Write Pattern: Random-Access, low-latency writes from user input</li>
+<li>Primary used by: End user</li>
+<li>What data represents: Latest state of data</li>
+<li>Dataset Size: Gigabytes to Terabytes</li>
+</ul>
+<h4 id=olap>OLAP</h4>
+<ul>
+<li>Main Read Pattern: Aggregate over large number of records</li>
+<li>Main Write Pattern: Bulk import or event stream</li>
+<li>Primary used by: Internal analyst</li>
+<li>What data represents: History of events</li>
+<li>Dataset Size: Terabytes to Petabytes</li>
+</ul>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
