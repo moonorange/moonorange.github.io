@@ -65,3 +65,16 @@ The difference is not clear-cut, but here are some main characteristics of these
 - Primary used by: Internal analyst
 - What data represents: History of events
 - Dataset Size: Terabytes to Petabytes
+
+
+## 4. Encoding and Evaluation. Page 111
+
+### Formats for Encoding data
+
+The translation from the in-memory representation to a byte sequence is called encoding(a.k.a marshalling or serialization). The reverse is called decoding, parsing, unmarshalling, or deserialization
+
+#### gRPC(compatibility)
+
+Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields. So the forward compatibility remains.
+
+Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards
