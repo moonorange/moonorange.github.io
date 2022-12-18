@@ -63,6 +63,11 @@ It stores data in a balanced tree like image below, thus searching data can be d
 <li><a href=#oltp-and-olap>OLTP and OLAP</a></li>
 </ul>
 </li>
+<li><a href=#4-encoding-and-evaluation-page-111>4. Encoding and Evaluation. Page 111</a>
+<ul>
+<li><a href=#formats-for-encoding-data>Formats for Encoding data</a></li>
+</ul>
+</li>
 </ul>
 </nav>
 </div>
@@ -106,6 +111,12 @@ It stores data in a balanced tree like image below, thus searching data can be d
 <li>What data represents: History of events</li>
 <li>Dataset Size: Terabytes to Petabytes</li>
 </ul>
+<h2 id=4-encoding-and-evaluation-page-111>4. Encoding and Evaluation. Page 111</h2>
+<h3 id=formats-for-encoding-data>Formats for Encoding data</h3>
+<p>The translation from the in-memory representation to a byte sequence is called encoding(a.k.a marshalling or serialization). The reverse is called decoding, parsing, unmarshalling, or deserialization</p>
+<h4 id=grpccompatibility>gRPC(compatibility)</h4>
+<p>Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields. So the forward compatibility remains.</p>
+<p>Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards</p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
