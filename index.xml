@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kei's Blog</title><link>https://moonorange.github.io/</link><description>Recent content on Kei's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 26 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://moonorange.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Designing Data-Intensive Applications</title><link>https://moonorange.github.io/posts/software_design/ddia/</link><pubDate>Sat, 26 Nov 2022 00:00:00 +0000</pubDate><guid>https://moonorange.github.io/posts/software_design/ddia/</guid><description>What&amp;rsquo;s this article about This is my notes of a book called Designing Data-Intensive Applications.
 Chapter3 Storage and Retrieval
-SSTables and LSM Trees Sorted String Tables and Log-Structured Merge Trees are still used in some database.
-As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.
-B-Trees The B-Tree is the most widely used indexing structure.
-It stores data in a balanced tree like image below, thus searching data can be done in O(logN).</description></item><item><title>Dijkstra’s Shortest Path Algorithm</title><link>https://moonorange.github.io/posts/dsa/dijkstra/</link><pubDate>Wed, 28 Sep 2022 00:00:00 +0000</pubDate><guid>https://moonorange.github.io/posts/dsa/dijkstra/</guid><description>What is Dijkstra’s Algorithm Dijkstra&amp;rsquo;s Algorithm is the algorithm to find the shortest path between any two vertices in a graph.
+SSTables and LSM Trees SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.
+https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/
+SSTables and Log-Structured Merge Trees are still used in some database.
+As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.</description></item><item><title>Dijkstra’s Shortest Path Algorithm</title><link>https://moonorange.github.io/posts/dsa/dijkstra/</link><pubDate>Wed, 28 Sep 2022 00:00:00 +0000</pubDate><guid>https://moonorange.github.io/posts/dsa/dijkstra/</guid><description>What is Dijkstra’s Algorithm Dijkstra&amp;rsquo;s Algorithm is the algorithm to find the shortest path between any two vertices in a graph.
 Dijkstra&amp;rsquo;s Algorithm will find the shortest path from a given starting vertex to every other vertices in a graph.
 Steps Prepare a table to have the shortest distance from a starting vertex and previous vertex.
 Initialize two list of visited and unvisited nodes

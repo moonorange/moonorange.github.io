@@ -10,10 +10,10 @@
 <meta name=twitter:title content="Designing Data-Intensive Applications">
 <meta name=twitter:description content="What&rsquo;s this article about This is my notes of a book called Designing Data-Intensive Applications.
 Chapter3 Storage and Retrieval
-SSTables and LSM Trees Sorted String Tables and Log-Structured Merge Trees are still used in some database.
-As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.
-B-Trees The B-Tree is the most widely used indexing structure.
-It stores data in a balanced tree like image below, thus searching data can be done in O(logN).">
+SSTables and LSM Trees SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.
+ https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/
+SSTables and Log-Structured Merge Trees are still used in some database.
+As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -77,7 +77,11 @@ It stores data in a balanced tree like image below, thus searching data can be d
 <h2 id=chapter3>Chapter3</h2>
 <p>Storage and Retrieval</p>
 <h3 id=sstables-and-lsm-trees>SSTables and LSM Trees</h3>
-<p>Sorted String Tables and Log-Structured Merge Trees are still used in some database.</p>
+<p>SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.</p>
+<p><figure><img src=./SSTables.png alt=SSTables width=100%>
+</figure>
+<a href=https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/>https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/</a></p>
+<p>SSTables and Log-Structured Merge Trees are still used in some database.</p>
 <p>As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.</p>
 <h3 id=b-trees>B-Trees</h3>
 <p>The B-Tree is the most widely used indexing structure.</p>
@@ -86,14 +90,14 @@ It stores data in a balanced tree like image below, thus searching data can be d
 </figure>
 <p>Each B-Tree parent page has references to child pages, and the number of references that a parent page can have is called <code>branching factor</code>, which is 6 in the case above but typically several hundred.</p>
 <h3 id=index>Index</h3>
-<p>Primary index is index that resolves references to primary key that can identify each record.</p>
-<p>Secondary index, whereas, is not necessary references to unique keys.</p>
+<p><code>Primary index</code> is index that resolves references to primary key that can identify each record.</p>
+<p><code>Secondary index</code>, whereas, is not necessary references to unique keys.</p>
 <h3 id=in-memory-database>In-Memory Database</h3>
 <p>In-memory database archives durability by writing data to disks.</p>
-<p>Redis has weak durability as it writes to disks asynchronously.</p>
+<p>Redis has <code>weak durability</code> as it writes to disks asynchronously.</p>
 <p>The reason why in-memory database has advantages on performance is not because it doesn&rsquo;t need to read from disks, but because they don&rsquo;t need to encode data in a form that can be written to disks.</p>
 <h3 id=oltp-and-olap>OLTP and OLAP</h3>
-<p>OLTP is online transaction processing, and OLAP is online analytic processing.</p>
+<p><code>OLTP</code> is online transaction processing, and <code>OLAP</code> is online analytic processing.</p>
 <p>The difference is not clear-cut, but here are some main characteristics of these two.</p>
 <h4 id=oltp>OLTP</h4>
 <ul>
@@ -113,10 +117,24 @@ It stores data in a balanced tree like image below, thus searching data can be d
 </ul>
 <h2 id=4-encoding-and-evaluation-page-111>4. Encoding and Evaluation. Page 111</h2>
 <h3 id=formats-for-encoding-data>Formats for Encoding data</h3>
-<p>The translation from the in-memory representation to a byte sequence is called encoding(a.k.a marshalling or serialization). The reverse is called decoding, parsing, unmarshalling, or deserialization</p>
+<p>The translation from the <code>in-memory representation</code> to a <code>byte sequence</code> is called encoding(a.k.a marshalling or serialization). The reverse is called decoding, parsing, unmarshalling, or deserialization</p>
 <h4 id=grpccompatibility>gRPC(compatibility)</h4>
 <p>Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields. So the forward compatibility remains.</p>
 <p>Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards</p>
+<h4 id=message-broker-and-actor-modelp137>Message Broker and Actor model(P137)</h4>
+<p><code>Message Broker</code></p>
+<p>One message sends a message to a named queue or topic, and broker ensures that the message is delivered to at least one consumers or subscribers to that topic or queue. There can be many producers and consumers on the same topic.</p>
+<p>Producer and Consumer Pattern Ref.(Japanese)
+<a href=https://www.hyuki.com/dp/dpinfo.html#ProducerConsumer>https://www.hyuki.com/dp/dpinfo.html#ProducerConsumer</a></p>
+<p>English
+<a href=https://cloud.google.com/pubsub/docs/overview>https://cloud.google.com/pubsub/docs/overview</a></p>
+<p><code>Actor Model</code></p>
+<p>Location transparency is the ability to access objects without the knowledge of their location.</p>
+<p>Actor model is a programming model for concurrency in a single process.</p>
+<p>Each actor typically represents one entity or client and usually has local state.</p>
+<p>It communicates with other actors by sending and receiving asynchronous messages.</p>
+<p>Ref.
+<a href="https://www.youtube.com/watch?v=ELwEdb_pD0k">https://www.youtube.com/watch?v=ELwEdb_pD0k</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
