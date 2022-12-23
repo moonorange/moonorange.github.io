@@ -78,3 +78,13 @@ The translation from the in-memory representation to a byte sequence is called e
 Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields. So the forward compatibility remains.
 
 Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards
+
+#### Message Broker and Actor model(P137)
+
+Location transparency is the ability to access objects without the knowledge of their location.
+
+Message Broker
+
+One message sends a message to a named queue or topic, and broker ensures that the message is delivered to at least one consumers or subscribers to that topic or queue. There can be many producers and consumers on the same topic.
+
+
