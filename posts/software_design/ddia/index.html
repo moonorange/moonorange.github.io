@@ -68,6 +68,11 @@ As a rule of thumb, LSM Trees are faster for writes but slower for read than B-T
 <li><a href=#formats-for-encoding-data>Formats for Encoding data</a></li>
 </ul>
 </li>
+<li><a href=#chapter-5-replication>Chapter 5 Replication</a>
+<ul>
+<li><a href=#github-incident>github incident</a></li>
+</ul>
+</li>
 </ul>
 </nav>
 </div>
@@ -135,6 +140,13 @@ As a rule of thumb, LSM Trees are faster for writes but slower for read than B-T
 <p>It communicates with other actors by sending and receiving asynchronous messages.</p>
 <p>Ref.
 <a href="https://www.youtube.com/watch?v=ELwEdb_pD0k">https://www.youtube.com/watch?v=ELwEdb_pD0k</a></p>
+<h2 id=chapter-5-replication>Chapter 5 Replication</h2>
+<h3 id=github-incident>github incident</h3>
+<p>Discarding failed writes of the leader is dangerous especially when it has to coordinate with other storage systems outside the database.</p>
+<p>There is an incident because of the leader crushing in Github.</p>
+<p>An out-dated follower became the leader.</p>
+<p>The database used the auto incrementing primary key, and the new leader used the primary key, which is already used in the old reader.
+It&rsquo;s also used in redis, thus it created the inconsistency between redis and database data.</p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
