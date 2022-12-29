@@ -109,3 +109,16 @@ It communicates with other actors by sending and receiving asynchronous messages
 
 Ref.
 <https://www.youtube.com/watch?v=ELwEdb_pD0k>
+
+## Chapter 5 Replication
+
+### github incident
+
+Discarding failed writes of the leader is dangerous especially when it has to coordinate with other storage systems outside the database.
+
+There is an incident because of the leader crushing in Github. 
+
+An out-dated follower became the leader. 
+
+The database used the auto incrementing primary key, and the new leader used the primary key, which is already used in the old reader. 
+It's also used in redis, thus it created the inconsistency between redis and database data.
