@@ -9,11 +9,11 @@
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Designing Data-Intensive Applications">
 <meta name=twitter:description content="What&rsquo;s this article about This is my notes of a book called Designing Data-Intensive Applications.
-Chapter3 Storage and Retrieval
-SSTables and LSM Trees SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.
+SSTables and LSM Trees(P.76) SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.
  https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/
 SSTables and Log-Structured Merge Trees are still used in some database.
-As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.">
+As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.
+B-Trees The B-Tree is the most widely used indexing structure.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -53,10 +53,9 @@ As a rule of thumb, LSM Trees are faster for writes but slower for read than B-T
 <div class=toc__menu>
 <nav id=TableOfContents>
 <ul>
-<li><a href=#whats-this-article-about>What&rsquo;s this article about</a></li>
-<li><a href=#chapter3>Chapter3</a>
+<li><a href=#whats-this-article-about>What&rsquo;s this article about</a>
 <ul>
-<li><a href=#sstables-and-lsm-trees>SSTables and LSM Trees</a></li>
+<li><a href=#sstables-and-lsm-treesp76>SSTables and LSM Trees(P.76)</a></li>
 <li><a href=#b-trees>B-Trees</a></li>
 <li><a href=#index>Index</a></li>
 <li><a href=#in-memory-database>In-Memory Database</a></li>
@@ -68,9 +67,11 @@ As a rule of thumb, LSM Trees are faster for writes but slower for read than B-T
 <li><a href=#formats-for-encoding-data>Formats for Encoding data</a></li>
 </ul>
 </li>
-<li><a href=#chapter-5-replication>Chapter 5 Replication</a>
+<li><a href=#chapter-5-replication>Chapter 5 Replication</a></li>
+<li><a href=#failover-is-fraught-with-things-that-can-go-wrong>Failover is fraught with things that can go wrong</a>
 <ul>
 <li><a href=#github-incident>github incident</a></li>
+<li><a href=#split-brain>Split brain</a></li>
 </ul>
 </li>
 </ul>
@@ -79,9 +80,7 @@ As a rule of thumb, LSM Trees are faster for writes but slower for read than B-T
 </div><div class="content post__content clearfix">
 <h2 id=whats-this-article-about>What&rsquo;s this article about</h2>
 <p>This is my notes of a book called <code>Designing Data-Intensive Applications</code>.</p>
-<h2 id=chapter3>Chapter3</h2>
-<p>Storage and Retrieval</p>
-<h3 id=sstables-and-lsm-trees>SSTables and LSM Trees</h3>
+<h3 id=sstables-and-lsm-treesp76>SSTables and LSM Trees(P.76)</h3>
 <p>SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.</p>
 <p><figure><img src=./SSTables.png alt=SSTables width=100%>
 </figure>
@@ -126,7 +125,7 @@ As a rule of thumb, LSM Trees are faster for writes but slower for read than B-T
 <h4 id=grpccompatibility>gRPC(compatibility)</h4>
 <p>Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields. So the forward compatibility remains.</p>
 <p>Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards</p>
-<h4 id=message-broker-and-actor-modelp137>Message Broker and Actor model(P137)</h4>
+<h4 id=message-broker-and-actor-modelp137>Message Broker and Actor model(P.137)</h4>
 <p><code>Message Broker</code></p>
 <p>One message sends a message to a named queue or topic, and broker ensures that the message is delivered to at least one consumers or subscribers to that topic or queue. There can be many producers and consumers on the same topic.</p>
 <p>Producer and Consumer Pattern Ref.(Japanese)
@@ -141,12 +140,18 @@ As a rule of thumb, LSM Trees are faster for writes but slower for read than B-T
 <p>Ref.
 <a href="https://www.youtube.com/watch?v=ELwEdb_pD0k">https://www.youtube.com/watch?v=ELwEdb_pD0k</a></p>
 <h2 id=chapter-5-replication>Chapter 5 Replication</h2>
+<h2 id=failover-is-fraught-with-things-that-can-go-wrong>Failover is fraught with things that can go wrong</h2>
+<p>When the <code>leader(master or primary)</code> node failed, one of the <code>followers(read replicas, slaves, secondaries, or hot standby)</code> is promoted to be a new leader, and this process is called <code>Failover</code>.</p>
+<p>Failover is fraught with things that can go wrong.</p>
 <h3 id=github-incident>github incident</h3>
 <p>Discarding failed writes of the leader is dangerous especially when it has to coordinate with other storage systems outside the database.</p>
 <p>There is an incident because of the leader crushing in Github.</p>
 <p>An out-dated follower became the leader.</p>
 <p>The database used the auto incrementing primary key, and the new leader used the primary key, which is already used in the old reader.
 It&rsquo;s also used in redis, thus it created the inconsistency between redis and database data.</p>
+<h3 id=split-brain>Split brain</h3>
+<p>When two nodes both believe that they are the leader is called <code>split brain</code>.
+It could lead data corruption and loss.</p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
@@ -278,7 +283,7 @@ Software Engineer living in Japan
 <footer class=footer>
 <div class="container footer__container flex">
 <div class=footer__copyright>
-&copy; 2022 Keigo Kida.
+&copy; 2023 Keigo Kida.
 <span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
 </div>
 </div>
