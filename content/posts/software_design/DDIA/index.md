@@ -10,11 +10,7 @@ tags: ["Distributed System", "DB", "English Article"]
 
 This is my notes of a book called `Designing Data-Intensive Applications`.
 
-## Chapter3
-
-Storage and Retrieval
-
-### SSTables and LSM Trees
+### SSTables and LSM Trees(P.76)
 
 SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.
 
@@ -84,7 +80,7 @@ Forward Compatibility: If new code reads data from the old protobuf including ne
 
 Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards
 
-#### Message Broker and Actor model(P137)
+#### Message Broker and Actor model(P.137)
 
 `Message Broker`
 
