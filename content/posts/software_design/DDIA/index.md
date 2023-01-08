@@ -108,13 +108,24 @@ Ref.
 
 ## Chapter 5 Replication
 
+## Failover is fraught with things that can go wrong
+
+When the `leader(master or primary)` node failed, one of the `followers(read replicas, slaves, secondaries, or hot standby)` is promoted to be a new leader, and this process is called `Failover`.
+
+Failover is fraught with things that can go wrong.
+
 ### github incident
 
 Discarding failed writes of the leader is dangerous especially when it has to coordinate with other storage systems outside the database.
 
-There is an incident because of the leader crushing in Github. 
+There is an incident because of the leader crushing in Github.
 
-An out-dated follower became the leader. 
+An out-dated follower became the leader.
 
-The database used the auto incrementing primary key, and the new leader used the primary key, which is already used in the old reader. 
+The database used the auto incrementing primary key, and the new leader used the primary key, which is already used in the old reader.
 It's also used in redis, thus it created the inconsistency between redis and database data.
+
+### Split brain
+
+When two nodes both believe that they are the leader is called `split brain`.
+It could lead data corruption and loss.
