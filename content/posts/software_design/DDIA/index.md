@@ -108,13 +108,13 @@ Ref.
 
 ## Chapter 5 Replication
 
-## Failover is fraught with things that can go wrong
+## Failover
 
-When the `leader(master or primary)` node failed, one of the `followers(read replicas, slaves, secondaries, or hot standby)` is promoted to be a new leader, and this process is called `Failover`.
+When the `leader(master or primary)` node failed, one of the `followers(read replicas, slaves, secondaries, or hot standbys)` is promoted to be a new leader, and this process is called `failover`.
 
 Failover is fraught with things that can go wrong.
 
-### github incident
+### Consistency with systems outside the database(github incident)
 
 Discarding failed writes of the leader is dangerous especially when it has to coordinate with other storage systems outside the database.
 
@@ -129,3 +129,11 @@ It's also used in redis, thus it created the inconsistency between redis and dat
 
 When two nodes both believe that they are the leader is called `split brain`.
 It could lead data corruption and loss.
+
+## Chapter 6 Partitioning(P.199)
+
+Hash partitioning is used to evenly scatter data in partitions, but it will lose the ability to do efficient range queries instead.
+
+Cassandra archives a compromise between two trade-offs above.
+
+It can be set with compound primary keys in which only the first part of the key is used to determine a partition, but the other columns are used as a concatenated index for sorting the data.
