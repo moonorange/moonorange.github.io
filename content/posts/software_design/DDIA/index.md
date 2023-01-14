@@ -129,3 +129,14 @@ It's also used in redis, thus it created the inconsistency between redis and dat
 
 When two nodes both believe that they are the leader is called `split brain`.
 It could lead data corruption and loss.
+
+## Chapter 6 Partiotioning 
+
+- Key range partioning where keys are soterd, and a partition owns keys. It has an advantage of sorting, but there is a risk for hot spot where there is a partition that is accessed more often than others
+
+- Hash partitioning, where hash functuon is applied to each key. It has an advantage of evenly distributing data into partitions, but ranging query is tend to be inefficient.
+
+
+## Chapter 7 Transactions
+
+
