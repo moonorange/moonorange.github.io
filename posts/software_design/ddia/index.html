@@ -74,6 +74,8 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 <li><a href=#split-brain>Split brain</a></li>
 </ul>
 </li>
+<li><a href=#chapter-6-partiotioning>Chapter 6 Partiotioning</a></li>
+<li><a href=#chapter-7-transactions>Chapter 7 Transactions</a></li>
 </ul>
 </nav>
 </div>
@@ -152,6 +154,16 @@ It&rsquo;s also used in redis, thus it created the inconsistency between redis a
 <h3 id=split-brain>Split brain</h3>
 <p>When two nodes both believe that they are the leader is called <code>split brain</code>.
 It could lead data corruption and loss.</p>
+<h2 id=chapter-6-partiotioning>Chapter 6 Partiotioning</h2>
+<ul>
+<li>
+<p>Key range partioning where keys are soterd, and a partition owns keys. It has an advantage of sorting, but there is a risk for hot spot where there is a partition that is accessed more often than others</p>
+</li>
+<li>
+<p>Hash partitioning, where hash functuon is applied to each key. It has an advantage of evenly distributing data into partitions, but ranging query is tend to be inefficient.</p>
+</li>
+</ul>
+<h2 id=chapter-7-transactions>Chapter 7 Transactions</h2>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
