@@ -68,13 +68,13 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 </ul>
 </li>
 <li><a href=#chapter-5-replication>Chapter 5 Replication</a></li>
-<li><a href=#failover-is-fraught-with-things-that-can-go-wrong>Failover is fraught with things that can go wrong</a>
+<li><a href=#failover>Failover</a>
 <ul>
-<li><a href=#github-incident>github incident</a></li>
+<li><a href=#consistency-with-systems-outside-the-databasegithub-incident>Consistency with systems outside the database(github incident)</a></li>
 <li><a href=#split-brain>Split brain</a></li>
 </ul>
 </li>
-<li><a href=#chapter-6-partiotioning>Chapter 6 Partiotioning</a></li>
+<li><a href=#chapter-6-partitioningp199>Chapter 6 Partitioning(P.199)</a></li>
 <li><a href=#chapter-7-transactions>Chapter 7 Transactions</a></li>
 </ul>
 </nav>
@@ -142,10 +142,10 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 <p>Ref.
 <a href="https://www.youtube.com/watch?v=ELwEdb_pD0k">https://www.youtube.com/watch?v=ELwEdb_pD0k</a></p>
 <h2 id=chapter-5-replication>Chapter 5 Replication</h2>
-<h2 id=failover-is-fraught-with-things-that-can-go-wrong>Failover is fraught with things that can go wrong</h2>
-<p>When the <code>leader(master or primary)</code> node failed, one of the <code>followers(read replicas, slaves, secondaries, or hot standby)</code> is promoted to be a new leader, and this process is called <code>Failover</code>.</p>
+<h2 id=failover>Failover</h2>
+<p>When the <code>leader(master or primary)</code> node failed, one of the <code>followers(read replicas, slaves, secondaries, or hot standbys)</code> is promoted to be a new leader, and this process is called <code>failover</code>.</p>
 <p>Failover is fraught with things that can go wrong.</p>
-<h3 id=github-incident>github incident</h3>
+<h3 id=consistency-with-systems-outside-the-databasegithub-incident>Consistency with systems outside the database(github incident)</h3>
 <p>Discarding failed writes of the leader is dangerous especially when it has to coordinate with other storage systems outside the database.</p>
 <p>There is an incident because of the leader crushing in Github.</p>
 <p>An out-dated follower became the leader.</p>
@@ -154,13 +154,18 @@ It&rsquo;s also used in redis, thus it created the inconsistency between redis a
 <h3 id=split-brain>Split brain</h3>
 <p>When two nodes both believe that they are the leader is called <code>split brain</code>.
 It could lead data corruption and loss.</p>
-<h2 id=chapter-6-partiotioning>Chapter 6 Partiotioning</h2>
+<p>&#171;&#171;&#171;&lt; HEAD</p>
+<h2 id=chapter-6-partitioningp199>Chapter 6 Partitioning(P.199)</h2>
+<p>A partition with unfair high load is called a <code>hot spot</code>.</p>
+<p>Hash partitioning is used to evenly scatter data in partitions, but it will lose the ability to do efficient range queries instead.</p>
+<p>Cassandra archives a compromise of the trade-off above.</p>
+<p>It can be set with compound primary keys in which only the first part of the key is used to determine a partition, but the other columns are used as a concatenated index for sorting the data.</p>
 <ul>
 <li>
-<p>Key range partioning where keys are soterd, and a partition owns keys. It has an advantage of sorting, but there is a risk for hot spot where there is a partition that is accessed more often than others</p>
+<p>Key range partitioning where keys are sorted, and a partition owns keys. It has an advantage of sorting, but there is a risk for hot spots</p>
 </li>
 <li>
-<p>Hash partitioning, where hash functuon is applied to each key. It has an advantage of evenly distributing data into partitions, but ranging query is tend to be inefficient.</p>
+<p>Hash partitioning, where hash function is applied to each key. It has an advantage of evenly distributing data into partitions, but ranging query is tend to be inefficient.</p>
 </li>
 </ul>
 <h2 id=chapter-7-transactions>Chapter 7 Transactions</h2>
