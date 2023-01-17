@@ -132,8 +132,10 @@ It could lead data corruption and loss.
 
 ## Chapter 6 Partitioning(P.199)
 
+A partition with unfair high load is called a `hot spot`.
+
 Hash partitioning is used to evenly scatter data in partitions, but it will lose the ability to do efficient range queries instead.
 
-Cassandra archives a compromise between two trade-offs above.
+Cassandra archives a compromise the trade-off above.
 
 It can be set with compound primary keys in which only the first part of the key is used to determine a partition, but the other columns are used as a concatenated index for sorting the data.
