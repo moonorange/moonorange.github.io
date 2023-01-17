@@ -130,12 +130,19 @@ It's also used in redis, thus it created the inconsistency between redis and dat
 When two nodes both believe that they are the leader is called `split brain`.
 It could lead data corruption and loss.
 
+<<<<<<< HEAD
 ## Chapter 6 Partitioning(P.199)
 
 A partition with unfair high load is called a `hot spot`.
 
 Hash partitioning is used to evenly scatter data in partitions, but it will lose the ability to do efficient range queries instead.
 
-Cassandra archives a compromise the trade-off above.
+Cassandra archives a compromise of the trade-off above.
 
 It can be set with compound primary keys in which only the first part of the key is used to determine a partition, but the other columns are used as a concatenated index for sorting the data.
+
+- Key range partitioning where keys are sorted, and a partition owns keys. It has an advantage of sorting, but there is a risk for hot spots
+
+- Hash partitioning, where hash function is applied to each key. It has an advantage of evenly distributing data into partitions, but ranging query is tend to be inefficient.
+
+## Chapter 7 Transactions
