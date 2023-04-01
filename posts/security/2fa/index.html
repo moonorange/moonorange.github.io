@@ -8,7 +8,7 @@
 <meta name=description content>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Implementing TOTP in Go">
-<meta name=twitter:description content="Introduction In this article, I would like to try implementing a code that generates a one-time password, which is often used in many two-factor authentication functions, called Time-based One-time Password (TOTP), using Go!
+<meta name=twitter:description content="Introduction In this article, I would like to try implementing a code that generates a one-time password, which is often used in many two-factor authentication functions, called Time-based One-time Password (TOTP), using Go.
 What is Two-Factor Authentication? Before writing the TOTP generation code, let&rsquo;s briefly review what two-factor authentication is.
 There are mainly three types of factors for authentication: knowledge, possession, and biometrics.
  Knowledge: Something only the user knows or remembers, such as a login password.">
@@ -61,22 +61,22 @@ There are mainly three types of factors for authentication: knowledge, possessio
 </div>
 </div><div class="content post__content clearfix">
 <h2 id=introduction>Introduction</h2>
-<p>In this article, I would like to try implementing a code that generates a one-time password, which is often used in many two-factor authentication functions, called Time-based One-time Password (TOTP), using Go!</p>
+<p>In this article, I would like to try implementing a code that generates a one-time password, which is often used in many two-factor authentication functions, called <code>Time-based One-time Password (TOTP)</code>, using Go.</p>
 <h2 id=what-is-two-factor-authentication>What is Two-Factor Authentication?</h2>
 <p>Before writing the TOTP generation code, let&rsquo;s briefly review what two-factor authentication is.</p>
-<p>There are mainly three types of factors for authentication: knowledge, possession, and biometrics.</p>
+<p>There are mainly three types of factors for authentication: <code>knowledge, possession, and biometrics</code>.</p>
 <ul>
-<li>Knowledge: Something only the user knows or remembers, such as a login password.</li>
-<li>Possession: Something only the user has, such as a smartphone.</li>
-<li>Biometrics: A physical characteristic unique to the user, such as a fingerprint.</li>
+<li><code>Knowledge:</code> Something only the user knows or remembers, such as a login password.</li>
+<li><code>Possession:</code> Something only the user has, such as a smartphone.</li>
+<li><code>Biometrics:</code> A physical characteristic unique to the user, such as a fingerprint.</li>
 </ul>
 <p>Two-factor authentication refers to using two of these factors for authentication.</p>
-<p>A common pattern is to install an app such as Google Authenticator on your own device, which uses both the knowledge element of the login password and the possession factor for two-factor authentication.</p>
+<p>A common pattern is to install an app such as Google Authenticator on your own device, which uses both the knowledge factor of the login password and the possession factor for two-factor authentication.</p>
 <h2 id=what-is-hotp-hmac-based-one-time-password>What is HOTP (HMAC-based One-time Password)?</h2>
-<p>HOTP is an OTP (One-time Password) generation algorithm based on HMAC, as its name suggests.</p>
-<p>HMAC (Hashed Message Authentication Code) is a message authentication code that uses a shared secret key and a hash function.</p>
+<p><code>HOTP</code> is an OTP (One-time Password) generation algorithm based on HMAC, as its name suggests.</p>
+<p><code>HMAC</code> (Hashed Message Authentication Code) is a message authentication code that uses a shared secret key and a hash function.</p>
 <p>In other words, it is a code used for detecting tampering when messages are sent and received between clients and servers.</p>
-<p>HOTP generates OTP using a value called a &ldquo;counter,&rdquo; which changes for each generation. TOTP is an extension of HOTP that uses a value that changes with time.</p>
+<p>HOTP generates OTP using a value called a <code>counter</code>, which changes for each generation. TOTP is an extension of HOTP that uses a value that changes with time.</p>
 <p>Therefore, to implement TOTP, it is necessary to know how HOTP is implemented.</p>
 <p>HOTP is generated through the following operations:</p>
 <ol>
@@ -86,7 +86,7 @@ There are mainly three types of factors for authentication: knowledge, possessio
 <li>Truncate MAC for the user to input easily
 <ol>
 <li>The last 4 bits of the HMAC are used as an offset.</li>
-<li>Get 4 bytes starting from the offset while masking the highest bit (this is done to avoid the difference in the result of the mod calculation between signed and unsigned on different processors).</li>
+<li>Get 4 bytes starting from the offset while masking the most significant bit (this is done to avoid the difference in the result of the mod calculation between signed and unsigned on different processors).</li>
 <li>Perform a modulo calculation with the obtained 32-bit value and 10^d (d is the number of digits of HOTP, which is often 6 digits).</li>
 </ol>
 </li>
@@ -104,9 +104,9 @@ There are mainly three types of factors for authentication: knowledge, possessio
 )
 
 <span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-   <span style=color:#f92672>/</span> <span style=color:#a6e22e>Generate</span> <span style=color:#a6e22e>a</span> <span style=color:#a6e22e>counter</span>
-    <span style=color:#75715e>// Define as uint64 to handle as 8-byte integer.
-</span><span style=color:#75715e></span>    <span style=color:#75715e>// It needs to be the same between server and client. Here, a random value is used.
+    <span style=color:#75715e>// Generate a counter
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// Define as uint64 to handle as 8-byte integer.
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// It needs to be common between server and client. Here, a random value is used.
 </span><span style=color:#75715e></span>    <span style=color:#a6e22e>counter</span> <span style=color:#f92672>:=</span> uint64(<span style=color:#ae81ff>11111111</span>)
 
     <span style=color:#75715e>// Secret key, a random value is used here
@@ -186,7 +186,7 @@ Software Engineer living in Japan
 <h4 class=widget__title>Recent Posts</h4>
 <div class=widget__content>
 <ul class=widget__list>
-<li class=widget__item><a class=widget__link href=/posts/security/2fa/2fa/>Implementing TOTP in Go</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/2fa/>Implementing TOTP in Go</a></li>
 <li class=widget__item><a class=widget__link href=/posts/cs/hpbn/>High Performance Browser Networking</a></li>
 <li class=widget__item><a class=widget__link href=/posts/software_design/ddia/>Designing Data-Intensive Applications</a></li>
 <li class=widget__item><a class=widget__link href=/posts/dsa/dijkstra/>Dijkstra’s Shortest Path Algorithm</a></li>
