@@ -28,7 +28,7 @@ Services
 
 #### Firebase
 
-When you're a mobile or html developer and want the least of amount of server-side code possible, you should choose Firebase.
+When you're a mobile or html developer and want the least amount of server-side code possible, you should choose Firebase.
 
 Firebase provides Database, Storage, Functions/Services, and Hosting with a little code.
 
@@ -42,8 +42,7 @@ Cloud Functions is like a AWS Lambda. Only pay for when your functions are runni
 
 If you don't want to separate codes into many independent tasks(functions) and still want serverless services, you can use App Engine.
 
-Can Scale to high and low traffic.
-
+It can Scale to high and low traffic.
 
 #### Cloud Run
 

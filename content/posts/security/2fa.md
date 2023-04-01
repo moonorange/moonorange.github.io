@@ -1,6 +1,6 @@
 ---
 title: 'Implementing TOTP in Go'
-date: '2023-03-28'
+date: '2023-04-01'
 categories: ["Security"]
 tags: ["2FA", "English Article"]
 ---
