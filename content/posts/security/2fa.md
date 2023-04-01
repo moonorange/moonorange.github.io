@@ -94,7 +94,9 @@ func generateHOTP(secretKey []byte, counter uint64) {
 
 ## What is TOTP?
 
-TOTP is a variant of HOTP that uses a changing value T based on the current time instead of the counter used in HOTP. It is defined as follows:
+TOTP is a variant of HOTP that uses a changing value `T` based on the current time instead of the counter used in HOTP.
+
+It is defined as follows:
 
 ```
 TOTP = HOTP(K, T)
