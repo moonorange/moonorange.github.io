@@ -130,7 +130,6 @@ It's also used in redis, thus it created the inconsistency between redis and dat
 When two nodes both believe that they are the leader is called `split brain`.
 It could lead data corruption and loss.
 
-<<<<<<< HEAD
 ## Chapter 6 Partitioning(P.199)
 
 A partition with unfair high load is called a `hot spot`.
