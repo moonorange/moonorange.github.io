@@ -134,7 +134,8 @@ There are mainly three types of factors for authentication: knowledge, possessio
     <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>hotp</span>)
 }
 </code></pre></div><h2 id=what-is-totp>What is TOTP?</h2>
-<p>TOTP is a variant of HOTP that uses a changing value T based on the current time instead of the counter used in HOTP. It is defined as follows:</p>
+<p>TOTP is a variant of HOTP that uses a changing value <code>T</code> based on the current time instead of the counter used in HOTP.</p>
+<p>It is defined as follows:</p>
 <pre><code>TOTP = HOTP(K, T)
 
 T = (current Unix time - T0) / X (where T0 is usually 0 seconds and X is 30 seconds)
