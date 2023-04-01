@@ -7,31 +7,31 @@ tags: ["2FA", "English Article"]
 
 ## Introduction
 
-In this article, I would like to try implementing a code that generates a one-time password, which is often used in many two-factor authentication functions, called Time-based One-time Password (TOTP), using Go!
+In this article, I would like to try implementing a code that generates a one-time password, which is often used in many two-factor authentication functions, called `Time-based One-time Password (TOTP)`, using Go.
 
 ## What is Two-Factor Authentication?
 
 Before writing the TOTP generation code, let's briefly review what two-factor authentication is.
 
-There are mainly three types of factors for authentication: knowledge, possession, and biometrics.
+There are mainly three types of factors for authentication: `knowledge, possession, and biometrics`.
 
-- Knowledge: Something only the user knows or remembers, such as a login password.
-- Possession: Something only the user has, such as a smartphone.
-- Biometrics: A physical characteristic unique to the user, such as a fingerprint.
+- `Knowledge:` Something only the user knows or remembers, such as a login password.
+- `Possession:` Something only the user has, such as a smartphone.
+- `Biometrics:` A physical characteristic unique to the user, such as a fingerprint.
 
 Two-factor authentication refers to using two of these factors for authentication.
 
-A common pattern is to install an app such as Google Authenticator on your own device, which uses both the knowledge element of the login password and the possession factor for two-factor authentication.
+A common pattern is to install an app such as Google Authenticator on your own device, which uses both the knowledge factor of the login password and the possession factor for two-factor authentication.
 
 ## What is HOTP (HMAC-based One-time Password)?
 
-HOTP is an OTP (One-time Password) generation algorithm based on HMAC, as its name suggests.
+`HOTP` is an OTP (One-time Password) generation algorithm based on HMAC, as its name suggests.
 
-HMAC (Hashed Message Authentication Code) is a message authentication code that uses a shared secret key and a hash function.
+`HMAC` (Hashed Message Authentication Code) is a message authentication code that uses a shared secret key and a hash function.
 
 In other words, it is a code used for detecting tampering when messages are sent and received between clients and servers.
 
-HOTP generates OTP using a value called a "counter," which changes for each generation. TOTP is an extension of HOTP that uses a value that changes with time.
+HOTP generates OTP using a value called a   `counter`, which changes for each generation. TOTP is an extension of HOTP that uses a value that changes with time.
 
 Therefore, to implement TOTP, it is necessary to know how HOTP is implemented.
 
@@ -42,7 +42,7 @@ HOTP is generated through the following operations:
 3. Use a hash function(SHA-1) to generate an HMAC from the secret key and the counter.
 4. Truncate MAC for the user to input easily
    1. The last 4 bits of the HMAC are used as an offset.
-   2. Get 4 bytes starting from the offset while masking the highest bit (this is done to avoid the difference in the result of the mod calculation between signed and unsigned on different processors).
+   2. Get 4 bytes starting from the offset while masking the most significant bit (this is done to avoid the difference in the result of the mod calculation between signed and unsigned on different processors).
    3. Perform a modulo calculation with the obtained 32-bit value and 10^d (d is the number of digits of HOTP, which is often 6 digits).
 
 This is what it looks like when implemented in Go:
@@ -61,9 +61,9 @@ import (
 )
 
 func main() {
-   / Generate a counter
+    // Generate a counter
     // Define as uint64 to handle as 8-byte integer.
-    // It needs to be the same between server and client. Here, a random value is used.
+    // It needs to be common between server and client. Here, a random value is used.
     counter := uint64(11111111)
 
     // Secret key, a random value is used here
