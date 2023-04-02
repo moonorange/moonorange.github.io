@@ -8,46 +8,46 @@ tags: ["Distributed System", "DB", "English Article"]
 
 ## What's this article about
 
-This is my notes of a book called `Designing Data-Intensive Applications`.
+These are my notes on a book called `Designing Data-Intensive Applications`.
 
 ### SSTables and LSM Trees(P.76)
 
-SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.
+SSTables (Sorted String Tables) are files that contain a set of arbitrary and sorted key-value pairs.
 
 {{<figure src="./SSTables.png" alt="SSTables" width="100%">}}
 <https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/>
 
 SSTables and Log-Structured Merge Trees are still used in some database.
 
-As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.
+As a rule of thumb, LSM Trees are faster for writes but slower for reads than B-Tree indexes.
 
 ### B-Trees
 
 The B-Tree is the most widely used indexing structure.
 
-It stores data in a balanced tree like image below, thus searching data can be done in O(logN).
+It stores data in a balanced tree, like the image below. Thus, searching data can be done in O(logN).
 
 {{<figure src="./b_tree_branches.png" alt="B-Tree" width="75%">}}
 
-Each B-Tree parent page has references to child pages, and the number of references that a parent page can have is called `branching factor`, which is 6 in the case above but typically several hundred.
+Each B-Tree parent page has references to child pages, and the number of references that a parent page can have is called the `branching factor`, which is 6 in the case above but typically several hundred.
 
 ### Index
 
-`Primary index` is index that resolves references to primary key that can identify each record.
+A `Primary index` is an index that resolves references to a primary key that can identify each record.
 
-`Secondary index`, whereas, is not necessary references to unique keys.
+A `Secondary index`, on the other hand, does not necessarily reference unique keys.
 
-### In-Memory Database
+### In-Memory Databases
 
-In-memory database archives durability by writing data to disks.
+In-memory databases achieve durability by writing data to disks.
 
 Redis has `weak durability` as it writes to disks asynchronously.
 
-The reason why in-memory database has advantages on performance is not because it doesn't need to read from disks, but because they don't need to encode data in a form that can be written to disks.
+The reason why in-memory databases have advantages in performance is not because they don't need to read from disks, but because they don't need to encode data in a form that can be written to disks.
 
 ### OLTP and OLAP
 
-`OLTP` is online transaction processing, and `OLAP` is online analytic processing.
+`OLTP` stands for online transaction processing, and `OLAP` stands for online analytic processing.
 
 The difference is not clear-cut, but here are some main characteristics of these two.
 
@@ -61,12 +61,11 @@ The difference is not clear-cut, but here are some main characteristics of these
 
 #### OLAP
 
-- Main Read Pattern: Aggregate over large number of records
+- Main Read Pattern: Aggregate over a large number of records
 - Main Write Pattern: Bulk import or event stream
 - Primary used by: Internal analyst
 - What data represents: History of events
 - Dataset Size: Terabytes to Petabytes
-
 
 ## 4. Encoding and Evaluation. Page 111
 
@@ -76,7 +75,7 @@ The translation from the `in-memory representation` to a `byte sequence` is call
 
 #### gRPC(compatibility)
 
-Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields. So the forward compatibility remains.
+Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields, so forward compatibility remains.
 
 Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards
 
@@ -84,14 +83,13 @@ Backward Compatibility: If you add a new required field, then old code cannot re
 
 `Message Broker`
 
-One message sends a message to a named queue or topic, and broker ensures that the message is delivered to at least one consumers or subscribers to that topic or queue. There can be many producers and consumers on the same topic.
+One message sends a message to a named queue or topic, and the broker ensures that the message is delivered to at least one consumers or subscribers to that topic or queue. There can be many producers and consumers on the same topic.
 
 Producer and Consumer Pattern Ref.(Japanese)
 <https://www.hyuki.com/dp/dpinfo.html#ProducerConsumer>
 
 English
 <https://cloud.google.com/pubsub/docs/overview>
-
 
 `Actor Model`
 
@@ -127,21 +125,21 @@ It's also used in redis, thus it created the inconsistency between redis and dat
 
 ### Split brain
 
-When two nodes both believe that they are the leader is called `split brain`.
-It could lead data corruption and loss.
+When two nodes both believe that they are the leader, it is called `split brain`.
+It could lead to data corruption and loss.
 
 ## Chapter 6 Partitioning(P.199)
 
-A partition with unfair high load is called a `hot spot`.
+A partition with an unfairly high load is called a `hot spot`.
 
-Hash partitioning is used to evenly scatter data in partitions, but it will lose the ability to do efficient range queries instead.
+Hash partitioning is used to evenly distribute data into partitions, but it loses the ability to efficiently perform range queries.
 
-Cassandra archives a compromise of the trade-off above.
+Cassandra achieves a compromise of the above trade-off.
 
-It can be set with compound primary keys in which only the first part of the key is used to determine a partition, but the other columns are used as a concatenated index for sorting the data.
+This can be achieved using compound primary keys, where only the first part of the key is used to determine a partition, and the other columns are used as a concatenated index for sorting the data.
 
-- Key range partitioning where keys are sorted, and a partition owns keys. It has an advantage of sorting, but there is a risk for hot spots
+- `Key range partitioning` involves sorting keys and assigning partitions to them. It has the advantage of sorting but carries a risk of creating hot spots.
 
-- Hash partitioning, where hash function is applied to each key. It has an advantage of evenly distributing data into partitions, but ranging query is tend to be inefficient.
+- `Hash partitioning` involves applying a hash function to each key. It has the advantage of evenly distributing data into partitions but can lead to inefficient range queries.
 
 ## Chapter 7 Transactions
