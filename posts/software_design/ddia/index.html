@@ -8,11 +8,11 @@
 <meta name=description content>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Designing Data-Intensive Applications">
-<meta name=twitter:description content="What&rsquo;s this article about This is my notes of a book called Designing Data-Intensive Applications.
-SSTables and LSM Trees(P.76) SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.
+<meta name=twitter:description content="What&rsquo;s this article about These are my notes on a book called Designing Data-Intensive Applications.
+SSTables and LSM Trees(P.76) SSTables (Sorted String Tables) are files that contain a set of arbitrary and sorted key-value pairs.
  https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/
 SSTables and Log-Structured Merge Trees are still used in some database.
-As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.
+As a rule of thumb, LSM Trees are faster for writes but slower for reads than B-Tree indexes.
 B-Trees The B-Tree is the most widely used indexing structure.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
@@ -58,7 +58,7 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 <li><a href=#sstables-and-lsm-treesp76>SSTables and LSM Trees(P.76)</a></li>
 <li><a href=#b-trees>B-Trees</a></li>
 <li><a href=#index>Index</a></li>
-<li><a href=#in-memory-database>In-Memory Database</a></li>
+<li><a href=#in-memory-databases>In-Memory Databases</a></li>
 <li><a href=#oltp-and-olap>OLTP and OLAP</a></li>
 </ul>
 </li>
@@ -81,29 +81,29 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 </div>
 </div><div class="content post__content clearfix">
 <h2 id=whats-this-article-about>What&rsquo;s this article about</h2>
-<p>This is my notes of a book called <code>Designing Data-Intensive Applications</code>.</p>
+<p>These are my notes on a book called <code>Designing Data-Intensive Applications</code>.</p>
 <h3 id=sstables-and-lsm-treesp76>SSTables and LSM Trees(P.76)</h3>
-<p>SSTables(Sorted String Tables) a file which contains a set of arbitrary and sorted key-value pairs inside.</p>
+<p>SSTables (Sorted String Tables) are files that contain a set of arbitrary and sorted key-value pairs.</p>
 <p><figure><img src=./SSTables.png alt=SSTables width=100%>
 </figure>
 <a href=https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/>https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/</a></p>
 <p>SSTables and Log-Structured Merge Trees are still used in some database.</p>
-<p>As a rule of thumb, LSM Trees are faster for writes but slower for read than B-Tree index.</p>
+<p>As a rule of thumb, LSM Trees are faster for writes but slower for reads than B-Tree indexes.</p>
 <h3 id=b-trees>B-Trees</h3>
 <p>The B-Tree is the most widely used indexing structure.</p>
-<p>It stores data in a balanced tree like image below, thus searching data can be done in O(logN).</p>
+<p>It stores data in a balanced tree, like the image below. Thus, searching data can be done in O(logN).</p>
 <figure><img src=./b_tree_branches.png alt=B-Tree width=75%>
 </figure>
-<p>Each B-Tree parent page has references to child pages, and the number of references that a parent page can have is called <code>branching factor</code>, which is 6 in the case above but typically several hundred.</p>
+<p>Each B-Tree parent page has references to child pages, and the number of references that a parent page can have is called the <code>branching factor</code>, which is 6 in the case above but typically several hundred.</p>
 <h3 id=index>Index</h3>
-<p><code>Primary index</code> is index that resolves references to primary key that can identify each record.</p>
-<p><code>Secondary index</code>, whereas, is not necessary references to unique keys.</p>
-<h3 id=in-memory-database>In-Memory Database</h3>
-<p>In-memory database archives durability by writing data to disks.</p>
+<p>A <code>Primary index</code> is an index that resolves references to a primary key that can identify each record.</p>
+<p>A <code>Secondary index</code>, on the other hand, does not necessarily reference unique keys.</p>
+<h3 id=in-memory-databases>In-Memory Databases</h3>
+<p>In-memory databases achieve durability by writing data to disks.</p>
 <p>Redis has <code>weak durability</code> as it writes to disks asynchronously.</p>
-<p>The reason why in-memory database has advantages on performance is not because it doesn&rsquo;t need to read from disks, but because they don&rsquo;t need to encode data in a form that can be written to disks.</p>
+<p>The reason why in-memory databases have advantages in performance is not because they don&rsquo;t need to read from disks, but because they don&rsquo;t need to encode data in a form that can be written to disks.</p>
 <h3 id=oltp-and-olap>OLTP and OLAP</h3>
-<p><code>OLTP</code> is online transaction processing, and <code>OLAP</code> is online analytic processing.</p>
+<p><code>OLTP</code> stands for online transaction processing, and <code>OLAP</code> stands for online analytic processing.</p>
 <p>The difference is not clear-cut, but here are some main characteristics of these two.</p>
 <h4 id=oltp>OLTP</h4>
 <ul>
@@ -115,7 +115,7 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 </ul>
 <h4 id=olap>OLAP</h4>
 <ul>
-<li>Main Read Pattern: Aggregate over large number of records</li>
+<li>Main Read Pattern: Aggregate over a large number of records</li>
 <li>Main Write Pattern: Bulk import or event stream</li>
 <li>Primary used by: Internal analyst</li>
 <li>What data represents: History of events</li>
@@ -125,11 +125,11 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 <h3 id=formats-for-encoding-data>Formats for Encoding data</h3>
 <p>The translation from the <code>in-memory representation</code> to a <code>byte sequence</code> is called encoding(a.k.a marshalling or serialization). The reverse is called decoding, parsing, unmarshalling, or deserialization</p>
 <h4 id=grpccompatibility>gRPC(compatibility)</h4>
-<p>Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields. So the forward compatibility remains.</p>
+<p>Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields, so forward compatibility remains.</p>
 <p>Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards</p>
 <h4 id=message-broker-and-actor-modelp137>Message Broker and Actor model(P.137)</h4>
 <p><code>Message Broker</code></p>
-<p>One message sends a message to a named queue or topic, and broker ensures that the message is delivered to at least one consumers or subscribers to that topic or queue. There can be many producers and consumers on the same topic.</p>
+<p>One message sends a message to a named queue or topic, and the broker ensures that the message is delivered to at least one consumers or subscribers to that topic or queue. There can be many producers and consumers on the same topic.</p>
 <p>Producer and Consumer Pattern Ref.(Japanese)
 <a href=https://www.hyuki.com/dp/dpinfo.html#ProducerConsumer>https://www.hyuki.com/dp/dpinfo.html#ProducerConsumer</a></p>
 <p>English
@@ -152,19 +152,19 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 <p>The database used the auto incrementing primary key, and the new leader used the primary key, which is already used in the old reader.
 It&rsquo;s also used in redis, thus it created the inconsistency between redis and database data.</p>
 <h3 id=split-brain>Split brain</h3>
-<p>When two nodes both believe that they are the leader is called <code>split brain</code>.
-It could lead data corruption and loss.</p>
+<p>When two nodes both believe that they are the leader, it is called <code>split brain</code>.
+It could lead to data corruption and loss.</p>
 <h2 id=chapter-6-partitioningp199>Chapter 6 Partitioning(P.199)</h2>
-<p>A partition with unfair high load is called a <code>hot spot</code>.</p>
-<p>Hash partitioning is used to evenly scatter data in partitions, but it will lose the ability to do efficient range queries instead.</p>
-<p>Cassandra archives a compromise of the trade-off above.</p>
-<p>It can be set with compound primary keys in which only the first part of the key is used to determine a partition, but the other columns are used as a concatenated index for sorting the data.</p>
+<p>A partition with an unfairly high load is called a <code>hot spot</code>.</p>
+<p>Hash partitioning is used to evenly distribute data into partitions, but it loses the ability to efficiently perform range queries.</p>
+<p>Cassandra achieves a compromise of the above trade-off.</p>
+<p>This can be achieved using compound primary keys, where only the first part of the key is used to determine a partition, and the other columns are used as a concatenated index for sorting the data.</p>
 <ul>
 <li>
-<p>Key range partitioning where keys are sorted, and a partition owns keys. It has an advantage of sorting, but there is a risk for hot spots</p>
+<p><code>Key range partitioning</code> involves sorting keys and assigning partitions to them. It has the advantage of sorting but carries a risk of creating hot spots.</p>
 </li>
 <li>
-<p>Hash partitioning, where hash function is applied to each key. It has an advantage of evenly distributing data into partitions, but ranging query is tend to be inefficient.</p>
+<p><code>Hash partitioning</code> involves applying a hash function to each key. It has the advantage of evenly distributing data into partitions but can lead to inefficient range queries.</p>
 </li>
 </ul>
 <h2 id=chapter-7-transactions>Chapter 7 Transactions</h2>
