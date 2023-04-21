@@ -10,6 +10,7 @@ tags: ["English Article"]
 NoSQL databases are non tabular databases.
 
 Features
+
 - Flexible schema
 - Horizontal scaling
 - Fast queries due to the data model

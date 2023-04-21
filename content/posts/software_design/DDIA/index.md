@@ -71,19 +71,21 @@ The difference is not clear-cut, but here are some main characteristics of these
 
 ### Formats for Encoding data
 
-The translation from the `in-memory representation` to a `byte sequence` is called encoding(a.k.a marshalling or serialization). The reverse is called decoding, parsing, unmarshalling, or deserialization
+`Encoding`, which refers to the conversion of `in-memory data` to `a byte sequence`, can also be called marshalling, serialization, or serialization. `Decoding`, on the other hand, is the reverse process, also known as parsing, unmarshalling, or deserialization.
 
 #### gRPC(compatibility)
 
-Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields, so forward compatibility remains.
+Regarding compatibility in gRPC, if new code reads data from an old protobuf that includes new fields, the new fields are simply ignored, thus maintaining forward compatibility.
 
-Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards
+However, adding a new required field would prevent old code from reading the old protobuf, so required fields cannot be added afterward.
 
 #### Message Broker and Actor model(P.137)
 
 `Message Broker`
 
-One message sends a message to a named queue or topic, and the broker ensures that the message is delivered to at least one consumers or subscribers to that topic or queue. There can be many producers and consumers on the same topic.
+When a message is sent to a named queue or topic, the broker ensures that it is delivered to at least one consumer or subscriber to that topic or queue.
+
+Many producers and consumers can exist on the same topic.
 
 Producer and Consumer Pattern Ref.(Japanese)
 <https://www.hyuki.com/dp/dpinfo.html#ProducerConsumer>
@@ -118,21 +120,19 @@ Discarding failed writes of the leader is dangerous especially when it has to co
 
 There is an incident because of the leader crushing in Github.
 
-An out-dated follower became the leader.
-
-The database used the auto incrementing primary key, and the new leader used the primary key, which is already used in the old reader.
-It's also used in redis, thus it created the inconsistency between redis and database data.
+Due to a leader crash in Github, an outdated follower became the new leader, resulting in a primary key conflict. The database employed an auto-incrementing primary key, which the new leader used despite it already being in use by the old reader. This caused inconsistencies between the data stored in Redis and the database.
 
 ### Split brain
 
-When two nodes both believe that they are the leader, it is called `split brain`.
-It could lead to data corruption and loss.
+When two nodes in a distributed system both consider themselves to be the leader, it is referred to as a "split brain" scenario.
+
+This situation can cause data corruption and loss.
 
 ## Chapter 6 Partitioning(P.199)
 
-A partition with an unfairly high load is called a `hot spot`.
+A partition with a disproportionately high load is commonly referred to as a `hot spot.`
 
-Hash partitioning is used to evenly distribute data into partitions, but it loses the ability to efficiently perform range queries.
+Hash partitioning is a popular technique used to distribute data evenly among partitions, but it can make range queries less efficient because data will be distributed regardless their similarity in contents.
 
 Cassandra achieves a compromise of the above trade-off.
 
