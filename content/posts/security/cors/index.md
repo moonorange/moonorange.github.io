@@ -49,7 +49,6 @@ They are regarded as the same site in the context of a scheme-less same site sce
 - <http://example.com>
 - <https://example.com>
 
-
 ## Set-Cookie Behavior
 
 The behavior of the Set-Cookie header is influenced by the SameSite policy for the cookie attributes.
@@ -118,3 +117,7 @@ This enables that redirection won't occur again until you access the deleted dom
 <https://developer.mozilla.org/en-US/docs/Glossary/Origin>
 
 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie>
+
+<https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS>
+
+<https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security>
