@@ -96,3 +96,5 @@ This enables that redirection won't occur again until you access the deleted dom
 <https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy>
 
 <https://developer.mozilla.org/en-US/docs/Glossary/Origin>
+
+<https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie>
