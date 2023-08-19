@@ -3,20 +3,19 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>Topological Sort - Kei's Blog</title>
+<title>Union-Find - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Topological Sort">
-<meta name=twitter:description content="What is Topological Sort? The topological sort is an ordering of nodes such that every node appears before all the nodes it points to.
-The canonical application of the algorism is dependency resolution.
-Coding problem using Topological Sort class Solution: def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]: graph = defaultdict(list) for crs, prereq in prerequisites: graph[crs].append(prereq) visited, cycle = set(), set() def dfs(crs): # if there is a cycle, return False if crs in cycle: return False # if it's already traversed if crs in visited: return True # add a node before traversing to check a cycle cycle.">
+<meta name=twitter:title content="Union-Find">
+<meta name=twitter:description content="Kei's personal blog about tech">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 <link rel=stylesheet href=/css/style.css>
 <link rel=stylesheet href=/css/custom.css>
+<link rel=alternate type=application/rss+xml href=/tags/union-find/index.xml title="Kei's Blog">
 <link rel="shortcut icon" href=/favicon.ico>
 </head>
 <body class=body>
@@ -35,90 +34,31 @@ Coding problem using Topological Sort class Solution: def findOrder(self, numCou
 </header>
 <div class="wrapper flex">
 <div class=primary>
-<main class=main role=main>
-<article class=post>
-<header class=post__header>
-<h1 class=post__title>Topological Sort</h1>
-<div class="post__meta meta">
+<main class="main list" role=main>
+<header class=main__header>
+<h1 class=main__title>Union-Find</h1>
+</header><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
+<a href=/posts/dsa/union_find/ rel=bookmark>
+Union-Find
+</a>
+</h2>
+<div class="list__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-09-25T00:00:00Z>September 25, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2023-08-19T00:00:00Z>August 19, 2023</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
 </span>
 </div></div>
 </header>
-<div class="post__toc toc">
-<div class=toc__title>Page content</div>
-<div class=toc__menu>
-<nav id=TableOfContents>
-<ul>
-<li><a href=#what-is-topological-sort>What is Topological Sort?</a></li>
-<li><a href=#coding-problem-using-topological-sort>Coding problem using Topological Sort</a></li>
-<li><a href=#references>References</a></li>
-</ul>
-</nav>
+<div class="content list__excerpt post__content clearfix">
+Union-Find Union-Find, aka Disjoint Set, is a rooted tree data structure that can efficiently classifies elements into categories. By utilizing this data structure, it becomes possible to rapidly determine whether two elements belong to the same group, as well as to swiftly merge two groups.
+Implementation in Python class UnionFind: def __init__(self, n): # Initialize all parents as -1, which means all nodes are root nodes self.parent = [-1] * n # Rank holds a weight to determine which tree has more weight # The tree with a smaller rank should be placed under the tree with a greater rank to keep the height of the merged tree smaller self.
 </div>
-</div><div class="content post__content clearfix">
-<h2 id=what-is-topological-sort>What is Topological Sort?</h2>
-<p>The topological sort is an ordering of nodes such that every node appears before all the nodes it points to.</p>
-<p>The canonical application of the algorism is dependency resolution.</p>
-<h2 id=coding-problem-using-topological-sort>Coding problem using Topological Sort</h2>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Solution</span>:
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>findOrder</span>(self, numCourses: int, prerequisites: List[List[int]]) <span style=color:#f92672>-&gt;</span> List[int]:
-        graph <span style=color:#f92672>=</span> defaultdict(list)
-        <span style=color:#66d9ef>for</span> crs, prereq <span style=color:#f92672>in</span> prerequisites:
-            graph[crs]<span style=color:#f92672>.</span>append(prereq)
-        visited, cycle <span style=color:#f92672>=</span> set(), set()
-        <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dfs</span>(crs):
-            <span style=color:#75715e># if there is a cycle, return False</span>
-            <span style=color:#66d9ef>if</span> crs <span style=color:#f92672>in</span> cycle:
-                <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
-            <span style=color:#75715e># if it&#39;s already traversed</span>
-            <span style=color:#66d9ef>if</span> crs <span style=color:#f92672>in</span> visited:
-                <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span>
-            <span style=color:#75715e># add a node before traversing to check a cycle</span>
-            cycle<span style=color:#f92672>.</span>add(crs)
-            <span style=color:#66d9ef>for</span> pre <span style=color:#f92672>in</span> graph[crs]:
-                <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> dfs(pre):
-                    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
-            <span style=color:#75715e># remove the node from a cycle check set after traversing</span>
-            cycle<span style=color:#f92672>.</span>remove(crs)
-            <span style=color:#75715e># check the node visited after traversing</span>
-            visited<span style=color:#f92672>.</span>add(crs)
-            <span style=color:#75715e># add the node to a result after traversing</span>
-            result<span style=color:#f92672>.</span>append(crs)
-            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span>
-        <span style=color:#66d9ef>for</span> c <span style=color:#f92672>in</span> range(numCourses):
-            <span style=color:#75715e># return [] if there is a cycle</span>
-            <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> dfs(c):
-                <span style=color:#66d9ef>return</span> []
-        <span style=color:#66d9ef>return</span> result
-</code></pre></div><h2 id=references>References</h2>
-<p><a href="https://www.youtube.com/watch?v=ddTC4Zovtbc">Topological Sort Graph Algorithm</a></p>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/dsa/union_find/>Read more…</a>
 </div>
-<footer class=post__footer>
-<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
-<ul class=tags__list>
-<li class=tags__item>
-<a class="tags__link btn" href=/tags/graph/ rel=tag>Graph</a>
-</li>
-<li class=tags__item>
-<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
-</li>
-</ul>
-</div>
-</footer>
 </article>
 </main>
-<div class="authorbox clearfix">
-<figure class=authorbox__avatar>
-<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
-</figure>
-<div class=authorbox__header>
-<span class=authorbox__name>About Keigo Kida</span>
-</div>
-<div class=authorbox__description>
-Software Engineer living in Japan
-</div>
-</div>
 </div>
 <aside class=sidebar>
 <div class="widget-recent widget">
@@ -232,6 +172,5 @@ Software Engineer living in Japan
 </footer>
 </div>
 <script async defer src=/js/menu.js></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>

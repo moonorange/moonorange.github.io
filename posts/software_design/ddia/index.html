@@ -123,13 +123,14 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 </ul>
 <h2 id=4-encoding-and-evaluation-page-111>4. Encoding and Evaluation. Page 111</h2>
 <h3 id=formats-for-encoding-data>Formats for Encoding data</h3>
-<p>The translation from the <code>in-memory representation</code> to a <code>byte sequence</code> is called encoding(a.k.a marshalling or serialization). The reverse is called decoding, parsing, unmarshalling, or deserialization</p>
+<p><code>Encoding</code>, which refers to the conversion of <code>in-memory data</code> to <code>a byte sequence</code>, can also be called marshalling, serialization, or serialization. <code>Decoding</code>, on the other hand, is the reverse process, also known as parsing, unmarshalling, or deserialization.</p>
 <h4 id=grpccompatibility>gRPC(compatibility)</h4>
-<p>Forward Compatibility: If new code reads data from the old protobuf including new fields, it just ignores new fields, so forward compatibility remains.</p>
-<p>Backward Compatibility: If you add a new required field, then old code cannot read from the old protobuf. So you cannot add required fields afterwards</p>
+<p>Regarding compatibility in gRPC, if new code reads data from an old protobuf that includes new fields, the new fields are simply ignored, thus maintaining forward compatibility.</p>
+<p>However, adding a new required field would prevent old code from reading the old protobuf, so required fields cannot be added afterward.</p>
 <h4 id=message-broker-and-actor-modelp137>Message Broker and Actor model(P.137)</h4>
 <p><code>Message Broker</code></p>
-<p>One message sends a message to a named queue or topic, and the broker ensures that the message is delivered to at least one consumers or subscribers to that topic or queue. There can be many producers and consumers on the same topic.</p>
+<p>When a message is sent to a named queue or topic, the broker ensures that it is delivered to at least one consumer or subscriber to that topic or queue.</p>
+<p>Many producers and consumers can exist on the same topic.</p>
 <p>Producer and Consumer Pattern Ref.(Japanese)
 <a href=https://www.hyuki.com/dp/dpinfo.html#ProducerConsumer>https://www.hyuki.com/dp/dpinfo.html#ProducerConsumer</a></p>
 <p>English
@@ -148,15 +149,13 @@ B-Trees The B-Tree is the most widely used indexing structure.">
 <h3 id=consistency-with-systems-outside-the-databasegithub-incident>Consistency with systems outside the database(github incident)</h3>
 <p>Discarding failed writes of the leader is dangerous especially when it has to coordinate with other storage systems outside the database.</p>
 <p>There is an incident because of the leader crushing in Github.</p>
-<p>An out-dated follower became the leader.</p>
-<p>The database used the auto incrementing primary key, and the new leader used the primary key, which is already used in the old reader.
-It&rsquo;s also used in redis, thus it created the inconsistency between redis and database data.</p>
+<p>Due to a leader crash in Github, an outdated follower became the new leader, resulting in a primary key conflict. The database employed an auto-incrementing primary key, which the new leader used despite it already being in use by the old reader. This caused inconsistencies between the data stored in Redis and the database.</p>
 <h3 id=split-brain>Split brain</h3>
-<p>When two nodes both believe that they are the leader, it is called <code>split brain</code>.
-It could lead to data corruption and loss.</p>
+<p>When two nodes in a distributed system both consider themselves to be the leader, it is referred to as a &ldquo;split brain&rdquo; scenario.</p>
+<p>This situation can cause data corruption and loss.</p>
 <h2 id=chapter-6-partitioningp199>Chapter 6 Partitioning(P.199)</h2>
-<p>A partition with an unfairly high load is called a <code>hot spot</code>.</p>
-<p>Hash partitioning is used to evenly distribute data into partitions, but it loses the ability to efficiently perform range queries.</p>
+<p>A partition with a disproportionately high load is commonly referred to as a <code>hot spot.</code></p>
+<p>Hash partitioning is a popular technique used to distribute data evenly among partitions, but it can make range queries less efficient because data will be distributed regardless their similarity in contents.</p>
 <p>Cassandra achieves a compromise of the above trade-off.</p>
 <p>This can be achieved using compound primary keys, where only the first part of the key is used to determine a partition, and the other columns are used as a concatenated index for sorting the data.</p>
 <ul>
@@ -203,11 +202,11 @@ Software Engineer living in Japan
 <h4 class=widget__title>Recent Posts</h4>
 <div class=widget__content>
 <ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/dsa/union_find/>Union-Find</a></li>
 <li class=widget__item><a class=widget__link href=/posts/security/2fa/>Implementing TOTP in Go</a></li>
 <li class=widget__item><a class=widget__link href=/posts/cs/hpbn/>High Performance Browser Networking</a></li>
 <li class=widget__item><a class=widget__link href=/posts/software_design/ddia/>Designing Data-Intensive Applications</a></li>
 <li class=widget__item><a class=widget__link href=/posts/dsa/dijkstra/>Dijkstra’s Shortest Path Algorithm</a></li>
-<li class=widget__item><a class=widget__link href=/posts/dsa/topological_sort/>Topological Sort</a></li>
 </ul>
 </div>
 </div>
@@ -279,6 +278,7 @@ Software Engineer living in Japan
 <a class="widget-taglist__link widget__link btn" href=/tags/terraform-cloud/ title="Terraform Cloud">Terraform Cloud</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/trie/ title=Trie>Trie</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/union-find/ title=Union-Find>Union-Find</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
 </div>
 </div>

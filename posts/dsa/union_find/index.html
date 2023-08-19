@@ -3,14 +3,13 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>Topological Sort - Kei's Blog</title>
+<title>Union-Find - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Topological Sort">
-<meta name=twitter:description content="What is Topological Sort? The topological sort is an ordering of nodes such that every node appears before all the nodes it points to.
-The canonical application of the algorism is dependency resolution.
-Coding problem using Topological Sort class Solution: def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]: graph = defaultdict(list) for crs, prereq in prerequisites: graph[crs].append(prereq) visited, cycle = set(), set() def dfs(crs): # if there is a cycle, return False if crs in cycle: return False # if it's already traversed if crs in visited: return True # add a node before traversing to check a cycle cycle.">
+<meta name=twitter:title content="Union-Find">
+<meta name=twitter:description content="Union-Find Union-Find, aka Disjoint Set, is a rooted tree data structure that can efficiently classifies elements into categories. By utilizing this data structure, it becomes possible to rapidly determine whether two elements belong to the same group, as well as to swiftly merge two groups.
+Implementation in Python class UnionFind: def __init__(self, n): # Initialize all parents as -1, which means all nodes are root nodes self.parent = [-1] * n # Rank holds a weight to determine which tree has more weight # The tree with a smaller rank should be placed under the tree with a greater rank to keep the height of the merged tree smaller self.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -38,10 +37,10 @@ Coding problem using Topological Sort class Solution: def findOrder(self, numCou
 <main class=main role=main>
 <article class=post>
 <header class=post__header>
-<h1 class=post__title>Topological Sort</h1>
+<h1 class=post__title>Union-Find</h1>
 <div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-09-25T00:00:00Z>September 25, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2023-08-19T00:00:00Z>August 19, 2023</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
 </span>
 </div></div>
 </header>
@@ -50,55 +49,73 @@ Coding problem using Topological Sort class Solution: def findOrder(self, numCou
 <div class=toc__menu>
 <nav id=TableOfContents>
 <ul>
-<li><a href=#what-is-topological-sort>What is Topological Sort?</a></li>
-<li><a href=#coding-problem-using-topological-sort>Coding problem using Topological Sort</a></li>
-<li><a href=#references>References</a></li>
+<li><a href=#union-find>Union-Find</a></li>
+<li><a href=#implementation-in-python>Implementation in Python</a></li>
+<li><a href=#reference>Reference</a></li>
 </ul>
 </nav>
 </div>
 </div><div class="content post__content clearfix">
-<h2 id=what-is-topological-sort>What is Topological Sort?</h2>
-<p>The topological sort is an ordering of nodes such that every node appears before all the nodes it points to.</p>
-<p>The canonical application of the algorism is dependency resolution.</p>
-<h2 id=coding-problem-using-topological-sort>Coding problem using Topological Sort</h2>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Solution</span>:
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>findOrder</span>(self, numCourses: int, prerequisites: List[List[int]]) <span style=color:#f92672>-&gt;</span> List[int]:
-        graph <span style=color:#f92672>=</span> defaultdict(list)
-        <span style=color:#66d9ef>for</span> crs, prereq <span style=color:#f92672>in</span> prerequisites:
-            graph[crs]<span style=color:#f92672>.</span>append(prereq)
-        visited, cycle <span style=color:#f92672>=</span> set(), set()
-        <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dfs</span>(crs):
-            <span style=color:#75715e># if there is a cycle, return False</span>
-            <span style=color:#66d9ef>if</span> crs <span style=color:#f92672>in</span> cycle:
-                <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
-            <span style=color:#75715e># if it&#39;s already traversed</span>
-            <span style=color:#66d9ef>if</span> crs <span style=color:#f92672>in</span> visited:
-                <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span>
-            <span style=color:#75715e># add a node before traversing to check a cycle</span>
-            cycle<span style=color:#f92672>.</span>add(crs)
-            <span style=color:#66d9ef>for</span> pre <span style=color:#f92672>in</span> graph[crs]:
-                <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> dfs(pre):
-                    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
-            <span style=color:#75715e># remove the node from a cycle check set after traversing</span>
-            cycle<span style=color:#f92672>.</span>remove(crs)
-            <span style=color:#75715e># check the node visited after traversing</span>
-            visited<span style=color:#f92672>.</span>add(crs)
-            <span style=color:#75715e># add the node to a result after traversing</span>
-            result<span style=color:#f92672>.</span>append(crs)
-            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span>
-        <span style=color:#66d9ef>for</span> c <span style=color:#f92672>in</span> range(numCourses):
-            <span style=color:#75715e># return [] if there is a cycle</span>
-            <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> dfs(c):
-                <span style=color:#66d9ef>return</span> []
-        <span style=color:#66d9ef>return</span> result
-</code></pre></div><h2 id=references>References</h2>
-<p><a href="https://www.youtube.com/watch?v=ddTC4Zovtbc">Topological Sort Graph Algorithm</a></p>
+<h2 id=union-find>Union-Find</h2>
+<p>Union-Find, aka Disjoint Set, is a rooted tree data structure that can efficiently classifies elements into categories.
+By utilizing this data structure, it becomes possible to rapidly determine whether two elements belong to the same group, as well as to swiftly merge two groups.</p>
+<h2 id=implementation-in-python>Implementation in Python</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>UnionFind</span>:
+    <span style=color:#66d9ef>def</span> __init__(self, n):
+        <span style=color:#75715e># Initialize all parents as -1, which means all nodes are root nodes</span>
+        self<span style=color:#f92672>.</span>parent <span style=color:#f92672>=</span> [<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>] <span style=color:#f92672>*</span> n
+        <span style=color:#75715e># Rank holds a weight to determine which tree has more weight</span>
+        <span style=color:#75715e># The tree with a smaller rank should be placed under the tree with a greater rank to keep the height of the merged tree smaller</span>
+        self<span style=color:#f92672>.</span>rank <span style=color:#f92672>=</span> [<span style=color:#ae81ff>0</span>] <span style=color:#f92672>*</span> n
+        <span style=color:#75715e># Size holds the number of nodes in a tree</span>
+        self<span style=color:#f92672>.</span>size <span style=color:#f92672>=</span> [<span style=color:#ae81ff>1</span>] <span style=color:#f92672>*</span> n
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>find_root</span>(self, x):
+        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>parent[x] <span style=color:#f92672>==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>:
+            <span style=color:#66d9ef>return</span> x
+        <span style=color:#66d9ef>else</span>:
+            <span style=color:#75715e># Make all nodes&#39; parents the root(Path Compression)</span>
+            <span style=color:#75715e># This speeds up future root lookups by reducing the path length</span>
+            self<span style=color:#f92672>.</span>parent[x] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>find_root(self<span style=color:#f92672>.</span>parent[x])
+            <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>parent[x]
+
+    <span style=color:#75715e># Check if x and y belong to the same root</span>
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>has_same_root</span>(self, x, y):
+        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>root(x) <span style=color:#f92672>==</span> self<span style=color:#f92672>.</span>root(y)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>union</span>(self, x, y) <span style=color:#f92672>-&gt;</span> bool:
+        rx, ry <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>find_root(x), self<span style=color:#f92672>.</span>find_root(y)
+        <span style=color:#75715e># If two elements have the same root meaning they are in the same group</span>
+        <span style=color:#75715e># Do nothing</span>
+        <span style=color:#66d9ef>if</span> rx <span style=color:#f92672>==</span> ry:
+            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
+
+        <span style=color:#75715e># Make the tree with the greater rank the parent(Union by rank)</span>
+        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>rank[rx] <span style=color:#f92672>&lt;</span> self<span style=color:#f92672>.</span>rank[ry]:
+            rx, ry <span style=color:#f92672>=</span> ry, rx
+        self<span style=color:#f92672>.</span>parent[ry] <span style=color:#f92672>=</span> rx
+
+        <span style=color:#75715e># Increment the rank of the parent</span>
+        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>rank[rx] <span style=color:#f92672>==</span> self<span style=color:#f92672>.</span>rank[ry]:
+            self<span style=color:#f92672>.</span>rank[rx] <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+
+        <span style=color:#75715e># Increment the size of the parent</span>
+        self<span style=color:#f92672>.</span>size[rx] <span style=color:#f92672>+=</span> self<span style=color:#f92672>.</span>size[ry]
+        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_size</span>(self, x):
+        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>size[self<span style=color:#f92672>.</span>find_root(x)]
+</code></pre></div><h2 id=reference>Reference</h2>
+<p><a href="https://www.youtube.com/watch?v=wU6udHRIkcc">1.12 Disjoint Sets Data Structure - Weighted Union and Collapsing Find</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
 <ul class=tags__list>
 <li class=tags__item>
-<a class="tags__link btn" href=/tags/graph/ rel=tag>Graph</a>
+<a class="tags__link btn" href=/tags/union-find/ rel=tag>Union-Find</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/python/ rel=tag>Python</a>
 </li>
 <li class=tags__item>
 <a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
