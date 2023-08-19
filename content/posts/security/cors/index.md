@@ -7,7 +7,7 @@ tags: ["Web", "HTTP cookies", "English Article"]
 
 ## Introduction
 
-This post summarizes what I have learned when I encountered issues related to CORS and cookies.
+This post summarizes what I have learned when I encountered issues related to CORS and HTTP cookies.
 
 ## Understanding Domains(hostname), Origins, and Sites
 
@@ -15,7 +15,7 @@ It's crucial to comprehend these concepts when dealing with CORS-related problem
 
 ### Origin
 
-An example of a web content's origin is <http://example.com:80>.
+An example of a web content's origin is `http://example.com:80`.
 An origin is comprised of the `domain` (hostname), `port`, and `scheme`.
 
 In the case above, `http` is the scheme, `example.com` is the domain, and `80` is the port.
@@ -36,8 +36,8 @@ Let's examine examples to gain a clearer understanding of what constitutes the s
 
 They are considered the same site due to their matching registrable domain and scheme:
 
-- <http://main.example.com:80>
-- <http://sub.example.com:80>
+- `http://example.com:80`
+- `http://www.example.com:80`
 
 They are also considered the same site because the port is irrelevant:
 
@@ -46,18 +46,18 @@ They are also considered the same site because the port is irrelevant:
 
 They are regarded as the same site in the context of a scheme-less same site scenario, but as different sites in the context of a scheme-ful same site scenario:
 
-- <http://example.com>
-- <https://example.com>
+- `http://example.com`
+- `https://example.com`
 
 ## Set-Cookie Behavior
 
-The behavior of the Set-Cookie header is influenced by the SameSite policy for the cookie attributes.
+The behavior of the Set-Cookie header is influenced by the `SameSite` policy for the cookie attributes.
 
-For instance, if the SameSite policy is set to Lax or Strict, the cookie will not be included in cross-site requests.
+For instance, if the SameSite policy is set to `Lax` or `Strict`, the cookie will not be included in cross-site requests.
 
 So, if you intend to transmit the cookie, it's necessary for both the client and server to be considered the same site.
 
-Imagine a scenario where you want to send a cookie from a client hosted at '<http://localhost:3000>' to an API hosted on <http://api.example.com:8080>.
+Imagine a scenario where you want to send a cookie from a client hosted at `http://localhost:3000` to an API hosted on `http://example.com:80`.
 
 You can achieve this locally by adding the domain (hostname) to your /etc/hosts file:
 
@@ -65,7 +65,7 @@ You can achieve this locally by adding the domain (hostname) to your /etc/hosts 
 127.0.0.1 example.com
 ```
 
-Now, when you access <http://example.com:3000>, you can successfully send the cookie to the API server since they are treated as part of the same site.
+Now, when you access `http://example.com:3000`, you can successfully send the cookie to the API server since they are treated as part of the same site.
 
 ## CORS
 
@@ -77,14 +77,14 @@ CORS is a mechanism that helps prevent potential security risks associated with 
 
 When a client makes a request to a sever hosted on a different origins, the browser enforces CORS policies to determine whether the request should be allowed or denied.
 
-So, when the client's server hosted at <http://localhost:3000> makes a request to the API server at <http://api.example.com:8080>, the request might be denied if the necessary CORS headers are not properly configured.
+So, when the client's server hosted at `http://localhost:3000` makes a request to the API server at `http://example.com:8080`, the request might be denied if the necessary CORS headers are not properly configured.
 
 In addition to correctly configuring those headers, there is a workaround to bypass this error by using a proxy for the requests from the client's server. This involves changing the origin of the request to match that of the API server.
 
 The process would look like this:
 
-- Initiate a request to the API server (e.g. 'http://api.example.com/login')
-- Proxy the request while changing the origin from `http://localhost:3000` to `http://api.example.com:8080`
+- Initiate a request to the API server (e.g. `http://example.com/login`)
+- Proxy the request while changing the origin from `http://localhost:3000` to `http://example.com:8080`
 - CORS error won't occur since the request now originates from the same origin.
 
 ## Strict-Transport-Security
@@ -99,9 +99,9 @@ This header is useful, and should be correctly configured in the production envi
 
 Consider the example presented in the 'Set-Cookie Behavior' section.
 
-When you access <http://example.com:3000> and the HTTP Strict-Transport-Security header is present, the access will automatically be redirected to <https://example.com:3000>.
+When you access `http://example.com:3000` and the HTTP Strict-Transport-Security header is present, the access will automatically be redirected to `https://example.com:3000`.
 
-Thus, the cookie won't be sent because <https://example.com:3000> and <http://api.example.com:8080> are scheme-ful different sites now.
+Thus, the cookie won't be sent because `https://example.com:3000` and `http://example.com:8080` are scheme-ful different sites now.
 
 In Chrome, you can manually remove the domain's security policy using the following steps:
 
