@@ -8,7 +8,7 @@
 <meta name=description content>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="CORS">
-<meta name=twitter:description content="Introduction This post summarizes what I have learned when I encountered issues related to CORS and cookies.
+<meta name=twitter:description content="Introduction This post summarizes what I have learned when I encountered issues related to CORS and HTTP cookies.
 Understanding Domains(hostname), Origins, and Sites It&rsquo;s crucial to comprehend these concepts when dealing with CORS-related problems.
 Origin An example of a web content&rsquo;s origin is http://example.com:80. An origin is comprised of the domain (hostname), port, and scheme.
 In the case above, http is the scheme, example.com is the domain, and 80 is the port.">
@@ -67,11 +67,11 @@ In the case above, http is the scheme, example.com is the domain, and 80 is the 
 </div>
 </div><div class="content post__content clearfix">
 <h2 id=introduction>Introduction</h2>
-<p>This post summarizes what I have learned when I encountered issues related to CORS and cookies.</p>
+<p>This post summarizes what I have learned when I encountered issues related to CORS and HTTP cookies.</p>
 <h2 id=understanding-domainshostname-origins-and-sites>Understanding Domains(hostname), Origins, and Sites</h2>
 <p>It&rsquo;s crucial to comprehend these concepts when dealing with CORS-related problems.</p>
 <h3 id=origin>Origin</h3>
-<p>An example of a web content&rsquo;s origin is <a href=http://example.com:80>http://example.com:80</a>.
+<p>An example of a web content&rsquo;s origin is <code>http://example.com:80</code>.
 An origin is comprised of the <code>domain</code> (hostname), <code>port</code>, and <code>scheme</code>.</p>
 <p>In the case above, <code>http</code> is the scheme, <code>example.com</code> is the domain, and <code>80</code> is the port.</p>
 <p>Two URLs are considered to have the same origin only when all three of these components are identical.</p>
@@ -83,8 +83,8 @@ An origin is comprised of the <code>domain</code> (hostname), <code>port</code>,
 <p>Let&rsquo;s examine examples to gain a clearer understanding of what constitutes the same site:</p>
 <p>They are considered the same site due to their matching registrable domain and scheme:</p>
 <ul>
-<li><a href=http://main.example.com:80>http://main.example.com:80</a></li>
-<li><a href=http://sub.example.com:80>http://sub.example.com:80</a></li>
+<li><code>http://example.com:80</code></li>
+<li><code>http://www.example.com:80</code></li>
 </ul>
 <p>They are also considered the same site because the port is irrelevant:</p>
 <ul>
@@ -93,28 +93,28 @@ An origin is comprised of the <code>domain</code> (hostname), <code>port</code>,
 </ul>
 <p>They are regarded as the same site in the context of a scheme-less same site scenario, but as different sites in the context of a scheme-ful same site scenario:</p>
 <ul>
-<li><a href=http://example.com>http://example.com</a></li>
-<li><a href=https://example.com>https://example.com</a></li>
+<li><code>http://example.com</code></li>
+<li><code>https://example.com</code></li>
 </ul>
 <h2 id=set-cookie-behavior>Set-Cookie Behavior</h2>
-<p>The behavior of the Set-Cookie header is influenced by the SameSite policy for the cookie attributes.</p>
-<p>For instance, if the SameSite policy is set to Lax or Strict, the cookie will not be included in cross-site requests.</p>
+<p>The behavior of the Set-Cookie header is influenced by the <code>SameSite</code> policy for the cookie attributes.</p>
+<p>For instance, if the SameSite policy is set to <code>Lax</code> or <code>Strict</code>, the cookie will not be included in cross-site requests.</p>
 <p>So, if you intend to transmit the cookie, it&rsquo;s necessary for both the client and server to be considered the same site.</p>
-<p>Imagine a scenario where you want to send a cookie from a client hosted at &lsquo;<a href=http://localhost:3000>http://localhost:3000</a>&rsquo; to an API hosted on <a href=http://api.example.com:8080>http://api.example.com:8080</a>.</p>
+<p>Imagine a scenario where you want to send a cookie from a client hosted at <code>http://localhost:3000</code> to an API hosted on <code>http://example.com:80</code>.</p>
 <p>You can achieve this locally by adding the domain (hostname) to your /etc/hosts file:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>127.0.0.1 example.com
-</code></pre></div><p>Now, when you access <a href=http://example.com:3000>http://example.com:3000</a>, you can successfully send the cookie to the API server since they are treated as part of the same site.</p>
+</code></pre></div><p>Now, when you access <code>http://example.com:3000</code>, you can successfully send the cookie to the API server since they are treated as part of the same site.</p>
 <h2 id=cors>CORS</h2>
 <p>CORS stands for <code>Cross-Origin Resource Sharing.</code></p>
 <p>It is a security feature implemented by web browsers to control how web pages or web applications hosted on one origin can request and interact with resources (such as data, images, scripts, etc.) hosted on another origin.</p>
 <p>CORS is a mechanism that helps prevent potential security risks associated with cross-origin requests, which could otherwise be exploited by malicious actors.</p>
 <p>When a client makes a request to a sever hosted on a different origins, the browser enforces CORS policies to determine whether the request should be allowed or denied.</p>
-<p>So, when the client&rsquo;s server hosted at <a href=http://localhost:3000>http://localhost:3000</a> makes a request to the API server at <a href=http://api.example.com:8080>http://api.example.com:8080</a>, the request might be denied if the necessary CORS headers are not properly configured.</p>
+<p>So, when the client&rsquo;s server hosted at <code>http://localhost:3000</code> makes a request to the API server at <code>http://example.com:8080</code>, the request might be denied if the necessary CORS headers are not properly configured.</p>
 <p>In addition to correctly configuring those headers, there is a workaround to bypass this error by using a proxy for the requests from the client&rsquo;s server. This involves changing the origin of the request to match that of the API server.</p>
 <p>The process would look like this:</p>
 <ul>
-<li>Initiate a request to the API server (e.g. &lsquo;<a href="http://api.example.com/login'">http://api.example.com/login'</a>)</li>
-<li>Proxy the request while changing the origin from <code>http://localhost:3000</code> to <code>http://api.example.com:8080</code></li>
+<li>Initiate a request to the API server (e.g. <code>http://example.com/login</code>)</li>
+<li>Proxy the request while changing the origin from <code>http://localhost:3000</code> to <code>http://example.com:8080</code></li>
 <li>CORS error won&rsquo;t occur since the request now originates from the same origin.</li>
 </ul>
 <h2 id=strict-transport-security>Strict-Transport-Security</h2>
@@ -123,8 +123,8 @@ An origin is comprised of the <code>domain</code> (hostname), <code>port</code>,
 <p>By utilizing this header, browsers automatically redirect HTTP connections to HTTPS.</p>
 <p>This header is useful, and should be correctly configured in the production environment to enforce secure connections, However, there might be certain situations where these redirects might not be desired.</p>
 <p>Consider the example presented in the &lsquo;Set-Cookie Behavior&rsquo; section.</p>
-<p>When you access <a href=http://example.com:3000>http://example.com:3000</a> and the HTTP Strict-Transport-Security header is present, the access will automatically be redirected to <a href=https://example.com:3000>https://example.com:3000</a>.</p>
-<p>Thus, the cookie won&rsquo;t be sent because <a href=https://example.com:3000>https://example.com:3000</a> and <a href=http://api.example.com:8080>http://api.example.com:8080</a> are scheme-ful different sites now.</p>
+<p>When you access <code>http://example.com:3000</code> and the HTTP Strict-Transport-Security header is present, the access will automatically be redirected to <code>https://example.com:3000</code>.</p>
+<p>Thus, the cookie won&rsquo;t be sent because <code>https://example.com:3000</code> and <code>http://example.com:8080</code> are scheme-ful different sites now.</p>
 <p>In Chrome, you can manually remove the domain&rsquo;s security policy using the following steps:</p>
 <ul>
 <li>Navigate to <code>chrome://net-internals/#hsts</code></li>
