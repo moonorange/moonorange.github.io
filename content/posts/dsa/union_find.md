@@ -8,6 +8,7 @@ tags: ["Union-Find", "Python", "English Article"]
 ## Union-Find
 
 Union-Find, aka Disjoint Set, is a rooted tree data structure that can efficiently classifies elements into categories.
+
 By utilizing this data structure, it becomes possible to rapidly determine whether two elements belong to the same group, as well as to swiftly merge two groups.
 
 ## Implementation in Python
