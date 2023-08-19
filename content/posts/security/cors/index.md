@@ -7,7 +7,7 @@ tags: ["Web", "HTTP cookies", "English Article"]
 
 ## Introduction
 
-This post summarizes what I have learned when I encountered issues related to CORS.
+This post summarizes what I have learned when I encountered issues related to CORS and cookies.
 
 ## Understanding Domains(hostname), Origins, and Sites
 
@@ -49,6 +49,25 @@ They are regarded as the same site in the context of a scheme-less same site sce
 - <http://example.com>
 - <https://example.com>
 
+
+## Set-Cookie Behavior
+
+The behavior of the Set-Cookie header is influenced by the SameSite policy for the cookie attributes.
+
+For instance, if the SameSite policy is set to Lax or Strict, the cookie will not be included in cross-site requests.
+
+As a result, if you intend to transmit the cookie, it's necessary for both the client and server to be considered the same site.
+
+Imagine a scenario where you want to send a cookie from a client hosted at '<http://localhost:3000>' to an API hosted on <http://api.example.com:8080>.
+
+You can achieve this locally by adding the domain (hostname) to your /etc/hosts file:
+
+```text
+127.0.0.1 example.com
+```
+
+Now, when you access <http://example.com:3000>, you can successfully send the cookie to the API server since they are treated as part of the same site.
+
 ## Strict-Transport-Security
 
 Slightly deviating from the main topic, let me explain the concept of HTTP Strict-Transport-Security (HSTS) as well.
@@ -57,7 +76,13 @@ The `HTTP Strict-Transport-Security` response header, commonly known as `HSTS`, 
 
 By utilizing this header, browsers automatically redirect HTTP connections to HTTPS.
 
-This header is useful, and should be correctly configured in the production environment to enforce secure connections, However, there are some cases where you might not want these redirects to occur.
+This header is useful, and should be correctly configured in the production environment to enforce secure connections, However, there might be certain situations where these redirects might not be desired.
+
+Consider the example presented in the 'Set-Cookie Behavior' section.
+
+When you access <http://example.com:3000> and the HTTP Strict-Transport-Security header is present, the access will automatically be redirected to <https://example.com:3000>.
+
+Thus, the cookie won't be sent because <https://example.com:3000> and <http://api.example.com:8080> scheme-ful different sites now.
 
 In Chrome, you can manually remove the domain's security policy using the following steps:
 
