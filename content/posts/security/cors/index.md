@@ -41,8 +41,8 @@ They are considered the same site due to their matching registrable domain and s
 
 They are also considered the same site because the port is irrelevant:
 
-- <https://example.com:8080>
-- <https://example.com>
+- `https://example.com:8080`
+- `https://example.com`
 
 They are regarded as the same site in the context of a scheme-less same site scenario, but as different sites in the context of a scheme-ful same site scenario:
 
@@ -77,14 +77,14 @@ CORS is a mechanism that helps prevent potential security risks associated with 
 
 When a client makes a request to a sever hosted on a different origins, the browser enforces CORS policies to determine whether the request should be allowed or denied.
 
-So, when the client's server hosted at `http://localhost:3000` makes a request to the API server at `http://example.com:8080`, the request might be denied if the necessary CORS headers are not properly configured.
+So, when the client's server hosted at `http://localhost:3000` makes a request to the API server at `http://example.com:80`, the request might be denied if the necessary CORS headers are not properly configured.
 
 In addition to correctly configuring those headers, there is a workaround to bypass this error by using a proxy for the requests from the client's server. This involves changing the origin of the request to match that of the API server.
 
 The process would look like this:
 
 - Initiate a request to the API server (e.g. `http://example.com/login`)
-- Proxy the request while changing the origin from `http://localhost:3000` to `http://example.com:8080`
+- Proxy the request while changing the origin from `http://localhost:3000` to `http://example.com:80`
 - CORS error won't occur since the request now originates from the same origin.
 
 ## Strict-Transport-Security
@@ -101,7 +101,7 @@ Consider the example presented in the 'Set-Cookie Behavior' section.
 
 When you access `http://example.com:3000` and the HTTP Strict-Transport-Security header is present, the access will automatically be redirected to `https://example.com:3000`.
 
-Thus, the cookie won't be sent because `https://example.com:3000` and `http://example.com:8080` are scheme-ful different sites now.
+Thus, the cookie won't be sent because `https://example.com:3000` and `http://example.com:80` are scheme-ful different sites now.
 
 In Chrome, you can manually remove the domain's security policy using the following steps:
 
