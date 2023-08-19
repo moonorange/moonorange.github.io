@@ -68,6 +68,26 @@ You can achieve this locally by adding the domain (hostname) to your /etc/hosts 
 
 Now, when you access <http://example.com:3000>, you can successfully send the cookie to the API server since they are treated as part of the same site.
 
+## CORS
+
+CORS stands for `Cross-Origin Resource Sharing.` 
+
+It is a security feature implemented by web browsers to control how web pages or web applications hosted on one origin can request and interact with resources (such as data, images, scripts, etc.) hosted on another origin.
+
+CORS is a mechanism that helps prevent potential security risks associated with cross-origin requests, which could otherwise be exploited by malicious actors.
+
+When a client makes a request to a sever hosted on a different origins, the browser enforces CORS policies to determine whether the request should be allowed or denied.
+
+So, when the client's server hosted at <http://localhost:3000> makes a request to the API server at <http://api.example.com:8080>, the request might be denied if the necessary CORS headers are not properly configured.
+
+In addition to correctly configuring those headers, there is a workaround to bypass this error by using a proxy for the requests from the client's server. This involves changing the origin of the request to match that of the API server.
+
+The process would look like this:
+
+- Initiate a request to the API server (e.g. 'http://api.example.com/login')
+- Proxy the request while changing the origin from `http://localhost:3000` to `http://api.example.com:8080`
+- CORS error won't occur since the request now originates from the same origin.
+
 ## Strict-Transport-Security
 
 Slightly deviating from the main topic, let me explain the concept of HTTP Strict-Transport-Security (HSTS) as well.
