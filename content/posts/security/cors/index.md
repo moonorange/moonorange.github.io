@@ -1,5 +1,5 @@
 ---
-title: 'CORS'
+title: 'Understanding Web content's Origin and Site'
 date: '2023-08-07'
 categories: ["Security", "HTTP cookies", "CORS"]
 tags: ["Web", "HTTP cookies", "English Article"]
