@@ -113,7 +113,7 @@ An origin is comprised of the <code>domain</code> (hostname), <code>port</code>,
 <p>Thus, the cookie won&rsquo;t be sent because <a href=https://example.com:3000>https://example.com:3000</a> and <a href=http://api.example.com:8080>http://api.example.com:8080</a> are scheme-ful different sites now.</p>
 <p>In Chrome, you can manually remove the domain&rsquo;s security policy using the following steps:</p>
 <ul>
-<li>Navigate to chrome://net-internals/#hsts</li>
+<li>Navigate to <code>chrome://net-internals/#hsts</code></li>
 <li>Remove domain security policies (e.g., &lsquo;example.com&rsquo;)</li>
 </ul>
 <p>This enables that redirection won&rsquo;t occur again until you access the deleted domain through HTTPS.</p>
