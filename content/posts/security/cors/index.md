@@ -86,7 +86,7 @@ Thus, the cookie won't be sent because <https://example.com:3000> and <http://ap
 
 In Chrome, you can manually remove the domain's security policy using the following steps:
 
-- Navigate to chrome://net-internals/#hsts
+- Navigate to `chrome://net-internals/#hsts`
 - Remove domain security policies (e.g., 'example.com')
 
 This enables that redirection won't occur again until you access the deleted domain through HTTPS.
