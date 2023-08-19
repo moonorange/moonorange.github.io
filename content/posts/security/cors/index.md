@@ -106,9 +106,17 @@ Thus, the cookie won't be sent because `https://example.com:3000` and `http://ex
 In Chrome, you can manually remove the domain's security policy using the following steps:
 
 - Navigate to `chrome://net-internals/#hsts`
-- Remove domain security policies (e.g., 'example.com')
+- Remove domain security policies (e.g., `example.com`)
 
 This enables that redirection won't occur again until you access the deleted domain through HTTPS.
+
+## Conclusion
+
+To recap, identical domain, port, and scheme is crucial for establishing a **Same-Origin** relationship, while maintaining the same scheme and registrable domain is essential for **Same-Site**.
+
+Gaining a clear understanding of Same-Site and Same-Origin is essential for addressing CORS and Same-Site errors effectively.
+
+Once you have a solid grasp of these concepts, you'll be better equipped to navigate and resolve these issues.
 
 ## References
 
