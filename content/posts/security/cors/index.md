@@ -56,7 +56,7 @@ The behavior of the Set-Cookie header is influenced by the SameSite policy for t
 
 For instance, if the SameSite policy is set to Lax or Strict, the cookie will not be included in cross-site requests.
 
-As a result, if you intend to transmit the cookie, it's necessary for both the client and server to be considered the same site.
+So, if you intend to transmit the cookie, it's necessary for both the client and server to be considered the same site.
 
 Imagine a scenario where you want to send a cookie from a client hosted at '<http://localhost:3000>' to an API hosted on <http://api.example.com:8080>.
 
@@ -82,7 +82,7 @@ Consider the example presented in the 'Set-Cookie Behavior' section.
 
 When you access <http://example.com:3000> and the HTTP Strict-Transport-Security header is present, the access will automatically be redirected to <https://example.com:3000>.
 
-Thus, the cookie won't be sent because <https://example.com:3000> and <http://api.example.com:8080> scheme-ful different sites now.
+Thus, the cookie won't be sent because <https://example.com:3000> and <http://api.example.com:8080> are scheme-ful different sites now.
 
 In Chrome, you can manually remove the domain's security policy using the following steps:
 
