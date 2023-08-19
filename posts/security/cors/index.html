@@ -59,6 +59,7 @@ In the case above, http is the scheme, example.com is the domain, and 80 is the 
 </ul>
 </li>
 <li><a href=#set-cookie-behavior>Set-Cookie Behavior</a></li>
+<li><a href=#cors>CORS</a></li>
 <li><a href=#strict-transport-security>Strict-Transport-Security</a></li>
 <li><a href=#references>References</a></li>
 </ul>
@@ -103,6 +104,19 @@ An origin is comprised of the <code>domain</code> (hostname), <code>port</code>,
 <p>You can achieve this locally by adding the domain (hostname) to your /etc/hosts file:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>127.0.0.1 example.com
 </code></pre></div><p>Now, when you access <a href=http://example.com:3000>http://example.com:3000</a>, you can successfully send the cookie to the API server since they are treated as part of the same site.</p>
+<h2 id=cors>CORS</h2>
+<p>CORS stands for <code>Cross-Origin Resource Sharing.</code></p>
+<p>It is a security feature implemented by web browsers to control how web pages or web applications hosted on one origin can request and interact with resources (such as data, images, scripts, etc.) hosted on another origin.</p>
+<p>CORS is a mechanism that helps prevent potential security risks associated with cross-origin requests, which could otherwise be exploited by malicious actors.</p>
+<p>When a client makes a request to a sever hosted on a different origins, the browser enforces CORS policies to determine whether the request should be allowed or denied.</p>
+<p>So, when the client&rsquo;s server hosted at <a href=http://localhost:3000>http://localhost:3000</a> makes a request to the API server at <a href=http://api.example.com:8080>http://api.example.com:8080</a>, the request might be denied if the necessary CORS headers are not properly configured.</p>
+<p>In addition to correctly configuring those headers, there is a workaround to bypass this error by using a proxy for the requests from the client&rsquo;s server. This involves changing the origin of the request to match that of the API server.</p>
+<p>The process would look like this:</p>
+<ul>
+<li>Initiate a request to the API server (e.g. &lsquo;<a href="http://api.example.com/login'">http://api.example.com/login'</a>)</li>
+<li>Proxy the request while changing the origin from <code>http://localhost:3000</code> to <code>http://api.example.com:8080</code></li>
+<li>CORS error won&rsquo;t occur since the request now originates from the same origin.</li>
+</ul>
 <h2 id=strict-transport-security>Strict-Transport-Security</h2>
 <p>Slightly deviating from the main topic, let me explain the concept of HTTP Strict-Transport-Security (HSTS) as well.</p>
 <p>The <code>HTTP Strict-Transport-Security</code> response header, commonly known as <code>HSTS</code>, is employed to compel browsers to exclusively accept HTTPS connections.</p>
