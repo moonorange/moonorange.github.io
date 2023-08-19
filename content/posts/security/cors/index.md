@@ -28,7 +28,9 @@ A site, on the other hand, is a collection of web pages served by the same domai
 
 Two URLs are deemed to belong to the same site if the `registrable domain` portion of the domain (and, in some cases, the scheme) is the same.
 
-Registrable domain portion consists of an entry of [Public Suffix List](https://publicsuffix.org/list/) or top level domains and plus the portion of the domain name just before it, so example.com is a registrable domain name as `com` part is a top level domain and `example` is the immediate preceding portion.
+The `registrable domain` consists of an entry of [Public Suffix List](https://publicsuffix.org/list/) or top level domains plus the portion of the domain name just before it.
+
+For instance, 'example.com' is a registrable domain name as `com` part is a top level domain and `example` is the immediate preceding portion.
 
 Let's examine examples to gain a clearer understanding of what constitutes the same site:
 
@@ -40,6 +42,11 @@ They are considered the same site due to their matching registrable domain and s
 They are also considered the same site because the port is irrelevant:
 
 - <https://example.com:8080>
+- <https://example.com>
+
+They are regarded as the same site in the context of a scheme-less same site scenario, but as different sites in the context of a scheme-ful same site scenario:
+
+- <http://example.com>
 - <https://example.com>
 
 ## Strict-Transport-Security
@@ -57,7 +64,7 @@ In Chrome, you can manually remove the domain's security policy using the follow
 - Navigate to chrome://net-internals/#hsts
 - Remove domain security policies (e.g., 'example.com')
 
-This ensures that redirection won't occur again until you access the deleted domain through HTTPS.
+This enables that redirection won't occur again until you access the deleted domain through HTTPS.
 
 ## References
 
