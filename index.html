@@ -60,6 +60,29 @@ Implementation in Python class UnionFind: def __init__(self, n): # Initialize al
 </article><article class="list__item post">
 <header class=list__header>
 <h2 class="list__title post__title">
+<a href=/posts/security/cors/ rel=bookmark>
+CORS
+</a>
+</h2>
+<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2023-08-07T00:00:00Z>August 07, 2023</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/security/ rel=category>Security</a>, <a class=meta__link href=/categories/http-cookies/ rel=category>HTTP cookies</a>, <a class=meta__link href=/categories/cors/ rel=category>CORS</a>
+</span>
+</div></div>
+</header>
+<div class="content list__excerpt post__content clearfix">
+Introduction This post summarizes what I have learned when I encountered issues related to CORS.
+Understanding Domains(hostname), Origins, and Sites It&rsquo;s crucial to comprehend these concepts when dealing with CORS-related problems.
+Origin An example of a web content&rsquo;s origin is http://example.com:80. An origin is comprised of the domain (hostname), port, and scheme.
+In the case above, http is the scheme, example.com is the domain, and 80 is the port.
+Two URLs are considered to have the same origin only when all three of these components are identical.
+</div>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/security/cors/>Read more…</a>
+</div>
+</article><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
 <a href=/posts/security/2fa/ rel=bookmark>
 Implementing TOTP in Go
 </a>
@@ -226,25 +249,6 @@ Firebase provides Database, Storage, Functions/Services, and Hosting with a litt
 <div class="list__footer clearfix">
 <a class="list__footer-readmore btn" href=/posts/public_cloud/gcp_decision_tree/>Read more…</a>
 </div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/dsa/graph/ rel=bookmark>
-Intro to Graphs
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-08-07T00:00:00Z>August 07, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
-</span>
-</div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
-What is a Graph? A graph G is an ordered pair of a set V of vertices and a set of E of edges. G can be defines as follows $$G=\left(V,E\right)$$ ordered pair $$(a, b) \neq \left(b,a\right) \text{where} \ a \neq b$$ Graph terminology There are two type of graph, the one is directed graph and the other is undirected graph. Directed graphs contain ordered pairs of vertices while undirected
-</div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/dsa/graph/>Read more…</a>
-</div>
 </article>
 </main>
 <div class=pagination>
@@ -258,10 +262,10 @@ What is a Graph? A graph G is an ordered pair of a set V of vertices and a set o
 <div class=widget__content>
 <ul class=widget__list>
 <li class=widget__item><a class=widget__link href=/posts/dsa/union_find/>Union-Find</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/cors/>CORS</a></li>
 <li class=widget__item><a class=widget__link href=/posts/security/2fa/>Implementing TOTP in Go</a></li>
 <li class=widget__item><a class=widget__link href=/posts/cs/hpbn/>High Performance Browser Networking</a></li>
 <li class=widget__item><a class=widget__link href=/posts/software_design/ddia/>Designing Data-Intensive Applications</a></li>
-<li class=widget__item><a class=widget__link href=/posts/dsa/dijkstra/>Dijkstra’s Shortest Path Algorithm</a></li>
 </ul>
 </div>
 </div>
@@ -270,11 +274,15 @@ What is a Graph? A graph G is an ordered pair of a set V of vertices and a set o
 <div class=widget__content>
 <ul class=widget__list>
 <li class=widget__item>
+<a class=widget__link href=/categories/cors/>CORS</a></li>
+<li class=widget__item>
 <a class=widget__link href=/categories/cs/>CS</a></li>
 <li class=widget__item>
 <a class=widget__link href=/categories/dsa/>DSA</a></li>
 <li class=widget__item>
 <a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/http-cookies/>HTTP cookies</a></li>
 <li class=widget__item>
 <a class=widget__link href=/categories/middleware/>Middleware</a></li>
 <li class=widget__item>
@@ -315,6 +323,7 @@ What is a Graph? A graph G is an ordered pair of a set V of vertices and a set o
 <a class="widget-taglist__link widget__link btn" href=/tags/hash-set/ title="Hash Set">Hash Set</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/hash-table/ title="Hash Table">Hash Table</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/heap/ title=Heap>Heap</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/http-cookies/ title="HTTP cookies">HTTP cookies</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/japanese-article/ title="Japanese Article">Japanese Article</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
@@ -334,6 +343,7 @@ What is a Graph? A graph G is an ordered pair of a set V of vertices and a set o
 <a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/trie/ title=Trie>Trie</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/union-find/ title=Union-Find>Union-Find</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web/ title=Web>Web</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
 </div>
 </div>
