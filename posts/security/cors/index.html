@@ -77,7 +77,8 @@ An origin is comprised of the <code>domain</code> (hostname), <code>port</code>,
 <h3 id=site>Site</h3>
 <p>A site, on the other hand, is a collection of web pages served by the same domain.</p>
 <p>Two URLs are deemed to belong to the same site if the <code>registrable domain</code> portion of the domain (and, in some cases, the scheme) is the same.</p>
-<p>Registrable domain portion consists of an entry of <a href=https://publicsuffix.org/list/>Public Suffix List</a> or top level domains and plus the portion of the domain name just before it, so example.com is a registrable domain name as <code>com</code> part is a top level domain and <code>example</code> is the immediate preceding portion.</p>
+<p>The <code>registrable domain</code> consists of an entry of <a href=https://publicsuffix.org/list/>Public Suffix List</a> or top level domains plus the portion of the domain name just before it.</p>
+<p>For instance, &lsquo;example.com&rsquo; is a registrable domain name as <code>com</code> part is a top level domain and <code>example</code> is the immediate preceding portion.</p>
 <p>Let&rsquo;s examine examples to gain a clearer understanding of what constitutes the same site:</p>
 <p>They are considered the same site due to their matching registrable domain and scheme:</p>
 <ul>
@@ -87,6 +88,11 @@ An origin is comprised of the <code>domain</code> (hostname), <code>port</code>,
 <p>They are also considered the same site because the port is irrelevant:</p>
 <ul>
 <li><a href=https://example.com:8080>https://example.com:8080</a></li>
+<li><a href=https://example.com>https://example.com</a></li>
+</ul>
+<p>They are regarded as the same site in the context of a scheme-less same site scenario, but as different sites in the context of a scheme-ful same site scenario:</p>
+<ul>
+<li><a href=http://example.com>http://example.com</a></li>
 <li><a href=https://example.com>https://example.com</a></li>
 </ul>
 <h2 id=strict-transport-security>Strict-Transport-Security</h2>
@@ -99,7 +105,7 @@ An origin is comprised of the <code>domain</code> (hostname), <code>port</code>,
 <li>Navigate to chrome://net-internals/#hsts</li>
 <li>Remove domain security policies (e.g., &lsquo;example.com&rsquo;)</li>
 </ul>
-<p>This ensures that redirection won&rsquo;t occur again until you access the deleted domain through HTTPS.</p>
+<p>This enables that redirection won&rsquo;t occur again until you access the deleted domain through HTTPS.</p>
 <h2 id=references>References</h2>
 <p><a href=https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy>https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy</a></p>
 <p><a href=https://developer.mozilla.org/en-US/docs/Glossary/Origin>https://developer.mozilla.org/en-US/docs/Glossary/Origin</a></p>
