@@ -1,5 +1,5 @@
 ---
-title: 'Understanding Web content's Origin and Site'
+title: "Understanding Web's content Origin and Site"
 date: '2023-08-07'
 categories: ["Security", "HTTP cookies", "CORS"]
 tags: ["Web", "HTTP cookies", "English Article"]
@@ -69,7 +69,7 @@ Now, when you access `http://example.com:3000`, you can successfully send the co
 
 ## CORS
 
-CORS stands for `Cross-Origin Resource Sharing.` 
+CORS stands for `Cross-Origin Resource Sharing.`
 
 It is a security feature implemented by web browsers to control how web pages or web applications hosted on one origin can request and interact with resources (such as data, images, scripts, etc.) hosted on another origin.
 
