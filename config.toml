@@ -34,7 +34,6 @@ paginate = 10
 
 [Params.widgets.social]
   github = "moonorange"
-  linkedin = "keigo-k-70557314b"
 
 [Params.sidebar]
     home = "right"
