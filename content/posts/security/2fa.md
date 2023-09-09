@@ -80,9 +80,10 @@ func generateHOTP(secretKey []byte, counter uint64) {
     // Calculate the MAC of the written message. The result of HMAC-SHA-1 is 20 bytes.
     sum := mac.Sum(nil)
 
-    // Take the last 4 bits as an offset
+    // Use the last 4 bits as an offset, ranging from 0 to 15 decimal.
     offset := sum[len(sum)-1] & 0x0f
     // Obtain the value of a contiguous 4-byte block from the offset while masking the most significant bit to avoid confusion about signed vs. unsigned modulo computations.
+    // The length of sum is 20 bytes, ensuring that the offset is within bounds.
     bin_code := binary.BigEndian.Uint32(sum[offset:offset+4]) & 0x7fffffff
 
     // To get a 6-digit HOTP, calculate the remainder when divided by 10^6
