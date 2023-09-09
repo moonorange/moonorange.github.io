@@ -197,6 +197,8 @@ var testCases = []struct {
 
 func BenchmarkGenerateLargeCSV(b *testing.B) {
  SetUp()
+ defer CleanUp()
+
  file, err := os.Create(fmt.Sprintf("data/%s.csv", fileName))
  if err != nil {
   panic(err)
@@ -217,7 +219,6 @@ func BenchmarkGenerateLargeCSV(b *testing.B) {
    GenerateLargeCSVParallelToOneFile(tc.totalNumRows/tc.numGoroutines, tc.numGoroutines, fileName2)
   })
  }
- defer CleanUp()
 }
 ```
 
@@ -226,13 +227,13 @@ goos: darwin
 goarch: amd64
 pkg: main/large_csv_generator
 cpu: Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz
-BenchmarkGenerateLargeCSV/totalNumRows=10000000-16                     1        11077188304 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=5-16                       1        10881989002 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=10-16                      1        10872359955 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=15-16                      1        10441068291 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=20-16                      1        11129653663 ns/op
+BenchmarkGenerateLargeCSV/totalNumRows=100000000-16                    1        109237932720 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100000000,numGoroutines=5-16                      1        104020250631 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100000000,numGoroutines=10-16                     1        103922320588 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100000000,numGoroutines=15-16                     1        105128871237 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100000000,numGoroutines=20-16                     1        107537896218 ns/op
 PASS
-ok      main/large_csv_generator        54.741s
+ok      main/large_csv_generator        530.679s
 ```
 
 You can find the complete code for this example here.
