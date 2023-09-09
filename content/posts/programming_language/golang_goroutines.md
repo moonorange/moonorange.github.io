@@ -166,5 +166,97 @@ This ensures that multiple Goroutines can write to the same file without concurr
 
 ## Conclusion
 
+Here is a code and result of benchmarking
+
+```go
+package large_csv_generator
+
+import (
+ "encoding/csv"
+ "errors"
+ "fmt"
+ "log"
+ "os"
+ "testing"
+)
+
+const fileName = "test_data"
+
+var testCases = []struct {
+ totalNumRows  int
+ numGoroutines int
+}{
+ {totalNumRows: 10000000, numGoroutines: 5},
+ {totalNumRows: 10000000, numGoroutines: 10},
+ {totalNumRows: 10000000, numGoroutines: 15},
+ {totalNumRows: 10000000, numGoroutines: 20},
+}
+
+func BenchmarkGenerateLargeCSV(b *testing.B) {
+ SetUp()
+ file, err := os.Create(fmt.Sprintf("data/%s.csv", fileName))
+ if err != nil {
+  panic(err)
+ }
+ defer func() {
+  err := file.Close()
+  if err != nil {
+   panic(err)
+  }
+ }()
+
+ writer := csv.NewWriter(file)
+ for _, tc := range testCases {
+  b.Run(fmt.Sprintf("totalNumRows=%d,numGoroutines=%d", tc.totalNumRows, tc.numGoroutines), func(b *testing.B) {
+   GenerateLargeCSV(tc.totalNumRows, writer)
+  })
+ }
+ defer CleanUp()
+}
+
+func BenchmarkGenerateLargeCSVParallelToOneFile(b *testing.B) {
+ SetUp()
+ for _, tc := range testCases {
+  b.Run(fmt.Sprintf("totalNumRows=%d,numGoroutines=%d", tc.totalNumRows, tc.numGoroutines), func(b *testing.B) {
+   GenerateLargeCSVParallelToOneFile(tc.totalNumRows/tc.numGoroutines, tc.numGoroutines, fileName)
+  })
+ }
+ defer CleanUp()
+}
+
+func SetUp() {
+ err := os.Mkdir("data", 0777)
+ if err != nil {
+  if !errors.Is(err, os.ErrExist) {
+   log.Fatal(err)
+  }
+ }
+}
+
+func CleanUp() {
+ err := os.RemoveAll("data")
+ if err != nil {
+  log.Fatal(err)
+ }
+}
+```
+
+```md
+goos: darwin
+goarch: amd64
+pkg: main/large_csv_generator
+cpu: Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz
+BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=5-16                     1        11486607477 ns/op
+BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=10-16                    1        11971851878 ns/op
+BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=15-16                    1        10757367102 ns/op
+BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=20-16                    1        10739765430 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=5-16                     1        10538272836 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=10-16                     1        10535757356 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=15-16                     1        10650880357 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=20-16                     1        10560888838 ns/op
+PASS
+ok      main/large_csv_generator        87.620s
+```
+
 You can find the complete code for this example here.
 <https://gist.github.com/moonorange/d09b6a0cd7f265b9a8d1ee5ddadd18e0>
