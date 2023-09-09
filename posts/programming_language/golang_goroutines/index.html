@@ -210,16 +210,19 @@ In this blog post, I&rsquo;ll share my approach to writing a large amount of dat
  <span style=color:#e6db74>&#34;testing&#34;</span>
 )
 
-<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>fileName</span> = <span style=color:#e6db74>&#34;test_data&#34;</span>
+<span style=color:#66d9ef>const</span> (
+ <span style=color:#a6e22e>fileName</span>  = <span style=color:#e6db74>&#34;test_data&#34;</span>
+ <span style=color:#a6e22e>fileName2</span> = <span style=color:#e6db74>&#34;test_data2&#34;</span>
+)
 
 <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>testCases</span> = []<span style=color:#66d9ef>struct</span> {
  <span style=color:#a6e22e>totalNumRows</span>  <span style=color:#66d9ef>int</span>
  <span style=color:#a6e22e>numGoroutines</span> <span style=color:#66d9ef>int</span>
 }{
- {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>10000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>5</span>},
- {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>10000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>10</span>},
- {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>10000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>15</span>},
- {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>10000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>20</span>},
+ {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>5</span>},
+ {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>10</span>},
+ {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>15</span>},
+ {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>20</span>},
 }
 
 <span style=color:#66d9ef>func</span> <span style=color:#a6e22e>BenchmarkGenerateLargeCSV</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
@@ -236,53 +239,27 @@ In this blog post, I&rsquo;ll share my approach to writing a large amount of dat
  }()
 
  <span style=color:#a6e22e>writer</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>csv</span>.<span style=color:#a6e22e>NewWriter</span>(<span style=color:#a6e22e>file</span>)
+ <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;totalNumRows=%d&#34;</span>, <span style=color:#ae81ff>100000000</span>), <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
+  <span style=color:#a6e22e>GenerateLargeCSV</span>(<span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>writer</span>)
+ })
  <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>testCases</span> {
   <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;totalNumRows=%d,numGoroutines=%d&#34;</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>totalNumRows</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>numGoroutines</span>), <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
-   <span style=color:#a6e22e>GenerateLargeCSV</span>(<span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>totalNumRows</span>, <span style=color:#a6e22e>writer</span>)
+   <span style=color:#a6e22e>GenerateLargeCSVParallelToOneFile</span>(<span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>totalNumRows</span><span style=color:#f92672>/</span><span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>numGoroutines</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>numGoroutines</span>, <span style=color:#a6e22e>fileName2</span>)
   })
  }
  <span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>CleanUp</span>()
-}
-
-<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>BenchmarkGenerateLargeCSVParallelToOneFile</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
- <span style=color:#a6e22e>SetUp</span>()
- <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>testCases</span> {
-  <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;totalNumRows=%d,numGoroutines=%d&#34;</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>totalNumRows</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>numGoroutines</span>), <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
-   <span style=color:#a6e22e>GenerateLargeCSVParallelToOneFile</span>(<span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>totalNumRows</span><span style=color:#f92672>/</span><span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>numGoroutines</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>numGoroutines</span>, <span style=color:#a6e22e>fileName</span>)
-  })
- }
- <span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>CleanUp</span>()
-}
-
-<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>SetUp</span>() {
- <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Mkdir</span>(<span style=color:#e6db74>&#34;data&#34;</span>, <span style=color:#ae81ff>0777</span>)
- <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
-  <span style=color:#66d9ef>if</span> !<span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>Is</span>(<span style=color:#a6e22e>err</span>, <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>ErrExist</span>) {
-   <span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#a6e22e>err</span>)
-  }
- }
-}
-
-<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>CleanUp</span>() {
- <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>RemoveAll</span>(<span style=color:#e6db74>&#34;data&#34;</span>)
- <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
-  <span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#a6e22e>err</span>)
- }
 }
 </code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-md data-lang=md>goos: darwin
 goarch: amd64
 pkg: main/large_csv_generator
 cpu: Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz
-BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=5-16                     1        11486607477 ns/op
-BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=10-16                    1        11971851878 ns/op
-BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=15-16                    1        10757367102 ns/op
-BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=20-16                    1        10739765430 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=5-16                     1        10538272836 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=10-16                     1        10535757356 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=15-16                     1        10650880357 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=20-16                     1        10560888838 ns/op
+BenchmarkGenerateLargeCSV/totalNumRows=10000000-16                     1        11077188304 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=5-16                       1        10881989002 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=10-16                      1        10872359955 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=15-16                      1        10441068291 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=20-16                      1        11129653663 ns/op
 PASS
-ok      main/large_csv_generator        87.620s
+ok      main/large_csv_generator        54.741s
 </code></pre></div><p>You can find the complete code for this example here.
 <a href=https://gist.github.com/moonorange/d09b6a0cd7f265b9a8d1ee5ddadd18e0>https://gist.github.com/moonorange/d09b6a0cd7f265b9a8d1ee5ddadd18e0</a></p>
 </div>
