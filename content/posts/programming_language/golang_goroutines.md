@@ -180,16 +180,19 @@ import (
  "testing"
 )
 
-const fileName = "test_data"
+const (
+ fileName  = "test_data"
+ fileName2 = "test_data2"
+)
 
 var testCases = []struct {
  totalNumRows  int
  numGoroutines int
 }{
- {totalNumRows: 10000000, numGoroutines: 5},
- {totalNumRows: 10000000, numGoroutines: 10},
- {totalNumRows: 10000000, numGoroutines: 15},
- {totalNumRows: 10000000, numGoroutines: 20},
+ {totalNumRows: 100000000, numGoroutines: 5},
+ {totalNumRows: 100000000, numGoroutines: 10},
+ {totalNumRows: 100000000, numGoroutines: 15},
+ {totalNumRows: 100000000, numGoroutines: 20},
 }
 
 func BenchmarkGenerateLargeCSV(b *testing.B) {
@@ -206,38 +209,15 @@ func BenchmarkGenerateLargeCSV(b *testing.B) {
  }()
 
  writer := csv.NewWriter(file)
+ b.Run(fmt.Sprintf("totalNumRows=%d", 100000000), func(b *testing.B) {
+  GenerateLargeCSV(100000000, writer)
+ })
  for _, tc := range testCases {
   b.Run(fmt.Sprintf("totalNumRows=%d,numGoroutines=%d", tc.totalNumRows, tc.numGoroutines), func(b *testing.B) {
-   GenerateLargeCSV(tc.totalNumRows, writer)
+   GenerateLargeCSVParallelToOneFile(tc.totalNumRows/tc.numGoroutines, tc.numGoroutines, fileName2)
   })
  }
  defer CleanUp()
-}
-
-func BenchmarkGenerateLargeCSVParallelToOneFile(b *testing.B) {
- SetUp()
- for _, tc := range testCases {
-  b.Run(fmt.Sprintf("totalNumRows=%d,numGoroutines=%d", tc.totalNumRows, tc.numGoroutines), func(b *testing.B) {
-   GenerateLargeCSVParallelToOneFile(tc.totalNumRows/tc.numGoroutines, tc.numGoroutines, fileName)
-  })
- }
- defer CleanUp()
-}
-
-func SetUp() {
- err := os.Mkdir("data", 0777)
- if err != nil {
-  if !errors.Is(err, os.ErrExist) {
-   log.Fatal(err)
-  }
- }
-}
-
-func CleanUp() {
- err := os.RemoveAll("data")
- if err != nil {
-  log.Fatal(err)
- }
 }
 ```
 
@@ -246,16 +226,13 @@ goos: darwin
 goarch: amd64
 pkg: main/large_csv_generator
 cpu: Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz
-BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=5-16                     1        11486607477 ns/op
-BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=10-16                    1        11971851878 ns/op
-BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=15-16                    1        10757367102 ns/op
-BenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=20-16                    1        10739765430 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=5-16                     1        10538272836 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=10-16                     1        10535757356 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=15-16                     1        10650880357 ns/op
-Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSVParallelToOneFile/totalNumRows=10000000,numGoroutines=20-16                     1        10560888838 ns/op
+BenchmarkGenerateLargeCSV/totalNumRows=10000000-16                     1        11077188304 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=5-16                       1        10881989002 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=10-16                      1        10872359955 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=15-16                      1        10441068291 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=10000000,numGoroutines=20-16                      1        11129653663 ns/op
 PASS
-ok      main/large_csv_generator        87.620s
+ok      main/large_csv_generator        54.741s
 ```
 
 You can find the complete code for this example here.
