@@ -3,18 +3,19 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>BFS and DFS - Kei's Blog</title>
+<title>Go - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="BFS and DFS">
-<meta name=twitter:description content="BFS Template A template in a python-ish pseudo-code for bfs from collections import deque def bfs(root, target): step = 0 # Enqueue root node in queue q = deque([root]) # Set to store visited nodes visited = set(q) while q: size = len(q) # Iterated the nodes which are already in the queue for _ in range(size): # Pop the first node in the queue curr = q.popleft if curr">
+<meta name=twitter:title content="Go">
+<meta name=twitter:description content="Kei's personal blog about tech">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 <link rel=stylesheet href=/css/style.css>
 <link rel=stylesheet href=/css/custom.css>
+<link rel=alternate type=application/rss+xml href=/categories/go/index.xml title="Kei's Blog">
 <link rel="shortcut icon" href=/favicon.ico>
 </head>
 <body class=body>
@@ -33,112 +34,50 @@
 </header>
 <div class="wrapper flex">
 <div class=primary>
-<main class=main role=main>
-<article class=post>
-<header class=post__header>
-<h1 class=post__title>BFS and DFS</h1>
-<div class="post__meta meta">
+<main class="main list" role=main>
+<header class=main__header>
+<h1 class=main__title>Go</h1>
+</header><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
+<a href=/posts/programming_language/golang_goroutines/ rel=bookmark>
+Write a Large Amount of Data to CSV File with Go (Golang)
+</a>
+</h2>
+<div class="list__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-06-19T00:00:00Z>June 19, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2023-09-09T00:00:00Z>September 09, 2023</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/programming-language/ rel=category>Programming Language</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>
 </span>
 </div></div>
 </header>
-<div class="content post__content clearfix">
-<h1 id=bfs-template>BFS Template</h1>
-<p>A template in a python-ish pseudo-code for bfs</p>
-<figure><img src="https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-image-store.s3.ap-northeast-1.amazonaws.com%2F0%2F182963%2F0d83198d-9e0a-0fb9-ddff-f7b64f1673b7.png?ixlib=rb-4.0.0&auto=format&gif-q=60&q=75&w=1400&fit=max&s=5515e347dc5d77374a2c577794b1eaa1" alt="Queue and BFS" width=100%>
-</figure>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>
-<span style=color:#f92672>from</span> collections <span style=color:#f92672>import</span> deque
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>bfs</span>(root, target):
-    step <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
-    <span style=color:#75715e># Enqueue root node in queue</span>
-    q <span style=color:#f92672>=</span> deque([root])
-    <span style=color:#75715e># Set to store visited nodes</span>
-    visited <span style=color:#f92672>=</span> set(q)
-
-    <span style=color:#66d9ef>while</span> q:
-        size <span style=color:#f92672>=</span> len(q)
-        <span style=color:#75715e># Iterated the nodes which are already in the queue</span>
-        <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(size):
-            <span style=color:#75715e># Pop the first node in the queue</span>
-            curr <span style=color:#f92672>=</span> q<span style=color:#f92672>.</span>popleft
-            <span style=color:#66d9ef>if</span> curr <span style=color:#f92672>==</span> target: <span style=color:#66d9ef>return</span> step
-            <span style=color:#75715e># Search all adjacent nodes of current node and append them to queue</span>
-            <span style=color:#66d9ef>for</span> neighbor <span style=color:#f92672>in</span> (the adjacent nodes of curr):
-                <span style=color:#75715e># Skip if we already visited the node</span>
-                <span style=color:#66d9ef>if</span> neighbor <span style=color:#f92672>in</span> visited <span style=color:#66d9ef>continue</span>:
-
-                q<span style=color:#f92672>.</span>append(neighbor)
-                visited<span style=color:#f92672>.</span>add(neighbor)
-        <span style=color:#75715e># Increment step for each search of the node</span>
-        step<span style=color:#f92672>+=</span><span style=color:#ae81ff>1</span>
-
-    <span style=color:#75715e># Return -1 if there is no target node</span>
-    <span style=color:#66d9ef>return</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>
-</code></pre></div><h1 id=dfs-template>DFS Template</h1>
-<p>A template in a python-ish pseudo-code for dfs</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Recursion</span>
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dfs</span>(self, curr: int, target: int, visited: Set[int]):
-    <span style=color:#75715e># Termination condition</span>
-    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span> <span style=color:#66d9ef>if</span> curr <span style=color:#f92672>==</span> target
-    <span style=color:#66d9ef>for</span> next_node <span style=color:#f92672>in</span> (each neighbor of curr):
-        <span style=color:#66d9ef>if</span> next_node <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> visited:
-            visited<span style=color:#f92672>.</span>add(next_node)
-            self<span style=color:#f92672>.</span>dfs(next_node, target, visited)
-    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
-</code></pre></div><p>It seems like we don&rsquo;t have to use any stacks when we implement DFS recursively. But actually, we are using the implicit stack provided by the system, also known as the Call Stack.</p>
-<figure><img src=./callstack.jpeg alt="Call Stack" width=100%>
-</figure>
-<p>If the depth of recursion is too much, you will end up suffering from stack overflow.</p>
-<p>In that case, you have to implement dfs using explicit stack.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>
-<span style=color:#75715e># Iteration</span>
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dfs</span>(self, root: int, target: int) {
-    visited <span style=color:#f92672>=</span> set()
-    stack <span style=color:#f92672>=</span> [root]
-    <span style=color:#66d9ef>while</span> stack:
-        cur <span style=color:#f92672>=</span> stack<span style=color:#f92672>.</span>pop()
-        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span> <span style=color:#66d9ef>if</span> cur <span style=color:#f92672>==</span> target
-        <span style=color:#66d9ef>for</span> next <span style=color:#f92672>in</span> (the neighbors of cur):
-            <span style=color:#66d9ef>if</span> next <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> visited:
-                visited<span style=color:#f92672>.</span>add(next)
-                stack<span style=color:#f92672>.</span>append(next)
-
-    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
-}
-</code></pre></div><h1 id=reference>Reference</h1>
-<p><a href=https://qiita.com/drken/items/996d80bcae64649a6580#1-4-bfs-%E3%81%AE%E8%A8%88%E7%AE%97%E9%87%8F>BFS (幅優先探索) 超入門！ 〜 キューを鮮やかに使いこなす 〜</a></p>
-<p><a href="https://www.youtube.com/watch?v=pcKY4hjDrxk">5.1 Graph Traversals - BFS & DFS -Breadth First Search and Depth First Search</a></p>
+<div class="content list__excerpt post__content clearfix">
+Introduction Have you ever found yourself in a situation where you needed to prepare a substantial amount of data for testing your code? If so, you&rsquo;re not alone. Working with large datasets is a common requirement in software development, and Go provides some powerful tools to help you accomplish this efficiently.
+In this blog post, I&rsquo;ll share my approach to writing a large amount of data into a CSV file using Go, and I&rsquo;ll demonstrate how to leverage Goroutines to make the process more efficient and faster.
 </div>
-<footer class=post__footer>
-<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
-<ul class=tags__list>
-<li class=tags__item>
-<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
-</li>
-<li class=tags__item>
-<a class="tags__link btn" href=/tags/bfs/ rel=tag>BFS</a>
-</li>
-<li class=tags__item>
-<a class="tags__link btn" href=/tags/dfs/ rel=tag>DFS</a>
-</li>
-</ul>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/programming_language/golang_goroutines/>Read more…</a>
 </div>
-</footer>
+</article><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
+<a href=/posts/programming_language/golang/ rel=bookmark>
+Golang Basic(Golang基礎)
+</a>
+</h2>
+<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-12-11T00:00:00Z>December 11, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/programming-language/ rel=category>Programming Language</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>
+</span>
+</div></div>
+</header>
+<div class="content list__excerpt post__content clearfix">
+概要 Golang についての基礎的な情報をまとめる資料である。 Go とは？ Google が開発したプログラミング言語であり、2009 年に最初のバージョンがオープンソース
+</div>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/programming_language/golang/>Read more…</a>
+</div>
 </article>
 </main>
-<div class="authorbox clearfix">
-<figure class=authorbox__avatar>
-<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
-</figure>
-<div class=authorbox__header>
-<span class=authorbox__name>About Keigo Kida</span>
-</div>
-<div class=authorbox__description>
-Software Engineer living in Japan
-</div>
-</div>
 </div>
 <aside class=sidebar>
 <div class="widget-recent widget">
@@ -255,6 +194,5 @@ Software Engineer living in Japan
 </footer>
 </div>
 <script async defer src=/js/menu.js></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>

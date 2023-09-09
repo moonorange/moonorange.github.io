@@ -123,9 +123,10 @@ There are mainly three types of factors for authentication: knowledge, possessio
     <span style=color:#75715e>// Calculate the MAC of the written message. The result of HMAC-SHA-1 is 20 bytes.
 </span><span style=color:#75715e></span>    <span style=color:#a6e22e>sum</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>mac</span>.<span style=color:#a6e22e>Sum</span>(<span style=color:#66d9ef>nil</span>)
 
-    <span style=color:#75715e>// Take the last 4 bits as an offset
+    <span style=color:#75715e>// Use the last 4 bits as an offset, ranging from 0 to 15 decimal.
 </span><span style=color:#75715e></span>    <span style=color:#a6e22e>offset</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>sum</span>[len(<span style=color:#a6e22e>sum</span>)<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>] <span style=color:#f92672>&amp;</span> <span style=color:#ae81ff>0x0f</span>
     <span style=color:#75715e>// Obtain the value of a contiguous 4-byte block from the offset while masking the most significant bit to avoid confusion about signed vs. unsigned modulo computations.
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// The length of sum is 20 bytes, ensuring that the offset is within bounds.
 </span><span style=color:#75715e></span>    <span style=color:#a6e22e>bin_code</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>binary</span>.<span style=color:#a6e22e>BigEndian</span>.<span style=color:#a6e22e>Uint32</span>(<span style=color:#a6e22e>sum</span>[<span style=color:#a6e22e>offset</span>:<span style=color:#a6e22e>offset</span><span style=color:#f92672>+</span><span style=color:#ae81ff>4</span>]) <span style=color:#f92672>&amp;</span> <span style=color:#ae81ff>0x7fffffff</span>
 
     <span style=color:#75715e>// To get a 6-digit HOTP, calculate the remainder when divided by 10^6
@@ -187,11 +188,11 @@ Software Engineer living in Japan
 <h4 class=widget__title>Recent Posts</h4>
 <div class=widget__content>
 <ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/golang_goroutines/>Write a Large Amount of Data to CSV File with Go (Golang)</a></li>
 <li class=widget__item><a class=widget__link href=/posts/dsa/union_find/>Union-Find</a></li>
 <li class=widget__item><a class=widget__link href=/posts/security/cors/>Understanding Web's content Origin and Site</a></li>
 <li class=widget__item><a class=widget__link href=/posts/security/2fa/>Implementing TOTP in Go</a></li>
 <li class=widget__item><a class=widget__link href=/posts/cs/hpbn/>High Performance Browser Networking</a></li>
-<li class=widget__item><a class=widget__link href=/posts/software_design/ddia/>Designing Data-Intensive Applications</a></li>
 </ul>
 </div>
 </div>
@@ -207,6 +208,8 @@ Software Engineer living in Japan
 <a class=widget__link href=/categories/dsa/>DSA</a></li>
 <li class=widget__item>
 <a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/go/>Go</a></li>
 <li class=widget__item>
 <a class=widget__link href=/categories/http-cookies/>HTTP cookies</a></li>
 <li class=widget__item>
