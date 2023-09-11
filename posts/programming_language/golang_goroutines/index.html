@@ -52,6 +52,7 @@ In this blog post, I&rsquo;ll share my approach to writing a large amount of dat
 <li><a href=#introduction>Introduction</a></li>
 <li><a href=#writing-data-sequentially>Writing Data Sequentially</a></li>
 <li><a href=#using-goroutines-for-parallelism>Using Goroutines for Parallelism</a></li>
+<li><a href=#benchmarking>Benchmarking</a></li>
 <li><a href=#conclusion>Conclusion</a></li>
 </ul>
 </nav>
@@ -104,14 +105,18 @@ In this blog post, I&rsquo;ll share my approach to writing a large amount of dat
 </span><span style=color:#75715e></span>  <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>writer</span>.<span style=color:#a6e22e>Write</span>(<span style=color:#a6e22e>row</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
    panic(<span style=color:#a6e22e>err</span>)
   }
- }
+<span style=color:#75715e>//   Flush if it reaches batchSize
+</span><span style=color:#75715e>//   if i &gt; 0 &amp;&amp; i%batchSize == 0 {
+</span><span style=color:#75715e>//    writer.Flush()
+</span><span style=color:#75715e>//   }
+</span><span style=color:#75715e></span> }
  <span style=color:#a6e22e>writer</span>.<span style=color:#a6e22e>Flush</span>()
  <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>writer</span>.<span style=color:#a6e22e>Error</span>() <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
   panic(<span style=color:#a6e22e>err</span>)
  }
 }
 </code></pre></div><h2 id=using-goroutines-for-parallelism>Using Goroutines for Parallelism</h2>
-<p>We can leverage Goroutines. Goroutines allow for concurrent execution of tasks, which can fully utilize multi-core processors and accelerate the process.</p>
+<p>We can leverage Goroutines. Goroutines allow for concurrent execution of tasks, which can utilize multi-core processors and might accelerate the process.</p>
 <p>However, it&rsquo;s essential to note that the standard <code>csv.Writer</code> is not thread-safe. If multiple Goroutines attempt to write to the same file concurrently, it can lead to concurrency issues. Therefore, we&rsquo;ll customize the csv.Writer to ensure thread safety.</p>
 <p>Here&rsquo;s an example of using Goroutines to write data to a CSV file concurrently in Go:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// Parallelize CSV generation
@@ -163,8 +168,15 @@ In this blog post, I&rsquo;ll share my approach to writing a large amount of dat
   <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>writer</span>.<span style=color:#a6e22e>Write</span>(<span style=color:#a6e22e>row</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
    panic(<span style=color:#a6e22e>err</span>)
   }
- }
+<span style=color:#75715e>//   Flush if it reaches batchSize
+</span><span style=color:#75715e>//   if i &gt; 0 &amp;&amp; i%batchSize == 0 {
+</span><span style=color:#75715e>//    writer.Flush()
+</span><span style=color:#75715e>//   }
+</span><span style=color:#75715e></span> }
  <span style=color:#a6e22e>writer</span>.<span style=color:#a6e22e>Flush</span>()
+ <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>writer</span>.<span style=color:#a6e22e>Error</span>() <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+  panic(<span style=color:#a6e22e>err</span>)
+ }
 }
 
 <span style=color:#75715e>// thread-safe csv writer
@@ -197,60 +209,8 @@ In this blog post, I&rsquo;ll share my approach to writing a large amount of dat
 }
 </code></pre></div><p>In this modified code, we&rsquo;ve introduced the concept of thread-safe CSV writing using a custom CsvWriter type.</p>
 <p>This ensures that multiple Goroutines can write to the same file without concurrency issues.</p>
-<h2 id=conclusion>Conclusion</h2>
-<p>Here is a code and result of benchmarking</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>large_csv_generator</span>
-
-<span style=color:#f92672>import</span> (
- <span style=color:#e6db74>&#34;encoding/csv&#34;</span>
- <span style=color:#e6db74>&#34;errors&#34;</span>
- <span style=color:#e6db74>&#34;fmt&#34;</span>
- <span style=color:#e6db74>&#34;log&#34;</span>
- <span style=color:#e6db74>&#34;os&#34;</span>
- <span style=color:#e6db74>&#34;testing&#34;</span>
-)
-
-<span style=color:#66d9ef>const</span> (
- <span style=color:#a6e22e>fileName</span>  = <span style=color:#e6db74>&#34;test_data&#34;</span>
- <span style=color:#a6e22e>fileName2</span> = <span style=color:#e6db74>&#34;test_data2&#34;</span>
-)
-
-<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>testCases</span> = []<span style=color:#66d9ef>struct</span> {
- <span style=color:#a6e22e>totalNumRows</span>  <span style=color:#66d9ef>int</span>
- <span style=color:#a6e22e>numGoroutines</span> <span style=color:#66d9ef>int</span>
-}{
- {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>5</span>},
- {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>10</span>},
- {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>15</span>},
- {<span style=color:#a6e22e>totalNumRows</span>: <span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>numGoroutines</span>: <span style=color:#ae81ff>20</span>},
-}
-
-<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>BenchmarkGenerateLargeCSV</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
- <span style=color:#a6e22e>SetUp</span>()
- <span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>CleanUp</span>()
-
- <span style=color:#a6e22e>file</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Create</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;data/%s.csv&#34;</span>, <span style=color:#a6e22e>fileName</span>))
- <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
-  panic(<span style=color:#a6e22e>err</span>)
- }
- <span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() {
-  <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>file</span>.<span style=color:#a6e22e>Close</span>()
-  <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
-   panic(<span style=color:#a6e22e>err</span>)
-  }
- }()
-
- <span style=color:#a6e22e>writer</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>csv</span>.<span style=color:#a6e22e>NewWriter</span>(<span style=color:#a6e22e>file</span>)
- <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;totalNumRows=%d&#34;</span>, <span style=color:#ae81ff>100000000</span>), <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
-  <span style=color:#a6e22e>GenerateLargeCSV</span>(<span style=color:#ae81ff>100000000</span>, <span style=color:#a6e22e>writer</span>)
- })
- <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>testCases</span> {
-  <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;totalNumRows=%d,numGoroutines=%d&#34;</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>totalNumRows</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>numGoroutines</span>), <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
-   <span style=color:#a6e22e>GenerateLargeCSVParallelToOneFile</span>(<span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>totalNumRows</span><span style=color:#f92672>/</span><span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>numGoroutines</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>numGoroutines</span>, <span style=color:#a6e22e>fileName2</span>)
-  })
- }
-}
-</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-md data-lang=md>goos: darwin
+<h2 id=benchmarking>Benchmarking</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-md data-lang=md>goos: darwin
 goarch: amd64
 pkg: main/large_csv_generator
 cpu: Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz
@@ -261,7 +221,9 @@ Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100
 Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100000000,numGoroutines=20-16                     1        107537896218 ns/op
 PASS
 ok      main/large_csv_generator        530.679s
-</code></pre></div><p>You can find the complete code for this example here.
+</code></pre></div><h2 id=conclusion>Conclusion</h2>
+<p>In conclusion, I have illustrated both sequential and parallel approaches for writing a substantial volume of data to CSV files. While the parallel implementation with Goroutines did not yield a speed improvement in this specific case, it&rsquo;s worth noting that Goroutines are a potent tool that, when employed effectively, can lead to substantial performance enhancements.</p>
+<p>For the complete code of this example, please refer to the following link: GitHub Gist.
 <a href=https://gist.github.com/moonorange/d09b6a0cd7f265b9a8d1ee5ddadd18e0>https://gist.github.com/moonorange/d09b6a0cd7f265b9a8d1ee5ddadd18e0</a></p>
 </div>
 <footer class=post__footer>
