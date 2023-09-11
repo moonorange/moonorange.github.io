@@ -59,6 +59,10 @@ func GenerateLargeCSV(numRows int, fileName string) {
   if err := writer.Write(row); err != nil {
    panic(err)
   }
+//   Flush if it reaches batchSize
+//   if i > 0 && i%batchSize == 0 {
+//    writer.Flush()
+//   }
  }
  writer.Flush()
  if writer.Error() != nil {
@@ -69,12 +73,11 @@ func GenerateLargeCSV(numRows int, fileName string) {
 
 ## Using Goroutines for Parallelism
 
-We can leverage Goroutines. Goroutines allow for concurrent execution of tasks, which can fully utilize multi-core processors and accelerate the process.
+We can leverage Goroutines. Goroutines allow for concurrent execution of tasks, which can utilize multi-core processors and might accelerate the process.
 
 However, it's essential to note that the standard `csv.Writer` is not thread-safe. If multiple Goroutines attempt to write to the same file concurrently, it can lead to concurrency issues. Therefore, we'll customize the csv.Writer to ensure thread safety.
 
 Here's an example of using Goroutines to write data to a CSV file concurrently in Go:
-
 
 ```go
 // Parallelize CSV generation
@@ -126,8 +129,15 @@ func GenerateLargeCSVWithLock(numRows int, writer *CsvWriter) {
   if err := writer.Write(row); err != nil {
    panic(err)
   }
+//   Flush if it reaches batchSize
+//   if i > 0 && i%batchSize == 0 {
+//    writer.Flush()
+//   }
  }
  writer.Flush()
+ if writer.Error() != nil {
+  panic(err)
+ }
 }
 
 // thread-safe csv writer
@@ -164,7 +174,25 @@ In this modified code, we've introduced the concept of thread-safe CSV writing u
 
 This ensures that multiple Goroutines can write to the same file without concurrency issues.
 
+## Benchmarking
+
+```md
+goos: darwin
+goarch: amd64
+pkg: main/large_csv_generator
+cpu: Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz
+BenchmarkGenerateLargeCSV/totalNumRows=100000000-16                    1        109237932720 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100000000,numGoroutines=5-16                      1        104020250631 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100000000,numGoroutines=10-16                     1        103922320588 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100000000,numGoroutines=15-16                     1        105128871237 ns/op
+Done GenerateLargeCSVParallelToOneFileBenchmarkGenerateLargeCSV/totalNumRows=100000000,numGoroutines=20-16                     1        107537896218 ns/op
+PASS
+ok      main/large_csv_generator        530.679s
+```
+
 ## Conclusion
 
-You can find the complete code for this example here.
+In conclusion, I have illustrated both sequential and parallel approaches for writing a substantial volume of data to CSV files. While the parallel implementation with Goroutines did not yield a speed improvement in this specific case, it's worth noting that Goroutines are a potent tool that, when employed effectively, can lead to substantial performance enhancements.
+
+For the complete code of this example, please refer to the following link: GitHub Gist.
 <https://gist.github.com/moonorange/d09b6a0cd7f265b9a8d1ee5ddadd18e0>
