@@ -40,6 +40,48 @@
 </header><article class="list__item post">
 <header class=list__header>
 <h2 class="list__title post__title">
+<a href=/posts/dsa/sort/merge_sort/ rel=bookmark>
+Implementation of Merge Sort in Python
+</a>
+</h2>
+<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2023-10-05T00:00:00Z>October 05, 2023</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+</span>
+</div></div>
+</header>
+<div class="content list__excerpt post__content clearfix">
+Merge Sort In sorting n objects, merge sort has an average and worst-case performance of O(n log n).
+Merge sort is a stable sort in the most implementations. The most common implementation does not sort in place, meaning it requires extra space.
+Implementation in Python from typing import List # Python merge sort implementation # Time complexity: O(NlogN), space complexity: O(N) def merge_sort(nums: List[int]): # Base case if len(nums) &lt;= 1: return nums mid = len(nums) // 2 left, right = merge_sort(nums[:mid]), merge_sort(nums[mid:]) return merge(left, right) def merge(left: List[int], right: List[int]): i, j = 0, 0 res = [] # Compare the elements in the left and right list and append the smaller one to the result list while i &lt; len(left) and j &lt; len(right): if left[i] &lt;= right[j]: res.
+</div>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/dsa/sort/merge_sort/>Read more…</a>
+</div>
+</article><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
+<a href=/posts/dsa/sort/quick_sort/ rel=bookmark>
+Implementation of Quick Sort in Python
+</a>
+</h2>
+<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2023-10-05T00:00:00Z>October 05, 2023</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+</span>
+</div></div>
+</header>
+<div class="content list__excerpt post__content clearfix">
+Quick Sort In sorting n objects, quick sort has an average performance of O(n log n) and a worst performance of O(n^2).
+Most implementations of quick sort are not stable, but sort in place, meaning it does not require extra space.
+Implementation in Python # O(NLogN), space complexity O(n) in this case def quick_sort(nums): if len(nums) &lt;= 1: return nums pivot = nums[len(nums) // 2] left = [n for n in nums if n &lt; pivot] mid = [n for n in nums if n == pivot] right = [n for n in nums if n > pivot] return quick_sort(left) + mid + quick_sort(right) # Test cases if __name__ == "__main__": # Test case 1: Sorting an empty list arr1 = [] result1 = quick_sort(arr1) assert result1 == [], "Test case 1 failed" # Test case 2: Sorting a list with one element arr2 = [5] result2 = quick_sort(arr2) assert result2 == [5], "Test case 2 failed" # Test case 3: Sorting a list with multiple elements arr3 = [3, 6, 1, 8, 2, 4, 5, 7] result3 = quick_sort(arr3) assert result3 == [1, 2, 3, 4, 5, 6, 7, 8], "Test case 3 failed" # Test case 4: Sorting a list with duplicate elements arr4 = [3, 6, 1, 8, 2, 4, 5, 7, 1, 2] result4 = quick_sort(arr4) assert result4 == [1, 1, 2, 2, 3, 4, 5, 6, 7, 8], "Test case 4 failed" # Test case 5: Sorting a list with duplicate pivot elements arr5 = [3, 6, 1, 5, 4, 4, 5, 7, 1, 2] result5= quick_sort(arr5) assert result5 == [1, 1, 2, 3, 4, 4, 5, 5, 6, 7], "Test case 5 failed {0}".
+</div>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/dsa/sort/quick_sort/>Read more…</a>
+</div>
+</article><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
 <a href=/posts/dsa/union_find/ rel=bookmark>
 Union-Find
 </a>
@@ -202,44 +244,6 @@ Trie() Initializes the trie object. void insert(String word) Inserts the string 
 <div class="list__footer clearfix">
 <a class="list__footer-readmore btn" href=/posts/dsa/tries/>Read more…</a>
 </div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/dsa/tree/ rel=bookmark>
-Tree
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-04-08T00:00:00Z>April 08, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
-</span>
-</div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
-Tree Properties Every tree has a special node called the root node. The root node can be used to traverse every node of the tree. It is called root because the tree originated from root only. If a tree has N nodes(vertices), the number of edges is always one less than the number of nodes (i.e., N-1). If it has more than that, it&rsquo;s called a graph not a tree.
-</div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/dsa/tree/>Read more…</a>
-</div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/dsa/hash/ rel=bookmark>
-Hash Set and Hash Table
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-11-15T00:00:00Z>November 15, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
-</span>
-</div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
-The Principle of Built-in Hash Table The key value can be any hashable type. A value that belongs to a hashable type has a hash code, and this code is used to get the bucket index. Each bucket contains an array to store all the values in the same bucket initially If there are too many values in the bucket, these values will be stored in the form of height-balanced BST so that look-up can be more efficient.
-</div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/dsa/hash/>Read more…</a>
-</div>
 </article>
 </main>
 <div class=pagination>
@@ -252,11 +256,11 @@ The Principle of Built-in Hash Table The key value can be any hashable type. A v
 <h4 class=widget__title>Recent Posts</h4>
 <div class=widget__content>
 <ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/dsa/sort/merge_sort/>Implementation of Merge Sort in Python</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/sort/quick_sort/>Implementation of Quick Sort in Python</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/golang_goroutines/>Write a Large Amount of Data to CSV File with Go (Golang)</a></li>
 <li class=widget__item><a class=widget__link href=/posts/dsa/union_find/>Union-Find</a></li>
 <li class=widget__item><a class=widget__link href=/posts/security/cors/>Understanding Web's content Origin and Site</a></li>
-<li class=widget__item><a class=widget__link href=/posts/security/2fa/>Implementing TOTP in Go</a></li>
-<li class=widget__item><a class=widget__link href=/posts/cs/hpbn/>High Performance Browser Networking</a></li>
 </ul>
 </div>
 </div>
@@ -321,15 +325,18 @@ The Principle of Built-in Hash Table The key value can be any hashable type. A v
 <a class="widget-taglist__link widget__link btn" href=/tags/japanese-article/ title="Japanese Article">Japanese Article</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/merge-sort/ title="Merge Sort">Merge Sort</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/queue/ title=Queue>Queue</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/quick-sort/ title="Quick Sort">Quick Sort</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/sort/ title=Sort>Sort</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/stack/ title=Stack>Stack</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/terraform/ title=Terraform>Terraform</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/terraform-cloud/ title="Terraform Cloud">Terraform Cloud</a>

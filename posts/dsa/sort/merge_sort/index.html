@@ -1,0 +1,288 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>Implementation of Merge Sort in Python - Kei's Blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Implementation of Merge Sort in Python">
+<meta name=twitter:description content="Merge Sort In sorting n objects, merge sort has an average and worst-case performance of O(n log n).
+Merge sort is a stable sort in the most implementations. The most common implementation does not sort in place, meaning it requires extra space.
+ Implementation in Python from typing import List # Python merge sort implementation # Time complexity: O(NlogN), space complexity: O(N) def merge_sort(nums: List[int]): # Base case if len(nums) <= 1: return nums mid = len(nums) // 2 left, right = merge_sort(nums[:mid]), merge_sort(nums[mid:]) return merge(left, right) def merge(left: List[int], right: List[int]): i, j = 0, 0 res = [] # Compare the elements in the left and right list and append the smaller one to the result list while i < len(left) and j < len(right): if left[i] <= right[j]: res.">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's Blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's Blog</div>
+</div>
+</a>
+</div>
+<div class=divider></div>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>Implementation of Merge Sort in Python</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2023-10-05T00:00:00Z>October 05, 2023</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+</span>
+</div></div>
+</header>
+<div class="post__toc toc">
+<div class=toc__title>Page content</div>
+<div class=toc__menu>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#merge-sort>Merge Sort</a></li>
+<li><a href=#implementation-in-python>Implementation in Python</a></li>
+</ul>
+</nav>
+</div>
+</div><div class="content post__content clearfix">
+<h2 id=merge-sort>Merge Sort</h2>
+<p>In sorting n objects, merge sort has an average and worst-case performance of O(n log n).</p>
+<p>Merge sort is a stable sort in the most implementations.
+The most common implementation does not sort in place, meaning it requires extra space.</p>
+<figure><img src=./merge_sort_algorithm.png alt="Merge sort diagram" width=75%>
+</figure>
+<h2 id=implementation-in-python>Implementation in Python</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> typing <span style=color:#f92672>import</span> List
+
+<span style=color:#75715e># Python merge sort implementation</span>
+
+<span style=color:#75715e># Time complexity: O(NlogN), space complexity: O(N)</span>
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>merge_sort</span>(nums: List[int]):
+    <span style=color:#75715e># Base case</span>
+    <span style=color:#66d9ef>if</span> len(nums) <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>1</span>:
+        <span style=color:#66d9ef>return</span> nums
+
+    mid <span style=color:#f92672>=</span> len(nums) <span style=color:#f92672>//</span> <span style=color:#ae81ff>2</span>
+    left, right <span style=color:#f92672>=</span> merge_sort(nums[:mid]), merge_sort(nums[mid:])
+    <span style=color:#66d9ef>return</span> merge(left, right)
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>merge</span>(left: List[int], right: List[int]):
+    i, j <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>0</span>
+    res <span style=color:#f92672>=</span> []
+    <span style=color:#75715e># Compare the elements in the left and right list and append the smaller one to the result list</span>
+    <span style=color:#66d9ef>while</span> i <span style=color:#f92672>&lt;</span> len(left) <span style=color:#f92672>and</span> j <span style=color:#f92672>&lt;</span> len(right):
+        <span style=color:#66d9ef>if</span> left[i] <span style=color:#f92672>&lt;=</span> right[j]:
+            res<span style=color:#f92672>.</span>append(left[i])
+            i <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+        <span style=color:#66d9ef>else</span>:
+            res<span style=color:#f92672>.</span>append(right[j])
+            j <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+
+    <span style=color:#75715e># add the rest of the list if any elements in the left remains</span>
+    <span style=color:#66d9ef>if</span> i <span style=color:#f92672>&lt;</span> len(left):
+        res<span style=color:#f92672>.</span>extend(left[i:])
+    <span style=color:#75715e># add the rest of the list if any elements in the right remains</span>
+    <span style=color:#66d9ef>if</span> j <span style=color:#f92672>&lt;</span> len(right):
+        res<span style=color:#f92672>.</span>extend(right[j:])
+
+    <span style=color:#66d9ef>return</span> res
+
+<span style=color:#75715e># 1. Empty list</span>
+
+<span style=color:#66d9ef>assert</span> merge_sort([]) <span style=color:#f92672>==</span> []
+
+<span style=color:#75715e># 2. One element list</span>
+
+<span style=color:#66d9ef>assert</span> merge_sort([<span style=color:#ae81ff>1</span>]) <span style=color:#f92672>==</span> [<span style=color:#ae81ff>1</span>]
+
+<span style=color:#75715e># 3. Two element list</span>
+
+<span style=color:#66d9ef>assert</span> merge_sort([<span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>]) <span style=color:#f92672>==</span> [<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>]
+
+<span style=color:#75715e># 4. More than two element list</span>
+
+<span style=color:#66d9ef>assert</span> merge_sort([<span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>]) <span style=color:#f92672>==</span> [<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>]
+
+<span style=color:#75715e># 5. Duplicate elements</span>
+
+<span style=color:#66d9ef>assert</span> merge_sort([<span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>]) <span style=color:#f92672>==</span> [<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>]
+
+<span style=color:#75715e># 6. Negative elements</span>
+
+<span style=color:#66d9ef>assert</span> merge_sort([<span style=color:#f92672>-</span><span style=color:#ae81ff>3</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]) <span style=color:#f92672>==</span> [<span style=color:#f92672>-</span><span style=color:#ae81ff>3</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]
+
+<span style=color:#75715e># 7. Mixed elements</span>
+
+<span style=color:#66d9ef>assert</span> merge_sort([<span style=color:#f92672>-</span><span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]) <span style=color:#f92672>==</span> [<span style=color:#f92672>-</span><span style=color:#ae81ff>3</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>]
+
+<span style=color:#75715e># 8. More complex case</span>
+
+<span style=color:#66d9ef>assert</span> merge_sort([<span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>3</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]) <span style=color:#f92672>==</span> [<span style=color:#f92672>-</span><span style=color:#ae81ff>3</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>]
+print(<span style=color:#e6db74>&#34;All tests passed!&#34;</span>)
+</code></pre></div>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/merge-sort/ rel=tag>Merge Sort</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/sort/ rel=tag>Sort</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/python/ rel=tag>Python</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
+</div>
+</div>
+<aside class=sidebar>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/dsa/sort/merge_sort/>Implementation of Merge Sort in Python</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/sort/quick_sort/>Implementation of Quick Sort in Python</a></li>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/golang_goroutines/>Write a Large Amount of Data to CSV File with Go (Golang)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/union_find/>Union-Find</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/cors/>Understanding Web's content Origin and Site</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/cors/>CORS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/go/>Go</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/http-cookies/>HTTP cookies</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/network/>Network</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/system-design/>System Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/2fa/ title=2FA>2FA</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/bfs/ title=BFS>BFS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/dfs/ title=DFS>DFS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/distributed-system/ title="Distributed System">Distributed System</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/english-article/ title="English Article">English Article</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/gcp/ title=GCP>GCP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/graph/ title=Graph>Graph</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/hash-set/ title="Hash Set">Hash Set</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/hash-table/ title="Hash Table">Hash Table</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/heap/ title=Heap>Heap</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/http-cookies/ title="HTTP cookies">HTTP cookies</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese-article/ title="Japanese Article">Japanese Article</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/merge-sort/ title="Merge Sort">Merge Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/queue/ title=Queue>Queue</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/quick-sort/ title="Quick Sort">Quick Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/sort/ title=Sort>Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/stack/ title=Stack>Stack</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/terraform/ title=Terraform>Terraform</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/terraform-cloud/ title="Terraform Cloud">Terraform Cloud</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/trie/ title=Trie>Trie</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/union-find/ title=Union-Find>Union-Find</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web/ title=Web>Web</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2023 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>
