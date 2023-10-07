@@ -80,7 +80,7 @@
 <p>A template in a python-ish pseudo-code for dfs</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Recursion</span>
 <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dfs</span>(self, curr: int, target: int, visited: Set[int]):
-    <span style=color:#75715e># Termination condition</span>
+    <span style=color:#75715e># Base case</span>
     <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span> <span style=color:#66d9ef>if</span> curr <span style=color:#f92672>==</span> target
     <span style=color:#66d9ef>for</span> next_node <span style=color:#f92672>in</span> (each neighbor of curr):
         <span style=color:#66d9ef>if</span> next_node <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> visited:
