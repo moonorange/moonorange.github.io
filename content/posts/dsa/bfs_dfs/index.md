@@ -51,7 +51,7 @@ A template in a python-ish pseudo-code for dfs
 ```python
 # Recursion
 def dfs(self, curr: int, target: int, visited: Set[int]):
-    # Termination condition
+    # Base case
     return True if curr == target
     for next_node in (each neighbor of curr):
         if next_node is not in visited:
