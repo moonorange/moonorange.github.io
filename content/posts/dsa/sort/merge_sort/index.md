@@ -10,7 +10,7 @@ tags: ["Merge Sort", "Sort", "English Article", "Python"]
 In sorting n objects, merge sort has an average and worst-case performance of O(n log n).
 
 Merge sort is a stable sort in the most implementations.
-The most common implementation does not sort in place meaning it requires extra space.
+The most common implementation does not sort in place, meaning it requires extra space.
 
 
 {{<figure src="./merge_sort_algorithm.png" alt="Merge sort diagram" width="75%">}}
