@@ -154,11 +154,11 @@ func NewCSVWriter(file io.Writer) (*CsvWriter, error) {
 // lock and write
 func (w *CsvWriter) Write(row []string) error {
  w.mutex.Lock()
+ defer w.mutex.Unlock()
  err := w.csvWriter.Write(row)
  if err != nil {
   return err
  }
- w.mutex.Unlock()
  return nil
 }
 

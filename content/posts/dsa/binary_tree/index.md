@@ -24,10 +24,10 @@ Pointer to a right child
 ```python
 # Definition for a binary tree node.
 class TreeNode:
-	def __init__(self, val=0, left=None, right=None):
-		self.val = val
-		self.left = left
-		self.right = right
+	def __init__( val=0, left=None, right=None):
+		val = val
+		left = left
+		right = right
 ```
 
 ## Types of binary tree
@@ -73,44 +73,29 @@ from binarytree import tree
 from binary_tree import TreeNode
 from typing import List
 
+# recursive solution
+def traverse(root: TreeNode) -> List[int]:
+    ans = []
+    traverse(root, ans)
+    return ans
 
-class Solution:
-    # recursive solution
-    def traverse(self, root: TreeNode) -> List[int]:
-        ans = []
-        self.traverse(root, ans)
-        return ans
+def inorder_traverse(root: TreeNode, ans: List[int]):
+    if root:
+        traverse(root.left, ans)
+        ans.append(root.val)
+        traverse(root.right, ans)
 
-    def inorder_traverse(self, root: TreeNode, ans: List[int]):
-        if root:
-            self.traverse(root.left, ans)
-            ans.append(root.val)
-            self.traverse(root.right, ans)
+def preorder_travese(root: TreeNode, ans: List[int]):
+    if root:
+        ans.append(root.val)
+        traverse(root.left, ans)
+        traverse(root.right, ans)
 
-    def preorder_travese(self, root: TreeNode, ans: List[int]):
-        if root:
-            ans.append(root.val)
-            self.traverse(root.left, ans)
-            self.traverse(root.right, ans)
-
-    def postorder_travese(self, root: TreeNode, ans: List[int]):
-        if root:
-            self.traverse(root.left, ans)
-            self.traverse(root.right, ans)
-            ans.append(root.val)
-
-    # iterative solution
-    def inorder_traversal2(self, root: TreeNode):
-        res, stack = [], []
-        while True:
-            while root:
-                stack.append(root)
-                root = root.left
-            if not stack:
-                return res
-            node = stack.pop()
-            res.append(node.val)
-            root = node.right
+def postorder_travese(root: TreeNode, ans: List[int]):
+    if root:
+        traverse(root.left, ans)
+        traverse(root.right, ans)
+        ans.append(root.val)
 ```
 
 "Breadth First Traversals":
@@ -122,7 +107,7 @@ Level order traversal of a tree is breadth first traversal for the tree.
 ```python
 # Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
 from itertools import chain
-def levelOrder(self, root: TreeNode) -> List[List[int]]:
+def levelOrder(root: TreeNode) -> List[List[int]]:
     if not root:
         return []
     ans, same_lev = [], [root]
@@ -138,7 +123,7 @@ from typing import List
 import queue
 
 # Implementation using queue
-def bfs(self, root: TreeNode) -> List[int]:
+def bfs(root: TreeNode) -> List[int]:
     ans = []
     my_queue = queue.Queue()
     my_queue.put(root)
