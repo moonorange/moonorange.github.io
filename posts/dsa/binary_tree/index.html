@@ -78,10 +78,10 @@ Pointer to a left child
 Pointer to a right child</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Definition for a binary tree node.</span>
 <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>TreeNode</span>:
-	<span style=color:#66d9ef>def</span> __init__(self, val<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>, left<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>, right<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>):
-		self<span style=color:#f92672>.</span>val <span style=color:#f92672>=</span> val
-		self<span style=color:#f92672>.</span>left <span style=color:#f92672>=</span> left
-		self<span style=color:#f92672>.</span>right <span style=color:#f92672>=</span> right
+	<span style=color:#66d9ef>def</span> __init__( val<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>, left<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>, right<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>):
+		val <span style=color:#f92672>=</span> val
+		left <span style=color:#f92672>=</span> left
+		right <span style=color:#f92672>=</span> right
 </code></pre></div><h2 id=types-of-binary-tree>Types of binary tree</h2>
 <p>There are many types of binary tree</p>
 <h3 id=full-binary-tree>Full Binary Tree</h3>
@@ -110,50 +110,35 @@ Pointer to a right child</p>
 <span style=color:#f92672>from</span> binary_tree <span style=color:#f92672>import</span> TreeNode
 <span style=color:#f92672>from</span> typing <span style=color:#f92672>import</span> List
 
+<span style=color:#75715e># recursive solution</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>traverse</span>(root: TreeNode) <span style=color:#f92672>-&gt;</span> List[int]:
+    ans <span style=color:#f92672>=</span> []
+    traverse(root, ans)
+    <span style=color:#66d9ef>return</span> ans
 
-<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Solution</span>:
-    <span style=color:#75715e># recursive solution</span>
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>traverse</span>(self, root: TreeNode) <span style=color:#f92672>-&gt;</span> List[int]:
-        ans <span style=color:#f92672>=</span> []
-        self<span style=color:#f92672>.</span>traverse(root, ans)
-        <span style=color:#66d9ef>return</span> ans
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>inorder_traverse</span>(root: TreeNode, ans: List[int]):
+    <span style=color:#66d9ef>if</span> root:
+        traverse(root<span style=color:#f92672>.</span>left, ans)
+        ans<span style=color:#f92672>.</span>append(root<span style=color:#f92672>.</span>val)
+        traverse(root<span style=color:#f92672>.</span>right, ans)
 
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>inorder_traverse</span>(self, root: TreeNode, ans: List[int]):
-        <span style=color:#66d9ef>if</span> root:
-            self<span style=color:#f92672>.</span>traverse(root<span style=color:#f92672>.</span>left, ans)
-            ans<span style=color:#f92672>.</span>append(root<span style=color:#f92672>.</span>val)
-            self<span style=color:#f92672>.</span>traverse(root<span style=color:#f92672>.</span>right, ans)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>preorder_travese</span>(root: TreeNode, ans: List[int]):
+    <span style=color:#66d9ef>if</span> root:
+        ans<span style=color:#f92672>.</span>append(root<span style=color:#f92672>.</span>val)
+        traverse(root<span style=color:#f92672>.</span>left, ans)
+        traverse(root<span style=color:#f92672>.</span>right, ans)
 
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>preorder_travese</span>(self, root: TreeNode, ans: List[int]):
-        <span style=color:#66d9ef>if</span> root:
-            ans<span style=color:#f92672>.</span>append(root<span style=color:#f92672>.</span>val)
-            self<span style=color:#f92672>.</span>traverse(root<span style=color:#f92672>.</span>left, ans)
-            self<span style=color:#f92672>.</span>traverse(root<span style=color:#f92672>.</span>right, ans)
-
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>postorder_travese</span>(self, root: TreeNode, ans: List[int]):
-        <span style=color:#66d9ef>if</span> root:
-            self<span style=color:#f92672>.</span>traverse(root<span style=color:#f92672>.</span>left, ans)
-            self<span style=color:#f92672>.</span>traverse(root<span style=color:#f92672>.</span>right, ans)
-            ans<span style=color:#f92672>.</span>append(root<span style=color:#f92672>.</span>val)
-
-    <span style=color:#75715e># iterative solution</span>
-    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>inorder_traversal2</span>(self, root: TreeNode):
-        res, stack <span style=color:#f92672>=</span> [], []
-        <span style=color:#66d9ef>while</span> <span style=color:#66d9ef>True</span>:
-            <span style=color:#66d9ef>while</span> root:
-                stack<span style=color:#f92672>.</span>append(root)
-                root <span style=color:#f92672>=</span> root<span style=color:#f92672>.</span>left
-            <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> stack:
-                <span style=color:#66d9ef>return</span> res
-            node <span style=color:#f92672>=</span> stack<span style=color:#f92672>.</span>pop()
-            res<span style=color:#f92672>.</span>append(node<span style=color:#f92672>.</span>val)
-            root <span style=color:#f92672>=</span> node<span style=color:#f92672>.</span>right
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>postorder_travese</span>(root: TreeNode, ans: List[int]):
+    <span style=color:#66d9ef>if</span> root:
+        traverse(root<span style=color:#f92672>.</span>left, ans)
+        traverse(root<span style=color:#f92672>.</span>right, ans)
+        ans<span style=color:#f92672>.</span>append(root<span style=color:#f92672>.</span>val)
 </code></pre></div><p>&ldquo;Breadth First Traversals&rdquo;:</p>
 <p>Level order traversal of a tree is breadth first traversal for the tree.</p>
 <p>1 2 3 4 5</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Given the root of a binary tree, return the level order traversal of its nodes&#39; values. (i.e., from left to right, level by level).</span>
 <span style=color:#f92672>from</span> itertools <span style=color:#f92672>import</span> chain
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>levelOrder</span>(self, root: TreeNode) <span style=color:#f92672>-&gt;</span> List[List[int]]:
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>levelOrder</span>(root: TreeNode) <span style=color:#f92672>-&gt;</span> List[List[int]]:
     <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> root:
         <span style=color:#66d9ef>return</span> []
     ans, same_lev <span style=color:#f92672>=</span> [], [root]
@@ -169,7 +154,7 @@ Pointer to a right child</p>
 <span style=color:#f92672>import</span> queue
 
 <span style=color:#75715e># Implementation using queue</span>
-<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>bfs</span>(self, root: TreeNode) <span style=color:#f92672>-&gt;</span> List[int]:
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>bfs</span>(root: TreeNode) <span style=color:#f92672>-&gt;</span> List[int]:
     ans <span style=color:#f92672>=</span> []
     my_queue <span style=color:#f92672>=</span> queue<span style=color:#f92672>.</span>Queue()
     my_queue<span style=color:#f92672>.</span>put(root)

@@ -193,11 +193,11 @@ In this blog post, I&rsquo;ll share my approach to writing a large amount of dat
 <span style=color:#75715e>// lock and write
 </span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>w</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>CsvWriter</span>) <span style=color:#a6e22e>Write</span>(<span style=color:#a6e22e>row</span> []<span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
  <span style=color:#a6e22e>w</span>.<span style=color:#a6e22e>mutex</span>.<span style=color:#a6e22e>Lock</span>()
+ <span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>w</span>.<span style=color:#a6e22e>mutex</span>.<span style=color:#a6e22e>Unlock</span>()
  <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>w</span>.<span style=color:#a6e22e>csvWriter</span>.<span style=color:#a6e22e>Write</span>(<span style=color:#a6e22e>row</span>)
  <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
   <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
  }
- <span style=color:#a6e22e>w</span>.<span style=color:#a6e22e>mutex</span>.<span style=color:#a6e22e>Unlock</span>()
  <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
 }
 
