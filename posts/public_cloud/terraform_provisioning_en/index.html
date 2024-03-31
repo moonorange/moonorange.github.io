@@ -1,0 +1,581 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>Infrastructure Setup Guide on AWS with Terraform - Kei's Blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Infrastructure Setup Guide on AWS with Terraform">
+<meta name=twitter:description content="Infrastructure Setup Guide This document outlines the steps for building a deployment environment for a web service on using AWS and Terraform. Infrastructure CI/CD is also achieved through Terraform Cloud and GitHub Actions. Basic explanations about Terraform are provided. Please note that the information in this document is current as of December 17, 2021. The tools you are using, such as Terraform and Terraform Cloud, may have been updated, so">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's Blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's Blog</div>
+</div>
+</a>
+</div>
+<div class=divider></div>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>Infrastructure Setup Guide on AWS with Terraform</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-12-17T00:00:00Z>December 17, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/public-cloud/ rel=category>Public Cloud</a>
+</span>
+</div></div>
+</header>
+<div class="post__toc toc">
+<div class=toc__title>Page content</div>
+<div class=toc__menu>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#infrastructure-setup-guide>Infrastructure Setup Guide</a></li>
+<li><a href=#configuration-of-terraform-cloud-tc-and-integration-with-github>Configuration of Terraform Cloud (TC) and Integration with GitHub</a>
+<ul>
+<li><a href=#tc-configuration>TC Configuration</a></li>
+<li><a href=#github-configuration>GitHub Configuration</a></li>
+</ul>
+</li>
+<li><a href=#creating-a-github-actions-workflow>Creating a GitHub Actions Workflow</a></li>
+<li><a href=#testing-the-github-actions-workflow>Testing the GitHub Actions Workflow</a></li>
+<li><a href=#explanation-of-each-tf-file>Explanation of Each .tf File</a>
+<ul>
+<li><a href=#vartf>var.tf</a></li>
+<li><a href=#outputtf>output.tf</a></li>
+<li><a href=#maintf>main.tf</a></li>
+</ul>
+</li>
+<li><a href=#creating-resources-required-for-web-service-deployment>Creating Resources Required for Web Service Deployment</a>
+<ul>
+<li><a href=#modules-to-create>Modules to Create</a></li>
+<li><a href=#running-terraform-apply>Running terraform apply</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div><div class="content post__content clearfix">
+<h2 id=infrastructure-setup-guide>Infrastructure Setup Guide</h2>
+<p>This document outlines the steps for building a deployment environment for a web service on using AWS and Terraform. Infrastructure CI/CD is also achieved through Terraform Cloud and GitHub Actions.</p>
+<p>Basic explanations about Terraform are provided.</p>
+<p>Please note that the information in this document is current as of December 17, 2021.</p>
+<p>The tools you are using, such as Terraform and Terraform Cloud, may have been updated, so be aware that things may not work exactly as described.</p>
+<h2 id=configuration-of-terraform-cloud-tc-and-integration-with-github>Configuration of Terraform Cloud (TC) and Integration with GitHub</h2>
+<p>You can achieve CI/CD of infrastructure code using TC and GitHub Actions.</p>
+<p>The goal is to have linting and terraform plan run when a pull request is created, and apply executed when it is merged.</p>
+<p>I followed the documentation provided in the following link: <a href="https://learn.hashicorp.com/tutorials/terraform/github-actions?in=terraform/automation">https://learn.hashicorp.com/tutorials/terraform/github-actions?in=terraform/automation</a></p>
+<h3 id=tc-configuration>TC Configuration</h3>
+<p>Create a workspace in TC.</p>
+<ol>
+<li>Choose an API-driven workflow for integration with GitHub Actions. Additionally, name the workspace in such a way that it</li>
+<li>indicates the environment and application.</li>
+</ol>
+<p>Once the workspace is created, you can configure environment variables, among other things.</p>
+<p>For constants you want to set across environments, you can use variable sets.</p>
+<p>Example:</p>
+<ol>
+<li>AWS_ACCESS_KEY_ID</li>
+<li>AWS_SECRET_ACCESS_KEY</li>
+</ol>
+<p>Here&rsquo;s how to set up variable sets: <a href=https://www.terraform.io/cloud-docs/workspaces/variables/managing-variables#variable-sets>https://www.terraform.io/cloud-docs/workspaces/variables/managing-variables#variable-sets</a></p>
+<p>Next, go to the <a href=https://app.terraform.io/app/settings/tokens>Token Page</a> and create an API Token for use with GitHub Actions. Make sure to copy the created token as you&rsquo;ll need it later.</p>
+<p>Finally, set the Terraform Working Directory in the workspace&rsquo;s settings/general.</p>
+<h3 id=github-configuration>GitHub Configuration</h3>
+<p>In GitHub Actions, navigate to the <code>Settings</code> of the repository where you want to implement CI/CD and go to <code>Secrets</code>.</p>
+<p>Define the API Token created in TC as <code>TF_API_TOKEN</code></p>
+<h2 id=creating-a-github-actions-workflow>Creating a GitHub Actions Workflow</h2>
+<p>To actually execute Terraform commands in GitHub Actions, you need to create a configuration file.</p>
+<p>You can refer to the following article for the basics: <a href=https://www.ai-shift.co.jp/techblog/1924>https://www.ai-shift.co.jp/techblog/1924</a></p>
+<p>Create a <code>.github/workflows/{any_name}.yml</code> file under the project&rsquo;s root.</p>
+<p>Here&rsquo;s an example of the content, assuming you want to operate the staging environment on the develop branch:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>name</span>: <span style=color:#e6db74>&#39;Terraform Plan&#39;</span>
+
+<span style=color:#f92672>on</span>:
+  <span style=color:#f92672>push</span>:
+    <span style=color:#f92672>paths</span>:
+    - <span style=color:#ae81ff>envs/staging/**</span>
+    - <span style=color:#ae81ff>modules/**</span>
+    <span style=color:#f92672>branches</span>:
+      - <span style=color:#ae81ff>develop</span>
+  <span style=color:#f92672>pull_request</span>:
+    <span style=color:#f92672>paths</span>:
+    - <span style=color:#ae81ff>envs/staging/**</span>
+    - <span style=color:#ae81ff>modules/**</span>
+    <span style=color:#f92672>branches</span>:
+      - <span style=color:#ae81ff>develop</span>
+
+<span style=color:#f92672>jobs</span>:
+  <span style=color:#f92672>terraform</span>:
+    <span style=color:#f92672>name</span>: <span style=color:#e6db74>&#39;Terraform staging&#39;</span>
+    <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>ubuntu-latest</span>
+    <span style=color:#f92672>defaults</span>:
+      <span style=color:#f92672>run</span>:
+        <span style=color:#f92672>working-directory</span>: <span style=color:#ae81ff>./envs/staging</span>
+    <span style=color:#f92672>steps</span>:
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Checkout</span>
+      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v2</span>
+
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Setup Terraform</span>
+      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>hashicorp/setup-terraform@v1</span>
+      <span style=color:#f92672>with</span>:
+        <span style=color:#f92672>cli_config_credentials_token</span>: <span style=color:#ae81ff>${{ secrets.TF_API_TOKEN }}</span>
+
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Terraform Init</span>
+      <span style=color:#f92672>id</span>: <span style=color:#ae81ff>init</span>
+      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>terraform init</span>
+
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Terraform Format</span>
+      <span style=color:#f92672>id</span>: <span style=color:#ae81ff>fmt</span>
+      <span style=color:#f92672>working-directory</span>: <span style=color:#ae81ff>./</span>
+      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>terraform fmt -check -recursive</span>
+      <span style=color:#f92672>continue-on-error</span>: <span style=color:#66d9ef>true</span>
+
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Terraform Plan</span>
+      <span style=color:#f92672>id</span>: <span style=color:#ae81ff>plan</span>
+      <span style=color:#f92672>if</span>: <span style=color:#ae81ff>github.event_name == &#39;pull_request&#39;</span>
+      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>terraform plan</span>
+      <span style=color:#f92672>continue-on-error</span>: <span style=color:#66d9ef>true</span>
+
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Terraform Plan Status</span>
+      <span style=color:#f92672>if</span>: <span style=color:#ae81ff>steps.plan.outcome == &#39;failure&#39;</span>
+      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>exit 1</span>
+
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Terraform Apply</span>
+      <span style=color:#f92672>if</span>: <span style=color:#ae81ff>github.ref == &#39;refs/heads/main&#39; &amp;&amp; github.event_name == &#39;push&#39;</span>
+      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>terraform apply -auto-approve</span>
+</code></pre></div><p>Once you have this setup, the workflow should run when you create pull requests or push commits according to the conditions you&rsquo;ve specified.</p>
+<h2 id=testing-the-github-actions-workflow>Testing the GitHub Actions Workflow</h2>
+<p>Create folders and files for each environment:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>mkdir staging
+cd staging
+touch <span style=color:#f92672>{</span>main,provider<span style=color:#f92672>}</span>.tf
+</code></pre></div><ul>
+<li>main is the entry point for Terraform code.</li>
+<li>provider contains configuration information for cloud providers like AWS.</li>
+</ul>
+<p><code>provider.tf:</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ae81ff>provider &#34;aws&#34; {</span>
+  <span style=color:#ae81ff>region  = &#34;ap-northeast-1&#34;</span>
+
+  <span style=color:#ae81ff>default_tags {</span>
+    <span style=color:#ae81ff>tags = {</span>
+      <span style=color:#ae81ff>Service = &#34;{your service name}&#34;</span>
+      <span style=color:#ae81ff>Env     = &#34;production&#34;</span>
+    }
+  }
+}
+
+<span style=color:#ae81ff>terraform {</span>
+  <span style=color:#ae81ff>required_providers {</span>
+    <span style=color:#ae81ff>aws = {</span>
+      <span style=color:#ae81ff>source  = &#34;hashicorp/aws&#34;</span>
+      <span style=color:#ae81ff>version = &#34;~&gt; 3.65.0&#34;</span>
+    }
+  }
+
+  <span style=color:#ae81ff>required_version = &#34;&gt;= 1.0.0&#34;</span>
+
+  <span style=color:#ae81ff>backend &#34;remote&#34; {</span>
+    <span style=color:#ae81ff>organization = &#34;{Your organization name}&#34;</span>
+
+    <span style=color:#ae81ff>workspaces {</span>
+      <span style=color:#ae81ff>name = &#34;{Your workspace name}&#34;</span>
+    }
+  }
+}
+</code></pre></div><p>Define the environment variables that you previously set in TC here as well. Additionally, let&rsquo;s add an S3 module.</p>
+<p>Under the modules/ directory, you can define AWS resources that you want to use across environments.</p>
+<p><code>main.tf:</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ae81ff>locals {</span>
+  <span style=color:#ae81ff>env     = &#34;prod&#34;</span>
+  <span style=color:#ae81ff>service = &#34;{your service name}&#34;</span>
+}
+
+<span style=color:#ae81ff>variable &#34;AWS_ACCESS_KEY_ID&#34; {}</span>
+<span style=color:#ae81ff>variable &#34;AWS_SECRET_ACCESS_KEY&#34; {}</span>
+
+<span style=color:#ae81ff>module &#34;s3_bucket&#34; {</span>
+  <span style=color:#ae81ff>source = &#34;../../modules/s3&#34;</span>
+
+  <span style=color:#ae81ff>bucket = &#34;{your bucket name}&#34;</span>
+  <span style=color:#ae81ff>acl    = &#34;private&#34;</span>
+}
+</code></pre></div><p><code>provider.tf:</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ae81ff>provider &#34;aws&#34; {</span>
+  <span style=color:#ae81ff>region  = &#34;ap-northeast-1&#34;</span>
+
+  <span style=color:#ae81ff>default_tags {</span>
+    <span style=color:#ae81ff>tags = {</span>
+      <span style=color:#ae81ff>Service = &#34;{your service name}&#34;</span>
+      <span style=color:#ae81ff>Env     = &#34;production&#34;</span>
+    }
+  }
+}
+
+<span style=color:#ae81ff>terraform {</span>
+  <span style=color:#ae81ff>required_providers {</span>
+    <span style=color:#ae81ff>aws = {</span>
+      <span style=color:#ae81ff>source  = &#34;hashicorp/aws&#34;</span>
+      <span style=color:#ae81ff>version = &#34;~&gt; 3.65.0&#34;</span>
+    }
+  }
+
+  <span style=color:#ae81ff>required_version = &#34;&gt;= 1.0.0&#34;</span>
+
+  <span style=color:#ae81ff>backend &#34;remote&#34; {</span>
+    <span style=color:#ae81ff>organization = &#34;{Your organization name}&#34;</span>
+
+    <span style=color:#ae81ff>workspaces {</span>
+      <span style=color:#ae81ff>name = &#34;{Your workspace name}&#34;</span>
+    }
+  }
+}
+</code></pre></div><p>Define the environment variables that you previously set in TC here as well. Additionally, let&rsquo;s add an S3 module.</p>
+<p>Under the modules/ directory, you can define AWS resources that you want to use across environments.</p>
+<p><code>main.tf:</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ae81ff>locals {</span>
+  <span style=color:#ae81ff>env     = &#34;prod&#34;</span>
+  <span style=color:#ae81ff>service = &#34;{your service name}&#34;</span>
+}
+
+<span style=color:#ae81ff>variable &#34;AWS_ACCESS_KEY_ID&#34; {}</span>
+<span style=color:#ae81ff>variable &#34;AWS_SECRET_ACCESS_KEY&#34; {}</span>
+
+<span style=color:#ae81ff>module &#34;s3_bucket&#34; {</span>
+  <span style=color:#ae81ff>source = &#34;../../modules/s3&#34;</span>
+
+  <span style=color:#ae81ff>bucket = &#34;{your bucket name}&#34;</span>
+  <span style=color:#ae81ff>acl    = &#34;private&#34;</span>
+}
+</code></pre></div><p>With this setup, you can run <code>terraform plan</code> to see what kind of bucket will be created when you try to create only the S3 module.</p>
+<p><code>terraform plan</code> doesn&rsquo;t actually create resources, so you can safely run it.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>terraform plan
+</code></pre></div><p>If the S3 module is created successfully, proceed to create a pull request and confirm that the GitHub Actions workflow runs successfully.</p>
+<p>In the repository settings, under <code>Branches</code>, add branch protection rules. Set <code>Require status checks to pass before merging</code> to true for the main branch. This ensures that the Terraform production workflow must pass for PRs to be merged.</p>
+<h2 id=explanation-of-each-tf-file>Explanation of Each .tf File</h2>
+<p>Here&rsquo;s an explanation of the three main types of files: <code>var.tf</code>, <code>output.tf</code>, and <code>main.tf</code>.</p>
+<h3 id=vartf>var.tf</h3>
+<p>This file is used to define variables. Usage is straightforward: values that you want to change dynamically in <code>modules*/main.tf</code> are defined in <code>var.tf</code> and passed from <code>envs/*/main.tf</code>.</p>
+<p><code>Example: modules/sg/var.tf</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ae81ff>variable &#34;env&#34; {</span>
+  <span style=color:#ae81ff>type        = string</span>
+  <span style=color:#ae81ff>description = &#34;Environment. e.g. staging, prod&#34;</span>
+}
+
+<span style=color:#ae81ff>variable &#34;service&#34; {</span>
+  <span style=color:#ae81ff>type        = string</span>
+  <span style=color:#ae81ff>description = &#34;Service name&#34;</span>
+}
+
+<span style=color:#ae81ff>variable &#34;vpc_id&#34; {</span>
+  <span style=color:#ae81ff>type        = string</span>
+  <span style=color:#ae81ff>description = &#34;VPC ID&#34;</span>
+}
+
+<span style=color:#ae81ff>variable &#34;ec2_sg_name&#34; {</span>
+  <span style=color:#ae81ff>type        = string</span>
+  <span style=color:#ae81ff>description = &#34;Security group name for ec2 instance&#34;</span>
+}
+</code></pre></div><h3 id=outputtf>output.tf</h3>
+<p>This file is used to describe values that you want to use outside the module.</p>
+<p>For example, if you want to use the security group&rsquo;s ID inside the RDS module, you would use this file.</p>
+<p><code>Example: modules/sg/output.tf</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ae81ff>output &#34;alb_sg_id&#34; {</span>
+  <span style=color:#ae81ff>description = &#34;Security group id for alb&#34;</span>
+  <span style=color:#ae81ff>value       = aws_security_group.alb.id</span>
+}
+
+<span style=color:#ae81ff>output &#34;fargate_sg_id&#34; {</span>
+  <span style=color:#ae81ff>description = &#34;Security group id for fargate tasks&#34;</span>
+  <span style=color:#ae81ff>value       = aws_security_group.fargate_sg.id</span>
+}
+
+<span style=color:#ae81ff>output &#34;db_sg_id&#34; {</span>
+  <span style=color:#ae81ff>description = &#34;Security group id for db&#34;</span>
+  <span style=color:#ae81ff>value       = aws_security_group.db.id</span>
+}
+
+<span style=color:#ae81ff>output &#34;ec2_sg_id&#34; {</span>
+  <span style=color:#ae81ff>description = &#34;Security group id for ec2 for script&#34;</span>
+  <span style=color:#ae81ff>value       = aws_security_group.ec2_sg.id</span>
+}
+</code></pre></div><h3 id=maintf>main.tf</h3>
+<p>This is the entry point for Terraform. The resources defined in this file will be created.</p>
+<p><code>envs/*/main.tf</code> serves as the entry point for all resources, and <code>modules/*/main.tf</code> is the entry point for each module.</p>
+<p><code>Example: Part of modules/sg/main.tf</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ae81ff>resource &#34;aws_security_group&#34; &#34;fargate_sg&#34; {</span>
+  <span style=color:#ae81ff>name        = &#34;${var.service}-${var.env}-fargate-sg&#34;</span>
+  <span style=color:#ae81ff>vpc_id      = var.vpc_id</span>
+  <span style=color:#ae81ff>description = &#34;For fargate tasks&#34;</span>
+
+  <span style=color:#ae81ff>egress {</span>
+  }
+
+  <span style=color:#ae81ff>ingress {</span>
+  }
+
+  <span style=color:#ae81ff>ingress {</span>
+  }
+
+  <span style=color:#ae81ff>tags = {</span>
+    <span style=color:#ae81ff>Name = &#34;${var.service}-sg-fargate-${var.env}&#34;</span>
+  }
+}
+
+<span style=color:#ae81ff>resource &#34;aws_security_group&#34; &#34;db&#34; {</span>
+  <span style=color:#ae81ff>vpc_id = var.vpc_id</span>
+  <span style=color:#ae81ff>name   = &#34;${var.service}-sg-db-${var.env}&#34;</span>
+
+  <span style=color:#ae81ff>ingress {</span>
+    <span style=color:#ae81ff>from_port       =</span>
+    <span style=color:#ae81ff>to_port         =</span>
+    <span style=color:#ae81ff>protocol        = &#34;tcp&#34;</span>
+    <span style=color:#ae81ff>security_groups = [aws_security_group.fargate_sg.id, aws_security_group.ec2_sg.id]</span>
+  }
+
+  <span style=color:#ae81ff>egress {</span>
+  }
+
+  <span style=color:#ae81ff>tags = {</span>
+    <span style=color:#ae81ff>Name = &#34;${var.service}-sg-db-${var.env}&#34;</span>
+  }
+}
+</code></pre></div><p><code>Example: Part of envs/staging/main.tf</code></p>
+<p>In this file, you pass variables and other configurations to the resources defined in each module to create all modules.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># VPC and subnets settings</span>
+<span style=color:#ae81ff>module &#34;vpc&#34; {</span>
+  <span style=color:#ae81ff>source  = &#34;../../modules/vpc&#34;</span>
+  <span style=color:#ae81ff>env     = local.env</span>
+  <span style=color:#ae81ff>service = local.service</span>
+
+  <span style=color:#ae81ff>cidr_block = &#34;172.31.0.0/16&#34;</span>
+}
+
+<span style=color:#75715e># Security group</span>
+<span style=color:#ae81ff>module &#34;secutiry_group&#34; {</span>
+  <span style=color:#75715e># moduleまでの相対pathを指定する</span>
+  <span style=color:#ae81ff>source      = &#34;../../modules/sg&#34;</span>
+  <span style=color:#75715e># moduleで使う変数を定義する。</span>
+  <span style=color:#ae81ff>env         = local.env</span>
+  <span style=color:#ae81ff>service     = local.service</span>
+  <span style=color:#75715e># modules/vpc/output.tfで定義した値を使用</span>
+  <span style=color:#ae81ff>vpc_id      = module.vpc.vpc_id</span>
+  <span style=color:#ae81ff>ec2_sg_name = &#34;{sg name}&#34;</span>
+}
+</code></pre></div><h2 id=creating-resources-required-for-web-service-deployment>Creating Resources Required for Web Service Deployment</h2>
+<p>With the setup of GitHub Actions and TC for CI/CD and an explanation of Terraform file structure, you can proceed to create the necessary resources for deploying a web service.</p>
+<h3 id=modules-to-create>Modules to Create</h3>
+<p>Listed below are the modules that should be created.</p>
+<p>When all of these modules are created, you will have everything needed for a release:</p>
+<ul>
+<li>iam_role (To create a role that allows ECS tasks to run)</li>
+<li>s3_bucket (For storing static files and more)</li>
+<li>vpc (Virtual network environment, subnets, Internet Gateway, route table)</li>
+<li>domain (Domain, SSL/TLS certificate, and API host records)</li>
+<li>security_group (To manage outbound from instances and inbound to instances)</li>
+<li>alb (Application Load Balancer for load balancing and HTTPS)</li>
+<li>ecr (To store Docker container images)</li>
+<li>rds (A service for creating databases)</li>
+<li>ecs (To manage Docker containers and run services)</li>
+</ul>
+<p>You can refer to Terraform&rsquo;s official documentation and other resources to create each module.</p>
+<h4 id=rds>rds</h4>
+<ul>
+<li><a href=https://docs.aws.amazon.com/ja_jp/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html>instance_class</a> Determine based on data volume and other factors in production</li>
+</ul>
+<h4 id=ecs>ecs</h4>
+<ul>
+<li>image_uri: Copy the image URI from ECR.</li>
+<li>cpu: Choose an appropriate value (e.g., 1024, 2048). You can decide based on CPU usage observed in the ECS console after - deployment.</li>
+<li>memory: Choose an appropriate value (e.g., 1024, 2048). You can decide based on memory usage observed in the ECS console after - deployment.</li>
+<li>desired_count: Determine based on how many tasks you want. Generally, the more you have, the more load it can handle.</li>
+</ul>
+<h3 id=running-terraform-apply>Running terraform apply</h3>
+<p>Once you have created the resources, execute <code>terraform apply</code> to actually provision them.</p>
+<p>You can choose to create modules one by one and run terraform plan to confirm there are no issues, which can be easier and involve fewer changes.</p>
+<p>Please note that you should not create the <code>ECS module</code> at this stage.</p>
+<p>Once the modules other than ECS are successfully created, push your Docker image to the ECR you created.</p>
+<p>Go to the ECR repository page and select the repository you created. Then, choose View push commands to see the push command. You can generally use the push command shown there as a reference.</p>
+<p>Obtain an authentication token and authenticate the Docker client with the ECR registry.</p>
+<p>Build the Docker image from your Dockerfile.</p>
+<p>The &ndash;platform part is explicitly specifying amd64 because the author is using an ARM Mac.</p>
+<pre><code class=language-console data-lang=console>docker build -t {tag_name} -f docker/app/Dockerfile --platform amd64 .
+</code></pre><p>Tag the built image.</p>
+<p>Push the image to the ECR repository.</p>
+<p>Once the image is pushed, copy the image URI. Go to the repository you created and click <code>Copy URI</code>.</p>
+<p>After completing these steps, you can proceed to write the ECS module.</p>
+<p>Paste the previously copied image_uri and make any necessary changes to other variables. Then, run terraform plan and terraform apply.</p>
+<p>With this, your infrastructure setup is complete. If you encounter any issues, be sure to check <code>CloudWatch logs</code> or other relevant resources for troubleshooting.</p>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/terraform/ rel=tag>Terraform</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/terraform-cloud/ rel=tag>Terraform Cloud</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/aws/ rel=tag>AWS</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer living in Japan
+</div>
+</div>
+</div>
+<aside class=sidebar>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/dsa/sort/merge_sort/>Implementation of Merge Sort in Python</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/sort/quick_sort/>Implementation of Quick Sort in Python</a></li>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/golang_goroutines/>Write a Large Amount of Data to CSV File with Go (Golang)</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/union_find/>Union-Find</a></li>
+<li class=widget__item><a class=widget__link href=/posts/security/cors/>Understanding Web's content Origin and Site</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/cors/>CORS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/go/>Go</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/http-cookies/>HTTP cookies</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/network/>Network</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/system-design/>System Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/2fa/ title=2FA>2FA</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/bfs/ title=BFS>BFS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/dfs/ title=DFS>DFS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/distributed-system/ title="Distributed System">Distributed System</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/english-article/ title="English Article">English Article</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/gcp/ title=GCP>GCP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/graph/ title=Graph>Graph</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/hash-set/ title="Hash Set">Hash Set</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/hash-table/ title="Hash Table">Hash Table</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/heap/ title=Heap>Heap</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/http-cookies/ title="HTTP cookies">HTTP cookies</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese-article/ title="Japanese Article">Japanese Article</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/merge-sort/ title="Merge Sort">Merge Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/queue/ title=Queue>Queue</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/quick-sort/ title="Quick Sort">Quick Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/sort/ title=Sort>Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/stack/ title=Stack>Stack</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/terraform/ title=Terraform>Terraform</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/terraform-cloud/ title="Terraform Cloud">Terraform Cloud</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/trie/ title=Trie>Trie</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/union-find/ title=Union-Find>Union-Find</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web/ title=Web>Web</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2024 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>
