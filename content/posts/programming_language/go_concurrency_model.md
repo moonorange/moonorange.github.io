@@ -42,18 +42,6 @@ func main() {
 
 A channel provides a way to connect between go routines, allowing them to communicate and synchronize with each other.
 
-Example
-
-```go
-var chan int
-c := make(chan int)
-// Sending on a channel
-c <- 1
-
-// Receiving from a channel
-val = <-c
-```
-
 Example with goroutine
 
 ```go
@@ -77,7 +65,7 @@ func main() {
 }
 ```
 
-Example3
+Example2
 
 ```go
 package main
@@ -105,6 +93,37 @@ func main() {
 	fmt.Println(joined1, joined2)
 }
 
+```
+
+## Buffered Channel
+
+If you provide the buffer length as the second argument, a channel can be buffered
+
+When you send data to a buffered channel, the send operation will block only if the buffer is full
+
+When you receive data from a buffered channel, the receive operation will block if the buffer is empty
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	ch := make(chan int, 3)
+	ch <- 1
+	ch <- 2
+	go func() {
+		time.Sleep(5 * time.Second)
+		ch <- 3
+	}()
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)
+    // Wait until a channel is not empty
+	fmt.Println(<-ch)
+}
 ```
 
 ## Select
