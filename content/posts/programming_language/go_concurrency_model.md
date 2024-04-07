@@ -33,7 +33,7 @@ func somefunc() {
 
 func main() {
     go somefunc()
-    // Wait somefunc not to exit main goroutine before executing somefunc
+    // Wait a while not to exit main goroutine before finishing another goroutine
     time.Sleep(100 * time.Millisecond)
 }
 ```
@@ -75,6 +75,36 @@ func main() {
     // It will wait until the channel sends some data
 	fmt.Printf("from channel %s\n", <-c)
 }
+```
+
+Example3
+
+```go
+package main
+
+import "fmt"
+
+func join(s []string, c chan string) {
+	joined := ""
+	for _, v := range s {
+		joined += v
+	}
+    // send joined string to a channel
+	c <- joined
+}
+
+func main() {
+	strings := []string{"a", "b", "c", "d", "e", "f"}
+	c := make(chan string)
+    // join the first half of the strings
+	go join(strings[:len(strings)/2], c)
+    // join the second half of the strings
+	go join(strings[len(strings)/2:], c)
+    // Receives from a channel, the order of data is unknown
+	joined1, joined2 := <-c, <-c
+	fmt.Println(joined1, joined2)
+}
+
 ```
 
 ## Select
