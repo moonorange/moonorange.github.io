@@ -3,18 +3,19 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>Intro to Graphs - Kei's Blog</title>
+<title>Posts - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Intro to Graphs">
-<meta name=twitter:description content="What is a Graph? A graph G is an ordered pair of a set V of vertices and a set of E of edges. G can be defines as follows $$G=\left(V,E\right)$$ ordered pair $$(a, b) \neq \left(b,a\right) \text{where} \ a \neq b$$ Graph terminology There are two type of graph, the one is directed graph and the other is undirected graph. Directed graphs contain ordered pairs of vertices while undirected">
+<meta name=twitter:title content="Posts">
+<meta name=twitter:description content="Kei's personal blog about tech">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 <link rel=stylesheet href=/css/style.css>
 <link rel=stylesheet href=/css/custom.css>
+<link rel=alternate type=application/rss+xml href=/posts/index.xml title="Kei's Blog">
 <link rel="shortcut icon" href=/favicon.ico>
 </head>
 <body class=body>
@@ -33,81 +34,33 @@
 </header>
 <div class="wrapper flex">
 <div class=primary>
-<main class=main role=main>
-<article class=post>
-<header class=post__header>
-<h1 class=post__title>Intro to Graphs</h1>
-<div class="post__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-08-07T00:00:00Z>August 07, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+<main class="main list" role=main>
+<header class=main__header>
+<h1 class=main__title>Posts</h1>
+</header><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
+<a href=/posts/dsa/binary_tree/ rel=bookmark>
+Binary Tree
+</a>
+</h2>
+<div class="list__meta meta"><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
 </span>
 </div></div>
 </header>
-<div class="post__toc toc">
-<div class=toc__title>Page content</div>
-<div class=toc__menu>
-<nav id=TableOfContents>
-<ul>
-<li><a href=#what-is-a-graph>What is a Graph?</a></li>
-<li><a href=#graph-terminology>Graph terminology</a></li>
-<li><a href=#reference>Reference</a></li>
-</ul>
-</nav>
+<div class="content list__excerpt post__content clearfix">
+Overview A tree is a frequently-used data structure to simulate a hierarchical tree structure.
+Each node of the tree will have a root value and a list of References to other nodes that are called child nodes. From graph view, a tree can also be defined as a directed acyclic graph that has N nodes and N-1 edges.
+A Binary Tree is one of the most typical tree structures. As the name suggests, a binary tree is a tree data structure in which each node has at most two children, which are referred to as the left child and the right child.
 </div>
-</div><div class="content post__content clearfix">
-<h2 id=what-is-a-graph>What is a Graph?</h2>
-<p>A graph G is an ordered pair of a set V of vertices and a set of E of edges.</p>
-<p>G can be defines as follows</p>
-<p>$$G=\left(V,E\right)$$</p>
-<p>ordered pair</p>
-<p>$$(a, b) \neq \left(b,a\right) \text{where} \ a \neq b$$</p>
-<figure><img src=./graph.png alt=Graph width=100%>
-</figure>
-<h2 id=graph-terminology>Graph terminology</h2>
-<p>There are two type of graph, the one is <code>directed graph</code> and the other is <code>undirected graph</code>.</p>
-<p>Directed graphs contain ordered pairs of vertices while undirected graphs contain unordered pairs of vertices.</p>
-<p><code>Directed Graph</code></p>
-<figure><img src=./directed_graph.png alt="Directed Graph" width=100%>
-</figure>
-<p><code>Undirected Graph</code></p>
-<figure><img src=./undirected_graph.png alt="Directed Graph" width=100%>
-</figure>
-<p>The number of edges connected to/from a node is called <code>degree</code>.</p>
-<p>In directed graph, the number of edges to a node is called <code>indegree</code>, whereas the number of edges from a node is called <code>outdegree</code>.</p>
-<p>The image below illustrates indegree(red color) and outdegree(blue color)</p>
-<figure><img src=./indegree_outdegree.png alt="Directed Graph" width=100%>
-</figure>
-<p><code>Weighted Graph</code> has weight/cost associated with every edge, while <code>Unweighted Graph</code> has the same weight in all edges.</p>
-<p>Check <a href=/posts/dsa/bfs_dfs/>BFS and DFS</a> for graph traversal</p>
-<h2 id=reference>Reference</h2>
-<p><a href="https://www.youtube.com/watch?v=gXgEDyodOJU">Data structures: Introduction to graphs</a></p>
-<p><a href=https://dev.classmethod.jp/articles/graph-theory/>グラフ理論入門</a></p>
-<p><a href="https://www.youtube.com/watch?v=pcKY4hjDrxk">5.1 Graph Traversals - BFS & DFS -Breadth First Search and Depth First Search</a></p>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/dsa/binary_tree/>Read more…</a>
 </div>
-<footer class=post__footer>
-<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
-<ul class=tags__list>
-<li class=tags__item>
-<a class="tags__link btn" href=/tags/graph/ rel=tag>Graph</a>
-</li>
-<li class=tags__item>
-<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
-</li>
-</ul>
-</div>
-</footer>
 </article>
 </main>
-<div class="authorbox clearfix">
-<figure class=authorbox__avatar>
-<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
-</figure>
-<div class=authorbox__header>
-<span class=authorbox__name>About Keigo Kida</span>
-</div>
-<div class=authorbox__description>
-Software Engineer from Japan
-</div>
+<div class=pagination>
+<a class="pagination__item pagination__item--prev btn" href=/posts/page/4/>«</a>
+<span class="pagination__item pagination__item--current">5/5</span>
 </div>
 </div>
 <aside class=sidebar>
@@ -230,6 +183,5 @@ Software Engineer from Japan
 </footer>
 </div>
 <script async defer src=/js/menu.js></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>

@@ -54,8 +54,12 @@ In go you can use goroutine like below with go keyword.">
 <li><a href=#intro>Intro</a></li>
 <li><a href=#concurrency-and-parallelism>Concurrency and Parallelism</a></li>
 <li><a href=#goroutines>Goroutines</a></li>
-<li><a href=#channels>Channels</a></li>
+<li><a href=#channels>Channels</a>
+<ul>
 <li><a href=#buffered-channel>Buffered Channel</a></li>
+<li><a href=#range-and-close>Range and Close</a></li>
+</ul>
+</li>
 <li><a href=#select>Select</a></li>
 <li><a href=#references>References</a></li>
 </ul>
@@ -132,7 +136,7 @@ However, for the point of understanding, it&rsquo;s not far off to think of it a
 	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>joined1</span>, <span style=color:#a6e22e>joined2</span>)
 }
 
-</code></pre></div><h2 id=buffered-channel>Buffered Channel</h2>
+</code></pre></div><h3 id=buffered-channel>Buffered Channel</h3>
 <p>If you provide the buffer length as the second argument, a channel can be buffered</p>
 <p>When you send data to a buffered channel, the send operation will block only if the buffer is full</p>
 <p>When you receive data from a buffered channel, the receive operation will block if the buffer is empty</p>
@@ -153,15 +157,17 @@ However, for the point of understanding, it&rsquo;s not far off to think of it a
 	}()
 	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ch</span>)
 	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ch</span>)
-    <span style=color:#75715e>// Wait until a channel is not empty
+    <span style=color:#75715e>// Wait until a channel is filled
 </span><span style=color:#75715e></span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ch</span>)
 }
-</code></pre></div><h2 id=select>Select</h2>
+</code></pre></div><h3 id=range-and-close>Range and Close</h3>
+<h2 id=select>Select</h2>
 <h2 id=references>References</h2>
 <p><a href="https://www.youtube.com/watch?v=f6kdp27TYZs">Google I/O 2012 - Go Concurrency Patterns
 </a></p>
 <p><a href="https://www.youtube.com/watch?v=QDDwwePbDtw">Google I/O 2013 - Advanced Go Concurrency Patterns
 </a></p>
+<p><a href=https://go.dev/tour/concurrency/1>A Tour Of Go</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
@@ -185,7 +191,7 @@ However, for the point of understanding, it&rsquo;s not far off to think of it a
 <span class=authorbox__name>About Keigo Kida</span>
 </div>
 <div class=authorbox__description>
-Software Engineer living in Japan
+Software Engineer from Japan
 </div>
 </div>
 </div>
@@ -194,11 +200,11 @@ Software Engineer living in Japan
 <h4 class=widget__title>Recent Posts</h4>
 <div class=widget__content>
 <ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/job_queues_go/>Implementation of Job Queue model using goroutine and channel</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/go_concurrency_model/>Go Concurrency Model</a></li>
 <li class=widget__item><a class=widget__link href=/posts/dsa/sort/merge_sort/>Implementation of Merge Sort in Python</a></li>
 <li class=widget__item><a class=widget__link href=/posts/dsa/sort/quick_sort/>Implementation of Quick Sort in Python</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/golang_goroutines/>Write a Large Amount of Data to CSV File with Go (Golang)</a></li>
-<li class=widget__item><a class=widget__link href=/posts/dsa/union_find/>Union-Find</a></li>
 </ul>
 </div>
 </div>
