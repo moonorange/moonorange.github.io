@@ -7,7 +7,9 @@ tags: ["Go", "English Article"]
 
 ## Intro
 
-This article aims to summarize what I have learnt about Go's concurrency model
+This article aims to summarize the key concepts and principles of Go's concurrency model that I've learned.
+
+To test your understanding and reinforce your knowledge, a quiz is available at the end of the article.
 
 ## Goroutines
 
