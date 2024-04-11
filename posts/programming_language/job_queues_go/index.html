@@ -8,7 +8,9 @@
 <meta name=description content>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Implementation of Job Queue model using goroutine and channel">
-<meta name=twitter:description content>
+<meta name=twitter:description content="Introduction In concurrent programming, managing tasks efficiently is crucial. One common pattern is the job queue model, where multiple tasks (jobs) are submitted to a queue and processed asynchronously by worker routines. In this blog post, we&rsquo;ll explore how to implement a job queue model in Go using goroutines and channels.
+Understanding the Job Queue Model At its core, the job queue model consists of two main components:
+  Job Queue: The job queue is a data structure that holds tasks awaiting execution.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -39,11 +41,256 @@
 <h1 class=post__title>Implementation of Job Queue model using goroutine and channel</h1>
 <div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2024-04-15T00:00:00Z>April 15, 2024</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/programming-language/ rel=category>Programming Language</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>, <a class=meta__link href=/categories/concurrency/ rel=category>Concurrency</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2024-04-11T00:00:00Z>April 11, 2024</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/programming-language/ rel=category>Programming Language</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>, <a class=meta__link href=/categories/concurrency/ rel=category>Concurrency</a>
 </span>
 </div></div>
 </header>
-<div class="content post__content clearfix">
+<div class="post__toc toc">
+<div class=toc__title>Page content</div>
+<div class=toc__menu>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#understanding-the-job-queue-model>Understanding the Job Queue Model</a></li>
+<li><a href=#implementation-in-go>Implementation in Go</a></li>
+<li><a href=#conclusion>Conclusion</a></li>
+</ul>
+</nav>
+</div>
+</div><div class="content post__content clearfix">
+<h2 id=introduction>Introduction</h2>
+<p>In concurrent programming, managing tasks efficiently is crucial. One common pattern is the job queue model, where multiple tasks (jobs) are submitted to a queue and processed asynchronously by worker routines. In this blog post, we&rsquo;ll explore how to implement a job queue model in Go using goroutines and channels.</p>
+<h2 id=understanding-the-job-queue-model>Understanding the Job Queue Model</h2>
+<p>At its core, the job queue model consists of two main components:</p>
+<ul>
+<li>
+<p>Job Queue: The job queue is a data structure that holds tasks awaiting execution. When a new task is submitted, it is added to the queue. Worker routines continuously monitor the queue for incoming tasks and execute them as they become available.</p>
+</li>
+<li>
+<p>Workers: Workers are concurrent routines responsible for executing tasks retrieved from the job queue. These routines are typically spawned when the application starts and continue running in the background, processing tasks as they arrive. By employing multiple workers, the system can handle a higher volume of tasks concurrently, improving overall efficiency and throughput.</p>
+</li>
+</ul>
+<h2 id=implementation-in-go>Implementation in Go</h2>
+<p>Let&rsquo;s dive into the implementation using Go&rsquo;s powerful concurrency primitives: goroutines and channels.</p>
+<p>main.go</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+
+<span style=color:#f92672>import</span> (
+	<span style=color:#e6db74>&#34;context&#34;</span>
+	<span style=color:#e6db74>&#34;fmt&#34;</span>
+	<span style=color:#e6db74>&#34;os&#34;</span>
+	<span style=color:#e6db74>&#34;os/signal&#34;</span>
+	<span style=color:#e6db74>&#34;sync&#34;</span>
+	<span style=color:#e6db74>&#34;syscall&#34;</span>
+)
+
+<span style=color:#66d9ef>const</span> (
+	<span style=color:#a6e22e>totalJobs</span>      <span style=color:#66d9ef>int</span> = <span style=color:#ae81ff>100</span>
+	<span style=color:#a6e22e>maxNumWorkers</span>      = <span style=color:#ae81ff>100</span>
+	<span style=color:#a6e22e>jobsPerRoutine</span>     = <span style=color:#a6e22e>totalJobs</span> <span style=color:#f92672>/</span> <span style=color:#a6e22e>maxNumWorkers</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#75715e>// Create a cancellation context to allow graceful shutdown
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>cancel</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>WithCancel</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Background</span>())
+
+	<span style=color:#75715e>// Create a channel to receive OS signals
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>sigCh</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Signal</span>, <span style=color:#ae81ff>1</span>)
+	<span style=color:#66d9ef>defer</span> close(<span style=color:#a6e22e>sigCh</span>)
+
+	<span style=color:#75715e>// Notify sigCh channel
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>signal</span>.<span style=color:#a6e22e>Notify</span>(<span style=color:#a6e22e>sigCh</span>, <span style=color:#a6e22e>syscall</span>.<span style=color:#a6e22e>SIGTERM</span>, <span style=color:#a6e22e>syscall</span>.<span style=color:#a6e22e>SIGTERM</span>, <span style=color:#a6e22e>syscall</span>.<span style=color:#a6e22e>SIGQUIT</span>, <span style=color:#a6e22e>syscall</span>.<span style=color:#a6e22e>SIGINT</span>)
+	<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
+		<span style=color:#75715e>// Wait until receiving the signal
+</span><span style=color:#75715e></span>		<span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>sigCh</span>
+		<span style=color:#75715e>// Cancel the context to propagate cancellation through the context tree
+</span><span style=color:#75715e></span>		<span style=color:#a6e22e>cancel</span>()
+	}()
+
+	<span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>NewAPIWorker</span>()
+	<span style=color:#a6e22e>d</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>NewDispatcher</span>(<span style=color:#a6e22e>p</span>, <span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>100</span>)
+	<span style=color:#75715e>// Start the dispatcher with the cancellation context
+</span><span style=color:#75715e></span>	<span style=color:#66d9ef>go</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>Start</span>(<span style=color:#a6e22e>ctx</span>)
+
+	<span style=color:#75715e>// WaitGroup to wait for all goroutines to finish
+</span><span style=color:#75715e></span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>wg</span> <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>
+	<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#a6e22e>maxNumWorkers</span>)
+	<span style=color:#a6e22e>concurrentEnqueue</span>(<span style=color:#a6e22e>d</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>wg</span>)
+
+	<span style=color:#75715e>// enqueue(d, 0, totalJobs)
+</span><span style=color:#75715e></span>
+	<span style=color:#75715e>// Wait for all goroutines to finish
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Wait</span>()
+
+	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;All enqueue jobs completed.&#34;</span>)
+
+	<span style=color:#75715e>// Wait for the dispatcher to finish processing all jobs
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>Wait</span>()
+	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;Finished!&#34;</span>)
+}
+
+<span style=color:#75715e>// enqueue enqueues jobs into the dispatcher within the specified range
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>enqueue</span>(<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Dispatcher</span>, <span style=color:#a6e22e>start</span>, <span style=color:#a6e22e>end</span> <span style=color:#66d9ef>int</span>) {
+	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>start</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>end</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+		<span style=color:#a6e22e>payload</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;dummy_payload_%d&#34;</span>, <span style=color:#a6e22e>i</span>)
+		<span style=color:#a6e22e>job</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>Job</span>{<span style=color:#a6e22e>Payload</span>: <span style=color:#a6e22e>payload</span>}
+		<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>Enqueue</span>(<span style=color:#a6e22e>job</span>)
+	}
+}
+
+<span style=color:#75715e>// concurrentEnqueue enqueues jobs concurrently using multiple goroutines
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>concurrentEnqueue</span>(<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Dispatcher</span>, <span style=color:#a6e22e>wg</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>) {
+	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>maxNumWorkers</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+		<span style=color:#a6e22e>start</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>jobsPerRoutine</span>
+		<span style=color:#a6e22e>end</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>start</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>jobsPerRoutine</span>
+		<span style=color:#75715e>// Handle remaining jobs for the last goroutine
+</span><span style=color:#75715e></span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>==</span> <span style=color:#a6e22e>maxNumWorkers</span><span style=color:#f92672>-</span><span style=color:#ae81ff>1</span> {
+			<span style=color:#a6e22e>end</span> = <span style=color:#a6e22e>totalJobs</span>
+		}
+		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;start: %d end: %d\n&#34;</span>, <span style=color:#a6e22e>start</span>, <span style=color:#a6e22e>end</span>)
+		<span style=color:#75715e>// Launch a goroutine to enqueue jobs within the specified range
+</span><span style=color:#75715e></span>		<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
+			<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Done</span>()
+			<span style=color:#a6e22e>enqueue</span>(<span style=color:#a6e22e>d</span>, <span style=color:#a6e22e>start</span>, <span style=color:#a6e22e>end</span>)
+		}()
+	}
+}
+</code></pre></div><p>worker.go</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+
+<span style=color:#f92672>import</span> (
+	<span style=color:#e6db74>&#34;fmt&#34;</span>
+	<span style=color:#e6db74>&#34;io&#34;</span>
+	<span style=color:#e6db74>&#34;math/rand&#34;</span>
+	<span style=color:#e6db74>&#34;net/http&#34;</span>
+	<span style=color:#e6db74>&#34;net/http/httptest&#34;</span>
+	<span style=color:#e6db74>&#34;strings&#34;</span>
+	<span style=color:#e6db74>&#34;time&#34;</span>
+)
+
+<span style=color:#75715e>// APIWorker sends post requests
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>APIWorker</span> <span style=color:#66d9ef>struct</span>{}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewAPIWorker</span>() <span style=color:#f92672>*</span><span style=color:#a6e22e>APIWorker</span> {
+	<span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>APIWorker</span>{}
+}
+
+<span style=color:#75715e>// Work waits for a few seconds and print a received URL.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>p</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>APIWorker</span>) <span style=color:#a6e22e>Work</span>(<span style=color:#a6e22e>job</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Job</span>) {
+	<span style=color:#a6e22e>t</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>NewTimer</span>(<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>(<span style=color:#a6e22e>rand</span>.<span style=color:#a6e22e>Intn</span>(<span style=color:#ae81ff>5</span>)) <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span>)
+	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Stop</span>()
+	<span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>C</span>
+
+	<span style=color:#a6e22e>server</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>mockServer</span>()
+	<span style=color:#75715e>// Make a fake HTTP request to the mock server
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>resp</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Post</span>(<span style=color:#a6e22e>server</span>.<span style=color:#a6e22e>URL</span>, <span style=color:#e6db74>&#34;application/json&#34;</span>, <span style=color:#a6e22e>strings</span>.<span style=color:#a6e22e>NewReader</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>`{&#34;key&#34;: %s}`</span>, <span style=color:#a6e22e>job</span>.<span style=color:#a6e22e>Payload</span>)))
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#75715e>// Output error logs so that failed payload can be retried
+</span><span style=color:#75715e></span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Error ocurred with payload %s: %+v&#34;</span>, <span style=color:#a6e22e>job</span>.<span style=color:#a6e22e>Payload</span>, <span style=color:#a6e22e>err</span>)
+		<span style=color:#66d9ef>return</span>
+	}
+	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>Body</span>.<span style=color:#a6e22e>Close</span>()
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>mockServer</span>() <span style=color:#f92672>*</span><span style=color:#a6e22e>httptest</span>.<span style=color:#a6e22e>Server</span> {
+	<span style=color:#75715e>// Create a new HTTP test server
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>server</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>httptest</span>.<span style=color:#a6e22e>NewServer</span>(<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>HandlerFunc</span>(<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>w</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Request</span>) {
+		<span style=color:#75715e>// Read the request body
+</span><span style=color:#75715e></span>		<span style=color:#a6e22e>body</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>io</span>.<span style=color:#a6e22e>ReadAll</span>(<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>Body</span>)
+		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+			<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Error</span>(<span style=color:#a6e22e>w</span>, <span style=color:#e6db74>&#34;Failed to read request body&#34;</span>, <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>StatusInternalServerError</span>)
+			<span style=color:#66d9ef>return</span>
+		}
+		<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>Body</span>.<span style=color:#a6e22e>Close</span>()
+
+		<span style=color:#75715e>// Print the request body (fake processing)
+</span><span style=color:#75715e></span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;Received POST request with body:&#34;</span>, string(<span style=color:#a6e22e>body</span>))
+	}))
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>server</span>
+}
+</code></pre></div><p>dispatcher.go</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+
+<span style=color:#f92672>import</span> (
+	<span style=color:#e6db74>&#34;context&#34;</span>
+	<span style=color:#e6db74>&#34;sync&#34;</span>
+)
+
+<span style=color:#75715e>// Job represents an interface of a job that can be enqueued into a dispatcher.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Job</span> <span style=color:#66d9ef>struct</span> {
+	<span style=color:#a6e22e>Payload</span> <span style=color:#66d9ef>string</span>
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Worker</span> <span style=color:#66d9ef>interface</span> {
+	<span style=color:#a6e22e>Work</span>(<span style=color:#a6e22e>j</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Job</span>) <span style=color:#75715e>// Work method defines the behavior of processing a job.
+</span><span style=color:#75715e></span>}
+
+<span style=color:#75715e>// Dispatcher represents a job dispatcher.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Dispatcher</span> <span style=color:#66d9ef>struct</span> {
+	<span style=color:#a6e22e>workerPool</span> <span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>struct</span>{}  <span style=color:#75715e>// Semaphore for limiting concurrent worker goroutines.
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>jobQueue</span>   <span style=color:#66d9ef>chan</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Job</span>      <span style=color:#75715e>// Channel for queuing incoming jobs.
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>worker</span>     <span style=color:#a6e22e>Worker</span>         <span style=color:#75715e>// Worker interface for processing jobs.
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>globalWg</span>   <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span> <span style=color:#75715e>// WaitGroup for tracking the termination of the dispatcher.
+</span><span style=color:#75715e></span>}
+
+<span style=color:#75715e>// NewDispatcher creates a new instance of a job dispatcher with the given parameters.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewDispatcher</span>(<span style=color:#a6e22e>worker</span> <span style=color:#a6e22e>Worker</span>, <span style=color:#a6e22e>maxWorkers</span> <span style=color:#66d9ef>int</span>, <span style=color:#a6e22e>maxQueueSize</span> <span style=color:#66d9ef>int</span>) <span style=color:#f92672>*</span><span style=color:#a6e22e>Dispatcher</span> {
+	<span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>Dispatcher</span>{
+		<span style=color:#a6e22e>workerPool</span>: make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>struct</span>{}, <span style=color:#a6e22e>maxWorkers</span>), <span style=color:#75715e>// Buffered channel acting as a workerPool. Use empty struct to minimize the memory allocation
+</span><span style=color:#75715e></span>		<span style=color:#a6e22e>jobQueue</span>:   make(<span style=color:#66d9ef>chan</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Job</span>, <span style=color:#a6e22e>maxQueueSize</span>),
+		<span style=color:#a6e22e>worker</span>:     <span style=color:#a6e22e>worker</span>,
+	}
+}
+
+<span style=color:#75715e>// Start initiates the dispatcher to begin processing jobs.
+</span><span style=color:#75715e>// The dispatcher stops when it receives a value from `ctx.Done`.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Dispatcher</span>) <span style=color:#a6e22e>Start</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>) {
+	<span style=color:#75715e>// Increment the wait group counter to indicate that the dispatcher has started processing jobs.
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>globalWg</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#ae81ff>1</span>)
+
+	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>wg</span> <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>
+
+	<span style=color:#75715e>// Main loop for processing jobs.
+</span><span style=color:#75715e></span>	<span style=color:#66d9ef>for</span> {
+		<span style=color:#66d9ef>select</span> {
+		<span style=color:#66d9ef>case</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Done</span>():
+			<span style=color:#75715e>// Block until all currently processing jobs have finished.
+</span><span style=color:#75715e></span>			<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Wait</span>()
+			<span style=color:#75715e>// When the loop exits (due to context cancellation), stop decrements the wait group counter to indicate that the dispatcher has stopped processing jobs
+</span><span style=color:#75715e></span>			<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>globalWg</span>.<span style=color:#a6e22e>Done</span>()
+			<span style=color:#66d9ef>return</span>
+		<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>job</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>jobQueue</span>:
+			<span style=color:#75715e>// Increment the local wait group to track the processing of this job.
+</span><span style=color:#75715e></span>			<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#ae81ff>1</span>)
+			<span style=color:#75715e>// Push to the workerPool to control the number of concurrent workers.
+</span><span style=color:#75715e></span>			<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>workerPool</span> <span style=color:#f92672>&lt;-</span> <span style=color:#66d9ef>struct</span>{}{}
+			<span style=color:#75715e>// Process the job concurrently.
+</span><span style=color:#75715e></span>			<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>job</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Job</span>) {
+				<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Done</span>()
+				<span style=color:#75715e>// After the job finishes, release the slot in the workerPool.
+</span><span style=color:#75715e></span>				<span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() { <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>workerPool</span> }()
+				<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>worker</span>.<span style=color:#a6e22e>Work</span>(<span style=color:#a6e22e>job</span>)
+			}(<span style=color:#a6e22e>job</span>)
+		}
+	}
+}
+
+<span style=color:#75715e>// Wait blocks until the dispatcher stops.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Dispatcher</span>) <span style=color:#a6e22e>Wait</span>() {
+	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>globalWg</span>.<span style=color:#a6e22e>Wait</span>()
+}
+
+<span style=color:#75715e>// Enqueue puts a job into the queue.
+</span><span style=color:#75715e>// If the number of enqueued jobs has already reached the maximum size,
+</span><span style=color:#75715e>// This will block until space becomes available in the queue to accept a new job.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Dispatcher</span>) <span style=color:#a6e22e>Enqueue</span>(<span style=color:#a6e22e>job</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Job</span>) {
+	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>jobQueue</span> <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>job</span>
+}
+</code></pre></div><h2 id=conclusion>Conclusion</h2>
+<p>Implementing a job queue model using goroutines and channels in Go provides a simple yet powerful way to manage and execute tasks concurrently.</p>
+<p>By leveraging Go&rsquo;s concurrency primitives, we can build efficient and scalable systems that handle large workloads effectively.</p>
+<p>This implementation serves as a foundation for building various concurrent applications, such as web servers, background job processors, and more.</p>
+<p>In summary, understanding and mastering concurrency concepts in Go opens up a world of possibilities for building high-performance and resilient software systems.</p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
