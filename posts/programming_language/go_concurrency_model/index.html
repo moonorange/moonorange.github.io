@@ -9,9 +9,10 @@
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Go Concurrency Model">
 <meta name=twitter:description content="Intro This article aims to summarize what I have learnt about Go&rsquo;s concurrency model
-Concurrency and Parallelism Goroutines goroutine is a cheap independently executing function, which has its own call stack.
-goroutine is not a thread, a thread can have multiple goroutines. However, for the point of understanding, it&rsquo;s not far off to think of it as a very cheap thread.
-In go you can use goroutine like below with go keyword.">
+Goroutines A goroutine is a lightweight independently executing function with its own call stack.
+While not equivalent to a thread, conceptually, it can be thought of as a very cheap thread.
+Here&rsquo;s how you can use goroutines:
+package main import ( &#34;fmt&#34; ) func somefunc() { fmt.Println(&#34;called by goroutine&#34;) } func main() { go somefunc() // Wait a while not to exit main goroutine before finishing another goroutine  time.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -52,7 +53,6 @@ In go you can use goroutine like below with go keyword.">
 <nav id=TableOfContents>
 <ul>
 <li><a href=#intro>Intro</a></li>
-<li><a href=#concurrency-and-parallelism>Concurrency and Parallelism</a></li>
 <li><a href=#goroutines>Goroutines</a></li>
 <li><a href=#channels>Channels</a>
 <ul>
@@ -61,6 +61,7 @@ In go you can use goroutine like below with go keyword.">
 </ul>
 </li>
 <li><a href=#select>Select</a></li>
+<li><a href=#want-to-learn-more>Want to learn more?</a></li>
 <li><a href=#references>References</a></li>
 </ul>
 </nav>
@@ -68,12 +69,10 @@ In go you can use goroutine like below with go keyword.">
 </div><div class="content post__content clearfix">
 <h2 id=intro>Intro</h2>
 <p>This article aims to summarize what I have learnt about Go&rsquo;s concurrency model</p>
-<h2 id=concurrency-and-parallelism>Concurrency and Parallelism</h2>
 <h2 id=goroutines>Goroutines</h2>
-<p>goroutine is a cheap independently executing function, which has its own call stack.</p>
-<p>goroutine is not a thread, a thread can have multiple goroutines.
-However, for the point of understanding, it&rsquo;s not far off to think of it as a very cheap thread.</p>
-<p>In go you can use goroutine like below with go keyword.</p>
+<p>A goroutine is a lightweight independently executing function with its own call stack.</p>
+<p>While not equivalent to a thread, conceptually, it can be thought of as a very cheap thread.</p>
+<p>Here&rsquo;s how you can use goroutines:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
 
 <span style=color:#f92672>import</span> (
@@ -90,8 +89,9 @@ However, for the point of understanding, it&rsquo;s not far off to think of it a
 </span><span style=color:#75715e></span>    <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#ae81ff>100</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Millisecond</span>)
 }
 </code></pre></div><h2 id=channels>Channels</h2>
-<p>A channel provides a way to connect between go routines, allowing them to communicate and synchronize with each other.</p>
-<p>Example with goroutine</p>
+<p>Channels provide a way for goroutines to communicate and synchronize with each other.</p>
+<p>Here are some examples:</p>
+<p>Example 1:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
 
 <span style=color:#f92672>import</span> (
@@ -110,7 +110,7 @@ However, for the point of understanding, it&rsquo;s not far off to think of it a
     <span style=color:#75715e>// It will wait until the channel sends some data
 </span><span style=color:#75715e></span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;from channel %s\n&#34;</span>, <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>c</span>)
 }
-</code></pre></div><p>Example2</p>
+</code></pre></div><p>Example 2:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
 
 <span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;fmt&#34;</span>
@@ -161,7 +161,73 @@ However, for the point of understanding, it&rsquo;s not far off to think of it a
 </span><span style=color:#75715e></span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ch</span>)
 }
 </code></pre></div><h3 id=range-and-close>Range and Close</h3>
-<h2 id=select>Select</h2>
+<p>You can use range with channels to repeatedly receive values until the channel is closed</p>
+<p>Closing a channel indicates that no more values will be sent, allowing the receiver to know when to stop waiting for new data.</p>
+<p>Unlike files, you usually don&rsquo;t need to close channels.</p>
+<p>Here&rsquo;s an example.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+
+<span style=color:#f92672>import</span> (
+	<span style=color:#e6db74>&#34;fmt&#34;</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>loop</span>(<span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>, <span style=color:#a6e22e>c</span> <span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>int</span>) {
+	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>n</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+		<span style=color:#a6e22e>c</span> <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>i</span>
+	}
+	close(<span style=color:#a6e22e>c</span>)
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#a6e22e>c</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>10</span>)
+	<span style=color:#66d9ef>go</span> <span style=color:#a6e22e>loop</span>(cap(<span style=color:#a6e22e>c</span>), <span style=color:#a6e22e>c</span>)
+	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>c</span> {
+		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>i</span>)
+	}
+}
+</code></pre></div><h2 id=select>Select</h2>
+<p>The select statement allows a goroutine to wait until one of the cases is ready.</p>
+<p>It randomly chooses one if multiple cases are ready.</p>
+<p>Here&rsquo;s an example:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+
+<span style=color:#f92672>import</span> (
+	<span style=color:#e6db74>&#34;context&#34;</span>
+	<span style=color:#e6db74>&#34;fmt&#34;</span>
+	<span style=color:#e6db74>&#34;time&#34;</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>loop</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>c</span> <span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>int</span>) {
+	<span style=color:#66d9ef>for</span> {
+		<span style=color:#66d9ef>select</span> {
+		<span style=color:#75715e>// Quit if context got canceled
+</span><span style=color:#75715e></span>		<span style=color:#66d9ef>case</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Done</span>():
+			<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;quit&#34;</span>)
+			<span style=color:#66d9ef>return</span>
+		<span style=color:#75715e>// Print values received from the channel
+</span><span style=color:#75715e></span>		<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>v</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>c</span>:
+			<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>v</span>)
+		}
+	}
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>cancel</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>WithCancel</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Background</span>())
+	<span style=color:#a6e22e>c</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>int</span>)
+
+	<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
+		<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>10</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+			<span style=color:#a6e22e>c</span> <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>i</span>
+		}
+	}()
+	<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
+		<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>1</span>)
+		<span style=color:#a6e22e>cancel</span>()
+	}()
+	<span style=color:#a6e22e>loop</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>c</span>)
+}
+</code></pre></div><h2 id=want-to-learn-more>Want to learn more?</h2>
+<p>Challenge yourself with quizzes available in this <a href=https://github.com/moonorange/go-quizzes/tree/main/advanced/concurrency/quizzes>repository</a>.</p>
 <h2 id=references>References</h2>
 <p><a href="https://www.youtube.com/watch?v=f6kdp27TYZs">Google I/O 2012 - Go Concurrency Patterns
 </a></p>
