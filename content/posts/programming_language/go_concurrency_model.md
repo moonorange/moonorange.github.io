@@ -95,7 +95,7 @@ func main() {
 
 ```
 
-## Buffered Channel
+### Buffered Channel
 
 If you provide the buffer length as the second argument, a channel can be buffered
 
@@ -121,10 +121,13 @@ func main() {
 	}()
 	fmt.Println(<-ch)
 	fmt.Println(<-ch)
-    // Wait until a channel is not empty
+    // Wait until a channel is filled
 	fmt.Println(<-ch)
 }
 ```
+
+### Range and Close
+
 
 ## Select
 
@@ -137,3 +140,5 @@ func main() {
 
 [Google I/O 2013 - Advanced Go Concurrency Patterns
 ](https://www.youtube.com/watch?v=QDDwwePbDtw)
+
+[A Tour Of Go](https://go.dev/tour/concurrency/1)

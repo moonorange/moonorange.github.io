@@ -13,7 +13,7 @@ paginate = 10
 
 [Author]
     name = "Keigo Kida"
-    bio = "Software Engineer living in Japan"
+    bio = "Software Engineer from Japan"
     avatar = "img/avatar.jpeg"
 
 [Params]
