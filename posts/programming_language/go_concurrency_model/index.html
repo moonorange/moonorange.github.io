@@ -8,11 +8,11 @@
 <meta name=description content>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Go Concurrency Model">
-<meta name=twitter:description content="Intro This article aims to summarize what I have learnt about Go&rsquo;s concurrency model
+<meta name=twitter:description content="Intro This article aims to summarize the key concepts and principles of Go&rsquo;s concurrency model that I&rsquo;ve learned.
+To test your understanding and reinforce your knowledge, a quiz is available at the end of the article.
 Goroutines A goroutine is a lightweight independently executing function with its own call stack.
 While not equivalent to a thread, conceptually, it can be thought of as a very cheap thread.
-Here&rsquo;s how you can use goroutines:
-package main import ( &#34;fmt&#34; ) func somefunc() { fmt.Println(&#34;called by goroutine&#34;) } func main() { go somefunc() // Wait a while not to exit main goroutine before finishing another goroutine  time.">
+Here&rsquo;s how you can use goroutines:">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -68,7 +68,8 @@ package main import ( &#34;fmt&#34; ) func somefunc() { fmt.Println(&#34;called 
 </div>
 </div><div class="content post__content clearfix">
 <h2 id=intro>Intro</h2>
-<p>This article aims to summarize what I have learnt about Go&rsquo;s concurrency model</p>
+<p>This article aims to summarize the key concepts and principles of Go&rsquo;s concurrency model that I&rsquo;ve learned.</p>
+<p>To test your understanding and reinforce your knowledge, a quiz is available at the end of the article.</p>
 <h2 id=goroutines>Goroutines</h2>
 <p>A goroutine is a lightweight independently executing function with its own call stack.</p>
 <p>While not equivalent to a thread, conceptually, it can be thought of as a very cheap thread.</p>

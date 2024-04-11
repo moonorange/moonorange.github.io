@@ -71,11 +71,11 @@ Go Concurrency Model
 </div></div>
 </header>
 <div class="content list__excerpt post__content clearfix">
-Intro This article aims to summarize what I have learnt about Go&rsquo;s concurrency model
+Intro This article aims to summarize the key concepts and principles of Go&rsquo;s concurrency model that I&rsquo;ve learned.
+To test your understanding and reinforce your knowledge, a quiz is available at the end of the article.
 Goroutines A goroutine is a lightweight independently executing function with its own call stack.
 While not equivalent to a thread, conceptually, it can be thought of as a very cheap thread.
 Here&rsquo;s how you can use goroutines:
-package main import ( "fmt" ) func somefunc() { fmt.Println("called by goroutine") } func main() { go somefunc() // Wait a while not to exit main goroutine before finishing another goroutine time.
 </div>
 <div class="list__footer clearfix">
 <a class="list__footer-readmore btn" href=/posts/programming_language/go_concurrency_model/>Read more…</a>
