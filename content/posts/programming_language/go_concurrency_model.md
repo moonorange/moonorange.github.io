@@ -9,16 +9,13 @@ tags: ["Go", "English Article"]
 
 This article aims to summarize what I have learnt about Go's concurrency model
 
-## Concurrency and Parallelism
-
 ## Goroutines
 
-goroutine is a cheap independently executing function, which has its own call stack.
+A goroutine is a lightweight independently executing function with its own call stack.
 
-goroutine is not a thread, a thread can have multiple goroutines.
-However, for the point of understanding, it's not far off to think of it as a very cheap thread.
+While not equivalent to a thread, conceptually, it can be thought of as a very cheap thread.
 
-In go you can use goroutine like below with go keyword.
+Here's how you can use goroutines:
 
 ```go
 package main
@@ -40,9 +37,11 @@ func main() {
 
 ## Channels
 
-A channel provides a way to connect between go routines, allowing them to communicate and synchronize with each other.
+Channels provide a way for goroutines to communicate and synchronize with each other.
 
-Example with goroutine
+Here are some examples:
+
+Example 1:
 
 ```go
 package main
@@ -65,7 +64,7 @@ func main() {
 }
 ```
 
-Example2
+Example 2:
 
 ```go
 package main
@@ -128,10 +127,88 @@ func main() {
 
 ### Range and Close
 
+You can use range with channels to repeatedly receive values until the channel is closed
+
+Closing a channel indicates that no more values will be sent, allowing the receiver to know when to stop waiting for new data.
+
+Unlike files, you usually don't need to close channels.
+
+Here's an example.
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func loop(n int, c chan int) {
+	for i := 0; i < n; i++ {
+		c <- i
+	}
+	close(c)
+}
+
+func main() {
+	c := make(chan int, 10)
+	go loop(cap(c), c)
+	for i := range c {
+		fmt.Println(i)
+	}
+}
+```
 
 ## Select
 
+The select statement allows a goroutine to wait until one of the cases is ready.
 
+It randomly chooses one if multiple cases are ready.
+
+Here's an example:
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+)
+
+func loop(ctx context.Context, c chan int) {
+	for {
+		select {
+		// Quit if context got canceled
+		case <-ctx.Done():
+			fmt.Println("quit")
+			return
+		// Print values received from the channel
+		case v := <-c:
+			fmt.Println(v)
+		}
+	}
+}
+
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	c := make(chan int)
+
+	go func() {
+		for i := 0; i < 10; i++ {
+			c <- i
+		}
+	}()
+	go func() {
+		time.Sleep(time.Second * 1)
+		cancel()
+	}()
+	loop(ctx, c)
+}
+```
+
+## Want to learn more?
+
+Challenge yourself with quizzes available in this [repository](https://github.com/moonorange/go-quizzes/tree/main/advanced/concurrency/quizzes).
 
 ## References
 
