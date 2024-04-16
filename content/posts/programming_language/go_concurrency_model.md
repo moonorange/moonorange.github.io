@@ -33,6 +33,7 @@ func somefunc() {
 func main() {
     go somefunc()
     // Wait a while not to exit main goroutine before finishing another goroutine
+    // Usually you should use sync.WaitGroup to wait for goroutines to finish instead of time.Sleep
     time.Sleep(100 * time.Millisecond)
 }
 ```
