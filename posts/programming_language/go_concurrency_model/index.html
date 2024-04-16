@@ -87,6 +87,7 @@ Here&rsquo;s how you can use goroutines:">
 <span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
     <span style=color:#66d9ef>go</span> <span style=color:#a6e22e>somefunc</span>()
     <span style=color:#75715e>// Wait a while not to exit main goroutine before finishing another goroutine
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// Usually you should use sync.WaitGroup to wait for goroutines to finish instead of time.Sleep
 </span><span style=color:#75715e></span>    <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#ae81ff>100</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Millisecond</span>)
 }
 </code></pre></div><h2 id=channels>Channels</h2>
