@@ -40,6 +40,30 @@
 </header><article class="list__item post">
 <header class=list__header>
 <h2 class="list__title post__title">
+<a href=/posts/software_design/ddia/ rel=bookmark>
+Designing Data-Intensive Applications
+</a>
+</h2>
+<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-11-26T00:00:00Z>November 26, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/software-design/ rel=category>Software Design</a>
+</span>
+</div></div>
+</header>
+<div class="content list__excerpt post__content clearfix">
+What&rsquo;s this article about These are my notes on a book called Designing Data-Intensive Applications.
+SSTables and LSM Trees(P.76) SSTables (Sorted String Tables) are files that contain a set of arbitrary and sorted key-value pairs.
+https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/
+SSTables and Log-Structured Merge Trees are still used in some database.
+As a rule of thumb, LSM Trees are faster for writes but slower for reads than B-Tree indexes.
+B-Trees The B-Tree is the most widely used indexing structure.
+</div>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/software_design/ddia/>Read more…</a>
+</div>
+</article><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
 <a href=/posts/dsa/dijkstra/ rel=bookmark>
 Dijkstra’s Shortest Path Algorithm
 </a>
@@ -229,25 +253,6 @@ Trie() Initializes the trie object. void insert(String word) Inserts the string 
 <div class="list__footer clearfix">
 <a class="list__footer-readmore btn" href=/posts/dsa/tries/>Read more…</a>
 </div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/dsa/tree/ rel=bookmark>
-Tree
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-04-08T00:00:00Z>April 08, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
-</span>
-</div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
-Tree Properties Every tree has a special node called the root node. The root node can be used to traverse every node of the tree. It is called root because the tree originated from root only. If a tree has N nodes(vertices), the number of edges is always one less than the number of nodes (i.e., N-1). If it has more than that, it&rsquo;s called a graph not a tree.
-</div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/dsa/tree/>Read more…</a>
-</div>
 </article>
 </main>
 <div class=pagination>
@@ -261,11 +266,11 @@ Tree Properties Every tree has a special node called the root node. The root nod
 <h4 class=widget__title>Recent Posts</h4>
 <div class=widget__content>
 <ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/>Learn gRPC, Go and Kubernetes by building Microservices</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/job_queues_go/>Implementation of Job Queue model using goroutine and channel</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/go_concurrency_model/>Go Concurrency Model</a></li>
 <li class=widget__item><a class=widget__link href=/posts/dsa/sort/merge_sort/>Implementation of Merge Sort in Python</a></li>
 <li class=widget__item><a class=widget__link href=/posts/dsa/sort/quick_sort/>Implementation of Quick Sort in Python</a></li>
-<li class=widget__item><a class=widget__link href=/posts/programming_language/golang_goroutines/>Write a Large Amount of Data to CSV File with Go (Golang)</a></li>
 </ul>
 </div>
 </div>
@@ -286,7 +291,13 @@ Tree Properties Every tree has a special node called the root node. The root nod
 <li class=widget__item>
 <a class=widget__link href=/categories/go/>Go</a></li>
 <li class=widget__item>
+<a class=widget__link href=/categories/grpc/>gRPC</a></li>
+<li class=widget__item>
 <a class=widget__link href=/categories/http-cookies/>HTTP cookies</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/kubernetes/>Kubernetes</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/microservice/>Microservice</a></li>
 <li class=widget__item>
 <a class=widget__link href=/categories/middleware/>Middleware</a></li>
 <li class=widget__item>
@@ -295,6 +306,8 @@ Tree Properties Every tree has a special node called the root node. The root nod
 <a class=widget__link href=/categories/network/>Network</a></li>
 <li class=widget__item>
 <a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/projects/>Projects</a></li>
 <li class=widget__item>
 <a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
 <li class=widget__item>
@@ -331,6 +344,7 @@ Tree Properties Every tree has a special node called the root node. The root nod
 <a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/japanese-article/ title="Japanese Article">Japanese Article</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/kubernetes/ title=Kubernetes>Kubernetes</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/merge-sort/ title="Merge Sort">Merge Sort</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>

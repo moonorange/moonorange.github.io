@@ -1,0 +1,393 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>Learn gRPC, Go and Kubernetes by building Microservices - Kei's Blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Learn gRPC, Go and Kubernetes by building Microservices">
+<meta name=twitter:description content="Intro In this article, we embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL.
+This project serves as an educational endeavor to understand the intricacies of microservices communication and the benefits of using gRPC and GraphQL.
+Project Structure(Overview) Our project revolves around three essential components:
+  Backend For Frontend (BFF): This layer acts as an intermediary between the frontend and the microservices.">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's Blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's Blog</div>
+</div>
+</a>
+</div>
+<div class=divider></div>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>Learn gRPC, Go and Kubernetes by building Microservices</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2024-04-20T00:00:00Z>April 20, 2024</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/projects/ rel=category>Projects</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>, <a class=meta__link href=/categories/microservice/ rel=category>Microservice</a>, <a class=meta__link href=/categories/grpc/ rel=category>gRPC</a>, <a class=meta__link href=/categories/kubernetes/ rel=category>Kubernetes</a>
+</span>
+</div></div>
+</header>
+<div class="post__toc toc">
+<div class=toc__title>Page content</div>
+<div class=toc__menu>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#grpc>gRPC</a></li>
+<li><a href=#protocol-buffers-protobuf>Protocol Buffers (protobuf)</a></li>
+<li><a href=#implementing-grpc-server>Implementing gRPC server</a>
+<ul>
+<li><a href=#run-grpc-server>Run gRPC server</a></li>
+<li><a href=#read-and-write-data-into-files>Read and Write data into files</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href=#understanding-kubernetes>Understanding Kubernetes</a></li>
+<li><a href=#deploying-services-locally-with-minikube>Deploying Services Locally with Minikube</a></li>
+<li><a href=#what-is-minikube>What is Minikube?</a></li>
+<li><a href=#testing-the-project-locally>Testing the Project Locally</a></li>
+</ul>
+</nav>
+</div>
+</div><div class="content post__content clearfix">
+<h1 id=intro>Intro</h1>
+<p>In this article, we embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL.</p>
+<p>This project serves as an educational endeavor to understand the intricacies of microservices communication and the benefits of using gRPC and GraphQL.</p>
+<h1 id=project-structureoverview>Project Structure(Overview)</h1>
+<p>Our project revolves around three essential components:</p>
+<ol>
+<li>
+<p>Backend For Frontend (BFF): This layer acts as an intermediary between the frontend and the microservices. It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.</p>
+</li>
+<li>
+<p>Microservices (gRPC): We’ll implement two microservices adhering to the Command Query Responsibility Segregation (CQRS) pattern:
+Command Service: Responsible for executing write operations, handling commands, and modifying data.
+Query Service: Retrieves data and responds to read queries.</p>
+</li>
+<li>
+<p>Kubernetes for Orchestration and Deployment: We’ll leverage Kubernetes to manage our microservices, ensuring scalability, resilience, and efficient resource utilization.</p>
+</li>
+</ol>
+<h1 id=microservices>Microservices</h1>
+<p>The CQRS pattern separates read and write responsibilities within our system.</p>
+<p>While it’s not necessary for small projects, understanding it can enhance your architectural knowledge.</p>
+<p>We will use gRPC for communication between services.</p>
+<h2 id=grpc>gRPC</h2>
+<p>gRPC, developed by Google, is an open-source remote procedure call (RPC) framework. It offers the following features:</p>
+<ul>
+<li>Interface Definition with Protocol Buffers: gRPC uses Protocol Buffers as its interface definition language. This ensures clear communication between services.</li>
+<li>HTTP/2 Transport: gRPC utilizes HTTP/2, providing efficient, high-performance communication.</li>
+<li>Remote Method Invocation: Services can invoke methods on remote servers as if they were local function calls.</li>
+</ul>
+<p>In summary, gRPC simplifies communication between distributed systems, making it an excellent choice for microservices architectures.</p>
+<h2 id=protocol-buffers-protobuf>Protocol Buffers (protobuf)</h2>
+<p>We’ll define our service interfaces and messages using <a href=https://protobuf.dev/>Protocol Buffers (protobuf)</a>.</p>
+<p>These language-agnostic schemas allow us to precisely specify the structure of our data.</p>
+<p>Define protobuf</p>
+<p>This is a part of the protobuf</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-proto data-lang=proto>syntax <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;proto3&#34;</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>import</span> <span style=color:#e6db74>&#34;google/protobuf/empty.proto&#34;</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e>// Define a directory to put auto generated codes
+</span><span style=color:#75715e></span><span style=color:#66d9ef>option</span> go_package <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;gen&#34;</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#f92672>package</span> task;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>service</span> TaskService {<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>rpc</span> CreateTask(CreateTaskRequest) <span style=color:#66d9ef>returns</span> (CreateTaskResponse);<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>rpc</span> GetTask(GetTaskRequest) <span style=color:#66d9ef>returns</span> (GetTaskResponse);<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>Task</span> {<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>int32</span> id <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>string</span> text <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>repeated</span> <span style=color:#66d9ef>string</span> tags <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>int64</span> due <span style=color:#f92672>=</span> <span style=color:#ae81ff>4</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>CreateTaskRequest</span> {<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>string</span> text <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>repeated</span> <span style=color:#66d9ef>string</span> tags <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>int64</span> due <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>CreateTaskResponse</span> {<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  Task task <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>GetTaskRequest</span> {<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>string</span> task_id <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>GetTaskResponse</span> {<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  Task task <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
+</span></code></pre></div><p>After defining protobuf, we can generate code automatically from protobuf.</p>
+<p>I will use <a href=https://github.com/bufbuild/buf>buf</a> to manage protobuf in this project</p>
+<p>Refer to the official document to leann how to install and use buf.</p>
+<p>Generate Go code from protobuf</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd proto
+buf generate proto
+</code></pre></div><h2 id=implementing-grpc-server>Implementing gRPC server</h2>
+<p>Let&rsquo;s implement gRPC server</p>
+<p>As I explained, we will implement two gRPC servers, Command Service and Query Service.</p>
+<h3 id=run-grpc-server>Run gRPC server</h3>
+<p>The following code will creates a gRPC server and run it locally.</p>
+<p>It&rsquo;s the same in both services.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+
+<span style=color:#f92672>import</span> (
+	<span style=color:#e6db74>&#34;fmt&#34;</span>
+	<span style=color:#e6db74>&#34;net&#34;</span>
+	<span style=color:#e6db74>&#34;os&#34;</span>
+	<span style=color:#e6db74>&#34;os/signal&#34;</span>
+	<span style=color:#e6db74>&#34;syscall&#34;</span>
+
+	<span style=color:#e6db74>&#34;github.com/sirupsen/logrus&#34;</span>
+	<span style=color:#e6db74>&#34;google.golang.org/grpc&#34;</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#75715e>// Create a listener on TCP port
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>port</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>8081</span>
+	<span style=color:#a6e22e>listener</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>net</span>.<span style=color:#a6e22e>Listen</span>(<span style=color:#e6db74>&#34;tcp&#34;</span>, <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;:%d&#34;</span>, <span style=color:#a6e22e>port</span>))
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#e6db74>&#34;failed to listen: &#34;</span>, <span style=color:#a6e22e>err</span>)
+	}
+
+	<span style=color:#75715e>// Create a gRPC server
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>grpc</span>.<span style=color:#a6e22e>NewServer</span>()
+
+	<span style=color:#75715e>// Listen for OS signals to stop the server when receiving a cancel signal
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>sigChan</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Signal</span>, <span style=color:#ae81ff>1</span>)
+	<span style=color:#a6e22e>signal</span>.<span style=color:#a6e22e>Notify</span>(<span style=color:#a6e22e>sigChan</span>, <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Interrupt</span>, <span style=color:#a6e22e>syscall</span>.<span style=color:#a6e22e>SIGINT</span>, <span style=color:#a6e22e>syscall</span>.<span style=color:#a6e22e>SIGTERM</span>)
+
+	<span style=color:#75715e>// Start the gRPC server
+</span><span style=color:#75715e></span>	<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
+		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>Serve</span>(<span style=color:#a6e22e>listener</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+			<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#e6db74>&#34;failed to serve: &#34;</span>, <span style=color:#a6e22e>err</span>)
+		}
+		<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Command service is running on port %d&#34;</span>, <span style=color:#a6e22e>port</span>)
+	}()
+
+	<span style=color:#75715e>// Wait for a signal to stop the server
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>sig</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>sigChan</span>
+	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Command service is shutting down: %s&#34;</span>, <span style=color:#a6e22e>sig</span>)
+
+	<span style=color:#75715e>// Stop the gRPC server gracefully
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>GracefulStop</span>()
+}
+</code></pre></div><h3 id=read-and-write-data-into-files>Read and Write data into files</h3>
+<h1 id=bff>BFF</h1>
+<p>Backend For Frontend (BFF) is an architectural pattern where a dedicated backend service is created for each frontend application or client type.</p>
+<p>Its primary role is to act as an intermediary between the frontend and the backend services.</p>
+<p>BFF aggregates data from multiple backend services and provides tailored APIs optimized for specific frontend requirements.</p>
+<p>BFF decouples the frontend from the complexities of backend services. It allows frontend teams to evolve their applications independently without being tied to backend changes.</p>
+<p>By reducing over-fetching and under-fetching of data, BFF improves performance and ensures a smoother user experience.</p>
+<p>Speak to two microservices and return results to clients in the project.</p>
+<h1 id=graphql>GraphQL</h1>
+<p>GraphQL is a query language for APIs and a runtime for executing those queries with existing data.</p>
+<p>GraphQL enables clients to request only the data they need. Clients can specify the shape and structure of the response, avoiding unnecessary data retrieval.</p>
+<p>Purpose: Unlike traditional REST APIs, GraphQL provides a more flexible and efficient approach to data fetching. It allows clients to retrieve nested data in a single request.</p>
+<h1 id=implementing-bff>Implementing BFF</h1>
+<p>In practice, the BFF aggregates data from microservices and constructs GraphQL responses for clients. This ensures that frontend applications receive precisely the data they require, enhancing performance and maintainability.</p>
+<h1 id=orchestrate-services-by-kubernetes>Orchestrate services by Kubernetes</h1>
+<h2 id=understanding-kubernetes>Understanding Kubernetes</h2>
+<p>Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.</p>
+<p>Kubernetes abstracts away the underlying infrastructure complexity. It automates tasks like container scheduling, scaling, and load balancing.</p>
+<p>By simplifying deployment and management, Kubernetes allows developers to focus on building and deploying applications without worrying about infrastructure details.</p>
+<h2 id=deploying-services-locally-with-minikube>Deploying Services Locally with Minikube</h2>
+<h2 id=what-is-minikube>What is Minikube?</h2>
+<p>Minikube is a powerful tool that allows us to run a Kubernetes cluster locally.</p>
+<p>It’s particularly useful for development and testing purposes.</p>
+<p>Minikube creates a lightweight, single-node Kubernetes cluster on your local machine.</p>
+<p>With Minikube, you can simulate a production-like environment without the need for a full-scale Kubernetes cluster.</p>
+<h2 id=testing-the-project-locally>Testing the Project Locally</h2>
+<p>We’ll leverage Minikube to test our project.</p>
+<h1 id=summary>Summary</h1>
+<p>In this article, we’ve explored the Backend For Frontend (BFF) pattern, microservices, and gRPC. Additionally, we’ve touched upon Kubernetes and Minikube for orchestration and local testing.</p>
+<p>While there are many other concepts related to microservices, such as Distributed Transactions, I hope this article has provided you with a foundational understanding of the microservices ecosystem.</p>
+<h1 id=references>References</h1>
+<p><a href=https://eli.thegreenplace.net/2021/rest-servers-in-go-part-7-graphql/>REST Servers in Go: Part 7 - GraphQL</a></p>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/go/ rel=tag>Go</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/kubernetes/ rel=tag>Kubernetes</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer from Japan
+</div>
+</div>
+</div>
+<aside class=sidebar>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/>Learn gRPC, Go and Kubernetes by building Microservices</a></li>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/job_queues_go/>Implementation of Job Queue model using goroutine and channel</a></li>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/go_concurrency_model/>Go Concurrency Model</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/sort/merge_sort/>Implementation of Merge Sort in Python</a></li>
+<li class=widget__item><a class=widget__link href=/posts/dsa/sort/quick_sort/>Implementation of Quick Sort in Python</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/concurrency/>Concurrency</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/cors/>CORS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/go/>Go</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/grpc/>gRPC</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/http-cookies/>HTTP cookies</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/kubernetes/>Kubernetes</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/microservice/>Microservice</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/network/>Network</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/projects/>Projects</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/system-design/>System Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/2fa/ title=2FA>2FA</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/bfs/ title=BFS>BFS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/dfs/ title=DFS>DFS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/distributed-system/ title="Distributed System">Distributed System</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/english-article/ title="English Article">English Article</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/gcp/ title=GCP>GCP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/graph/ title=Graph>Graph</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/hash-set/ title="Hash Set">Hash Set</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/hash-table/ title="Hash Table">Hash Table</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/heap/ title=Heap>Heap</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/http-cookies/ title="HTTP cookies">HTTP cookies</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese-article/ title="Japanese Article">Japanese Article</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/kubernetes/ title=Kubernetes>Kubernetes</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/merge-sort/ title="Merge Sort">Merge Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/queue/ title=Queue>Queue</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/quick-sort/ title="Quick Sort">Quick Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/sort/ title=Sort>Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/stack/ title=Stack>Stack</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/terraform/ title=Terraform>Terraform</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/terraform-cloud/ title="Terraform Cloud">Terraform Cloud</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/trie/ title=Trie>Trie</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/union-find/ title=Union-Find>Union-Find</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web/ title=Web>Web</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2024 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>
