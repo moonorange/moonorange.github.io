@@ -374,7 +374,7 @@ Go to [localhost:8080](http://localhost:8080/) to interact with bff servers.
 
 GraphQL query
 
-```yml
+```graphql
 query{
   getTasksByTag(tag: "tag1") {
     Text
