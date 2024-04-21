@@ -1,5 +1,5 @@
 ---
-title: 'Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - gRPC MicroServices'
+title: 'Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - Building gRPC Microservices'
 date: '2024-04-19'
 categories: ["Projects", "Go", "Microservice", "gRPC", "Kubernetes"]
 tags: ["Go", "English Article", "Kubernetes"]
@@ -23,17 +23,27 @@ Here is a list of posts in the series:
 
 Our project revolves around three essential components:
 
-1. Microservices (gRPC): We’ll implement two microservices adhering to the Command Query Responsibility Segregation (CQRS) pattern:
+- Microservices (gRPC):
+
+We’ll implement two microservices adhering to the Command Query Responsibility Segregation (CQRS) pattern:
+
 Command Service: Responsible for executing write operations, handling commands, and modifying data.
+
 Query Service: Retrieves data and responds to read queries.
 
-2. Backend For Frontend (BFF): This layer acts as an intermediary between the frontend and the microservices. It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.
+- Backend For Frontend (BFF):
 
-3. Kubernetes for Orchestration and Deployment: We’ll leverage Kubernetes to manage our microservices, ensuring scalability, resilience, and efficient resource utilization.
+This layer acts as an intermediary between the frontend and the microservices.
+
+It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.
+
+- Kubernetes for Orchestration and Deployment:
+
+We’ll leverage Kubernetes to manage our microservices.
 
 {{<figure src="./project_arch.png" alt="Project Architecture" width="80%" height="80%">}}
 
-Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
+Explore the full code [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
 # Microservices
 
@@ -43,7 +53,7 @@ While it’s not necessary and over-engineering for small projects, understandin
 
 We will use gRPC for communication between services.
 
-## gRPC
+## Understanding gRPC
 
 gRPC, developed by Google, is an open-source remote procedure call (RPC) framework. It offers the following features:
 
@@ -61,7 +71,7 @@ These language-agnostic schemas allow us to precisely specify the structure of o
 
 ## Defining protobuf
 
-Let's start with defining Protocol Buffer.
+Let's kickstart by defining Protocol Buffer for our project:
 
 `{PROJECT_ROOT}/proto_go/proto/task.proto`
 
@@ -113,13 +123,13 @@ message ListTasksByTagResponse {
 }
 ```
 
-After defining protobuf, we can generate code automatically from protobuf.
+After defining protobuf, we can automatically generate code from protobuf. 
 
-I will use [buf](https://github.com/bufbuild/buf) to manage protobuf in this project
+We'll use [buf](https://github.com/bufbuild/buf) for managing protobuf in our project.
 
 Refer to the official document to leann how to install and use buf.
 
-Generate Go code from protobuf
+Generate Go code from protobuf:
 
 `{PROJECT_ROOT}/proto_go/`
 
@@ -132,13 +142,11 @@ You can see codes for both gRPC server and client were generated.
 
 ## Implementing gRPC server
 
-Let's implement gRPC server using auto-generated code.
+Let's dive into implementing gRPC servers using auto-generated code.
 
 As I explained, we will implement two gRPC servers, Command Service and Query Service.
 
-The following code will creates a gRPC server and run it locally.
-
-It's almost the same in both services.
+We'll begin by creating two gRPC servers: Command Service and Query Service. The following code illustrates setting up a gRPC server:
 
 `{PROJECT_ROOT/microservices/query_service/cmd/server/main.go`
 
@@ -188,7 +196,9 @@ func main() {
 
 ### Implementing TaskService
 
-Let's implement `TaskService.ListTaskByTag` in query service.
+Next, we'll implement methods within the TaskService interface for both Query and Command Services. 
+
+Here's a snippet demonstrating the implementation:
 
 In reality, you will use some sort of DB, but here just return values for simplicity.
 
@@ -218,8 +228,6 @@ func (t *taskServer) ListTasksByTag(ctx context.Context, req *connect.Request[ge
 ```
 
 Let's implement `TaskService.CreateTask` in command service.
-
-In reality, you will use some sort of DB, but here just return values for simplicity.
 
 `{PROJECT_ROOT/microservices/command_service/cmd/server/main.go`
 
@@ -283,12 +291,12 @@ So far we have implemented two micro services, let's implement BFF using GraphQL
 
 # Summary
 
-We have learned about gRPC and Protocol Buffer and implemented two micro services, query service and command service in this post.
+In this post, we have delved into the fundamentals of gRPC and Protocol Buffers.
 
-In part 2 we will implementing BFF speaking GraphQL.
+Also, we have implemented two microservices: Query Service and Command Service.
+
+In part 2 we will explore GraphQL and construct our BFF layer.
 
 # References
 
-[REST Servers in Go: Part 7 - GraphQL](https://eli.thegreenplace.net/2021/rest-servers-in-go-part-7-graphql/)
-
-[Building GraphQL servers in golang](https://gqlgen.com/getting-started/)
+[Try the Buf CLI](https://buf.build/docs/tutorials/getting-started-with-buf-cli#resolve-go-dependencies)

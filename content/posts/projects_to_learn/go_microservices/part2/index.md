@@ -249,3 +249,9 @@ query{
 We have learned about BFF and GraphQL and implemented BFF.
 
 In part 3 we will orchestrate services by Kubernetes.
+
+# References
+
+[REST Servers in Go: Part 7 - GraphQL](https://eli.thegreenplace.net/2021/rest-servers-in-go-part-7-graphql/)
+
+[Building GraphQL servers in golang](https://gqlgen.com/getting-started/)
