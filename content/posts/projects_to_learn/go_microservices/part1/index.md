@@ -1,5 +1,5 @@
 ---
-title: 'Learn gRPC, Go and Kubernetes by building Microservices: Part 1 - gRPC MicroServices'
+title: 'Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - gRPC MicroServices'
 date: '2024-04-19'
 categories: ["Projects", "Go", "Microservice", "gRPC", "Kubernetes"]
 tags: ["Go", "English Article", "Kubernetes"]
@@ -7,7 +7,7 @@ tags: ["Go", "English Article", "Kubernetes"]
 
 # Intro
 
-This is the first post in a series about learning gRPC, Go and Kubernetes by building Microservices in Go.
+This is the first post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 
 In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL.
 
@@ -32,6 +32,8 @@ Query Service: Retrieves data and responds to read queries.
 3. Kubernetes for Orchestration and Deployment: We’ll leverage Kubernetes to manage our microservices, ensuring scalability, resilience, and efficient resource utilization.
 
 {{<figure src="./project_arch.png" alt="Project Architecture" width="80%" height="80%">}}
+
+Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
 # Microservices
 

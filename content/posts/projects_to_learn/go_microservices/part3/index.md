@@ -1,5 +1,5 @@
 ---
-title: 'Learn gRPC, Go and Kubernetes by building Microservices: Part 3 - Kubernetes'
+title: 'Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 3 - Kubernetes'
 date: '2024-04-21'
 categories: ["Projects", "Go", "Microservice", "gRPC", "Kubernetes"]
 tags: ["Go", "English Article", "Kubernetes"]
@@ -7,13 +7,15 @@ tags: ["Go", "English Article", "Kubernetes"]
 
 # Intro
 
-This is the third and last post in a series about learning gRPC, Go and Kubernetes by building Microservices in Go.
+This is the third and last post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 
 Here is a list of posts in the series:
 
 [Part 1 - gRPC Microservices](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1)
 [Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
 [Part 3 - Orchestrating by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
+
+Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
 # Orchestrate services by Kubernetes
 
