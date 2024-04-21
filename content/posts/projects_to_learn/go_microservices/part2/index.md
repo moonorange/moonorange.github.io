@@ -1,6 +1,6 @@
 ---
 title: 'Learn gRPC, Go and Kubernetes by building Microservices: Part 2 - GraphQL BFF'
-date: '2024-04-20'
+date: '2024-04-21'
 categories: ["Projects", "Go", "Microservice", "gRPC", "Kubernetes"]
 tags: ["Go", "English Article", "Kubernetes"]
 ---
@@ -10,9 +10,9 @@ tags: ["Go", "English Article", "Kubernetes"]
 This is the second post in a series about learning gRPC, Go and Kubernetes by building Microservices in Go. 
 Here is a list of posts in the series:
 
-[Part 1 - gRPC Microservices](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1)
-[Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
-[Part 3 - Orchestrating by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
+- [Part 1 - gRPC Microservices](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1)
+- [Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
+- [Part 3 - Orchestrating by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
 
 # BFF
 
