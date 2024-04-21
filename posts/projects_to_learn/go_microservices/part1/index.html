@@ -3,11 +3,11 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - gRPC MicroServices - Kei's Blog</title>
+<title>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - Building gRPC Microservices - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - gRPC MicroServices">
+<meta name=twitter:title content="Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - Building gRPC Microservices">
 <meta name=twitter:description content="Intro This is the first post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL.
 This project serves as an educational endeavor to understand the intricacies of microservices communication and the benefits of using gRPC and GraphQL.
@@ -39,7 +39,7 @@ Here is a list of posts in the series:">
 <main class=main role=main>
 <article class=post>
 <header class=post__header>
-<h1 class=post__title>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - gRPC MicroServices</h1>
+<h1 class=post__title>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - Building gRPC Microservices</h1>
 <div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
 <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2024-04-19T00:00:00Z>April 19, 2024</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/projects/ rel=category>Projects</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>, <a class=meta__link href=/categories/microservice/ rel=category>Microservice</a>, <a class=meta__link href=/categories/grpc/ rel=category>gRPC</a>, <a class=meta__link href=/categories/kubernetes/ rel=category>Kubernetes</a>
@@ -51,7 +51,7 @@ Here is a list of posts in the series:">
 <div class=toc__menu>
 <nav id=TableOfContents>
 <ul>
-<li><a href=#grpc>gRPC</a></li>
+<li><a href=#understanding-grpc>Understanding gRPC</a></li>
 <li><a href=#protocol-buffers-protobuf>Protocol Buffers (protobuf)</a></li>
 <li><a href=#defining-protobuf>Defining protobuf</a></li>
 <li><a href=#implementing-grpc-server>Implementing gRPC server</a>
@@ -73,27 +73,29 @@ Here is a list of posts in the series:">
 <a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></p>
 <h1 id=project-structureoverview>Project Structure(Overview)</h1>
 <p>Our project revolves around three essential components:</p>
-<ol>
-<li>
-<p>Microservices (gRPC): We’ll implement two microservices adhering to the Command Query Responsibility Segregation (CQRS) pattern:
-Command Service: Responsible for executing write operations, handling commands, and modifying data.
-Query Service: Retrieves data and responds to read queries.</p>
-</li>
-<li>
-<p>Backend For Frontend (BFF): This layer acts as an intermediary between the frontend and the microservices. It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.</p>
-</li>
-<li>
-<p>Kubernetes for Orchestration and Deployment: We’ll leverage Kubernetes to manage our microservices, ensuring scalability, resilience, and efficient resource utilization.</p>
-</li>
-</ol>
+<ul>
+<li>Microservices (gRPC):</li>
+</ul>
+<p>We’ll implement two microservices adhering to the Command Query Responsibility Segregation (CQRS) pattern:</p>
+<p>Command Service: Responsible for executing write operations, handling commands, and modifying data.</p>
+<p>Query Service: Retrieves data and responds to read queries.</p>
+<ul>
+<li>Backend For Frontend (BFF):</li>
+</ul>
+<p>This layer acts as an intermediary between the frontend and the microservices.</p>
+<p>It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.</p>
+<ul>
+<li>Kubernetes for Orchestration and Deployment:</li>
+</ul>
+<p>We’ll leverage Kubernetes to manage our microservices.</p>
 <figure><img src=./project_arch.png alt="Project Architecture" width=80% height=80%>
 </figure>
-<p>Full code is in <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
+<p>Explore the full code <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
 <h1 id=microservices>Microservices</h1>
 <p>The CQRS pattern separates read and write responsibilities within our system.</p>
 <p>While it’s not necessary and over-engineering for small projects, understanding it can enhance your architectural knowledge.</p>
 <p>We will use gRPC for communication between services.</p>
-<h2 id=grpc>gRPC</h2>
+<h2 id=understanding-grpc>Understanding gRPC</h2>
 <p>gRPC, developed by Google, is an open-source remote procedure call (RPC) framework. It offers the following features:</p>
 <ul>
 <li>Interface Definition with Protocol Buffers: gRPC uses Protocol Buffers as its interface definition language. This ensures clear communication between services.</li>
@@ -105,7 +107,7 @@ Query Service: Retrieves data and responds to read queries.</p>
 <p>We’ll define our service interfaces and messages using <a href=https://protobuf.dev/>Protocol Buffers (protobuf)</a>.</p>
 <p>These language-agnostic schemas allow us to precisely specify the structure of our data.</p>
 <h2 id=defining-protobuf>Defining protobuf</h2>
-<p>Let&rsquo;s start with defining Protocol Buffer.</p>
+<p>Let&rsquo;s kickstart by defining Protocol Buffer for our project:</p>
 <p><code>{PROJECT_ROOT}/proto_go/proto/task.proto</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-proto data-lang=proto>syntax <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;proto3&#34;</span>;<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010>
@@ -152,19 +154,18 @@ Query Service: Retrieves data and responds to read queries.</p>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>ListTasksByTagResponse</span> {<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>   <span style=color:#66d9ef>repeated</span> Task tasks <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
-</span></code></pre></div><p>After defining protobuf, we can generate code automatically from protobuf.</p>
-<p>I will use <a href=https://github.com/bufbuild/buf>buf</a> to manage protobuf in this project</p>
+</span></code></pre></div><p>After defining protobuf, we can automatically generate code from protobuf.</p>
+<p>We&rsquo;ll use <a href=https://github.com/bufbuild/buf>buf</a> for managing protobuf in our project.</p>
 <p>Refer to the official document to leann how to install and use buf.</p>
-<p>Generate Go code from protobuf</p>
+<p>Generate Go code from protobuf:</p>
 <p><code>{PROJECT_ROOT}/proto_go/</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd proto
 buf generate proto
 </code></pre></div><p>You can see codes for both gRPC server and client were generated.</p>
 <h2 id=implementing-grpc-server>Implementing gRPC server</h2>
-<p>Let&rsquo;s implement gRPC server using auto-generated code.</p>
+<p>Let&rsquo;s dive into implementing gRPC servers using auto-generated code.</p>
 <p>As I explained, we will implement two gRPC servers, Command Service and Query Service.</p>
-<p>The following code will creates a gRPC server and run it locally.</p>
-<p>It&rsquo;s almost the same in both services.</p>
+<p>We&rsquo;ll begin by creating two gRPC servers: Command Service and Query Service. The following code illustrates setting up a gRPC server:</p>
 <p><code>{PROJECT_ROOT/microservices/query_service/cmd/server/main.go</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
 	<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>host</span> = <span style=color:#e6db74>&#34;localhost:8082&#34;</span>
@@ -204,7 +205,8 @@ buf generate proto
 	}
 }
 </code></pre></div><h3 id=implementing-taskservice>Implementing TaskService</h3>
-<p>Let&rsquo;s implement <code>TaskService.ListTaskByTag</code> in query service.</p>
+<p>Next, we&rsquo;ll implement methods within the TaskService interface for both Query and Command Services.</p>
+<p>Here&rsquo;s a snippet demonstrating the implementation:</p>
 <p>In reality, you will use some sort of DB, but here just return values for simplicity.</p>
 <p><code>{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>taskServer</span> <span style=color:#66d9ef>struct</span> {
@@ -228,7 +230,6 @@ buf generate proto
 	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewResponse</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>ListTasksByTagResponse</span>{<span style=color:#a6e22e>Tasks</span>: <span style=color:#a6e22e>tasks</span>}), <span style=color:#66d9ef>nil</span>
 }
 </code></pre></div><p>Let&rsquo;s implement <code>TaskService.CreateTask</code> in command service.</p>
-<p>In reality, you will use some sort of DB, but here just return values for simplicity.</p>
 <p><code>{PROJECT_ROOT/microservices/command_service/cmd/server/main.go</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// taskServer implements the TaskService API.
 </span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>taskServer</span> <span style=color:#66d9ef>struct</span> {
@@ -265,11 +266,11 @@ go run cmd/server/main.go
 </span><span style=color:#ae81ff></span>  http://localhost:8081/task.TaskService/CreateTask
 </code></pre></div><p>So far we have implemented two micro services, let&rsquo;s implement BFF using GraphQL next.</p>
 <h1 id=summary>Summary</h1>
-<p>We have learned about gRPC and Protocol Buffer and implemented two micro services, query service and command service in this post.</p>
-<p>In part 2 we will implementing BFF speaking GraphQL.</p>
+<p>In this post, we have delved into the fundamentals of gRPC and Protocol Buffers.</p>
+<p>Also, we have implemented two microservices: Query Service and Command Service.</p>
+<p>In part 2 we will explore GraphQL and construct our BFF layer.</p>
 <h1 id=references>References</h1>
-<p><a href=https://eli.thegreenplace.net/2021/rest-servers-in-go-part-7-graphql/>REST Servers in Go: Part 7 - GraphQL</a></p>
-<p><a href=https://gqlgen.com/getting-started/>Building GraphQL servers in golang</a></p>
+<p><a href=https://buf.build/docs/tutorials/getting-started-with-buf-cli#resolve-go-dependencies>Try the Buf CLI</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
@@ -307,7 +308,7 @@ Software Engineer from Japan
 <ul class=widget__list>
 <li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part3/>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 3 - Kubernetes</a></li>
 <li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part2/>Learn gRPC, GraphQL and Kubernetes by building Microservices in Go: Part 2 - GraphQL BFF</a></li>
-<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part1/>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - gRPC MicroServices</a></li>
+<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part1/>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - Building gRPC Microservices</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/job_queues_go/>Implementation of Job Queue model using goroutine and channel</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/go_concurrency_model/>Go Concurrency Model</a></li>
 </ul>
