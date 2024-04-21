@@ -23,7 +23,7 @@ Query Service: Retrieves data and responds to read queries.
 
 3. Kubernetes for Orchestration and Deployment: We’ll leverage Kubernetes to manage our microservices, ensuring scalability, resilience, and efficient resource utilization.
 
-{{<figure src="./project_arch.png" alt="Project Architecture" width="100%">}}
+{{<figure src="./project_arch.png" alt="Project Architecture" width="80%" height="80%">}}
 
 # Microservices
 
