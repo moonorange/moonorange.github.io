@@ -11,7 +11,7 @@
 <meta name=twitter:description content="Intro In this article, we embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL.
 This project serves as an educational endeavor to understand the intricacies of microservices communication and the benefits of using gRPC and GraphQL.
 Project Structure(Overview) Our project revolves around three essential components:
-  Backend For Frontend (BFF): This layer acts as an intermediary between the frontend and the microservices.">
+  Microservices (gRPC): We’ll implement two microservices adhering to the Command Query Responsibility Segregation (CQRS) pattern: Command Service: Responsible for executing write operations, handling commands, and modifying data.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -53,16 +53,15 @@ Project Structure(Overview) Our project revolves around three essential componen
 <ul>
 <li><a href=#grpc>gRPC</a></li>
 <li><a href=#protocol-buffers-protobuf>Protocol Buffers (protobuf)</a></li>
+<li><a href=#defining-protobuf>Defining protobuf</a></li>
 <li><a href=#implementing-grpc-server>Implementing gRPC server</a>
 <ul>
-<li><a href=#run-grpc-server>Run gRPC server</a></li>
-<li><a href=#handler>Handler</a></li>
-<li><a href=#service>Service</a></li>
+<li><a href=#implementing-taskservice>Implementing TaskService</a></li>
 </ul>
 </li>
 </ul>
 <ul>
-<li><a href=#update-graphql-schema>Update GraphQL Schema</a></li>
+<li><a href=#define-your-graphql-schema>Define Your GraphQL Schema</a></li>
 <li><a href=#preventing-over-fetching>Preventing over-fetching</a></li>
 <li><a href=#implementing-resolvers>Implementing resolvers</a></li>
 </ul>
@@ -82,20 +81,22 @@ Project Structure(Overview) Our project revolves around three essential componen
 <p>Our project revolves around three essential components:</p>
 <ol>
 <li>
-<p>Backend For Frontend (BFF): This layer acts as an intermediary between the frontend and the microservices. It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.</p>
-</li>
-<li>
 <p>Microservices (gRPC): We’ll implement two microservices adhering to the Command Query Responsibility Segregation (CQRS) pattern:
 Command Service: Responsible for executing write operations, handling commands, and modifying data.
 Query Service: Retrieves data and responds to read queries.</p>
 </li>
 <li>
+<p>Backend For Frontend (BFF): This layer acts as an intermediary between the frontend and the microservices. It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.</p>
+</li>
+<li>
 <p>Kubernetes for Orchestration and Deployment: We’ll leverage Kubernetes to manage our microservices, ensuring scalability, resilience, and efficient resource utilization.</p>
 </li>
 </ol>
+<figure><img src=./microservice_arch.png alt="Project Architecture" width=100%>
+</figure>
 <h1 id=microservices>Microservices</h1>
 <p>The CQRS pattern separates read and write responsibilities within our system.</p>
-<p>While it’s not necessary for small projects, understanding it can enhance your architectural knowledge.</p>
+<p>While it’s not necessary and over-engineering for small projects, understanding it can enhance your architectural knowledge.</p>
 <p>We will use gRPC for communication between services.</p>
 <h2 id=grpc>gRPC</h2>
 <p>gRPC, developed by Google, is an open-source remote procedure call (RPC) framework. It offers the following features:</p>
@@ -108,8 +109,9 @@ Query Service: Retrieves data and responds to read queries.</p>
 <h2 id=protocol-buffers-protobuf>Protocol Buffers (protobuf)</h2>
 <p>We’ll define our service interfaces and messages using <a href=https://protobuf.dev/>Protocol Buffers (protobuf)</a>.</p>
 <p>These language-agnostic schemas allow us to precisely specify the structure of our data.</p>
-<p>Define protobuf</p>
-<p>This is a part of the protobuf</p>
+<h2 id=defining-protobuf>Defining protobuf</h2>
+<p>Let&rsquo;s start with defining Protocol Buffer.</p>
+<p><code>{PROJECT_ROOT}/proto_go/proto/task.proto</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-proto data-lang=proto>syntax <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;proto3&#34;</span>;<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>import</span> <span style=color:#e6db74>&#34;google/protobuf/empty.proto&#34;</span>;<span style=color:#960050;background-color:#1e0010>
@@ -122,19 +124,18 @@ Query Service: Retrieves data and responds to read queries.</p>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>service</span> TaskService {<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>rpc</span> CreateTask(CreateTaskRequest) <span style=color:#66d9ef>returns</span> (CreateTaskResponse);<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>rpc</span> GetTask(GetTaskRequest) <span style=color:#66d9ef>returns</span> (GetTaskResponse);<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>rpc</span> ListTasksByTag(ListTasksByTagRequest) <span style=color:#66d9ef>returns</span> (ListTasksByTagResponse);<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>Task</span> {<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>int32</span> id <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>string</span> text <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>;<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>repeated</span> <span style=color:#66d9ef>string</span> tags <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>;<span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>int64</span> due <span style=color:#f92672>=</span> <span style=color:#ae81ff>4</span>;<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>CreateTaskRequest</span> {<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>string</span> text <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>repeated</span> <span style=color:#66d9ef>string</span> tags <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>;<span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>int64</span> due <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>;<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>CreateTaskResponse</span> {<span style=color:#960050;background-color:#1e0010>
@@ -148,78 +149,142 @@ Query Service: Retrieves data and responds to read queries.</p>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>GetTaskResponse</span> {<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>  Task task <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>ListTasksByTagRequest</span> {<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>  <span style=color:#66d9ef>string</span> tag_name <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>message</span> <span style=color:#a6e22e>ListTasksByTagResponse</span> {<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>   <span style=color:#66d9ef>repeated</span> Task tasks <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span>}<span style=color:#960050;background-color:#1e0010>
 </span></code></pre></div><p>After defining protobuf, we can generate code automatically from protobuf.</p>
 <p>I will use <a href=https://github.com/bufbuild/buf>buf</a> to manage protobuf in this project</p>
 <p>Refer to the official document to leann how to install and use buf.</p>
 <p>Generate Go code from protobuf</p>
+<p><code>{PROJECT_ROOT}/proto_go/</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd proto
 buf generate proto
-</code></pre></div><h2 id=implementing-grpc-server>Implementing gRPC server</h2>
-<p>Let&rsquo;s implement gRPC server</p>
+</code></pre></div><p>You can see codes for both gRPC server and client were generated.</p>
+<h2 id=implementing-grpc-server>Implementing gRPC server</h2>
+<p>Let&rsquo;s implement gRPC server using auto-generated code.</p>
 <p>As I explained, we will implement two gRPC servers, Command Service and Query Service.</p>
-<h3 id=run-grpc-server>Run gRPC server</h3>
 <p>The following code will creates a gRPC server and run it locally.</p>
-<p>It&rsquo;s the same in both services.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+<p>It&rsquo;s almost the same in both services.</p>
+<p><code>{PROJECT_ROOT/microservices/query_service/cmd/server/main.go</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>host</span> = <span style=color:#e6db74>&#34;localhost:8082&#34;</span>
 
-<span style=color:#f92672>import</span> (
-	<span style=color:#e6db74>&#34;fmt&#34;</span>
-	<span style=color:#e6db74>&#34;net&#34;</span>
-	<span style=color:#e6db74>&#34;os&#34;</span>
-	<span style=color:#e6db74>&#34;os/signal&#34;</span>
-	<span style=color:#e6db74>&#34;syscall&#34;</span>
+	<span style=color:#a6e22e>mux</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>NewServeMux</span>()
+	<span style=color:#a6e22e>path</span>, <span style=color:#a6e22e>handler</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>NewTaskServiceHandler</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>taskServer</span>{})
+	<span style=color:#a6e22e>mux</span>.<span style=color:#a6e22e>Handle</span>(<span style=color:#a6e22e>path</span>, <span style=color:#a6e22e>handler</span>)
+	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;... Listening on&#34;</span>, <span style=color:#a6e22e>host</span>)
 
-	<span style=color:#e6db74>&#34;github.com/sirupsen/logrus&#34;</span>
-	<span style=color:#e6db74>&#34;google.golang.org/grpc&#34;</span>
-)
-
-<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-	<span style=color:#75715e>// Create a listener on TCP port
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>port</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>8081</span>
-	<span style=color:#a6e22e>listener</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>net</span>.<span style=color:#a6e22e>Listen</span>(<span style=color:#e6db74>&#34;tcp&#34;</span>, <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;:%d&#34;</span>, <span style=color:#a6e22e>port</span>))
-	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
-		<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#e6db74>&#34;failed to listen: &#34;</span>, <span style=color:#a6e22e>err</span>)
-	}
-
-	<span style=color:#75715e>// Create a gRPC server
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>grpc</span>.<span style=color:#a6e22e>NewServer</span>()
-
-	<span style=color:#75715e>// Listen for OS signals to stop the server when receiving a cancel signal
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>sigChan</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Signal</span>, <span style=color:#ae81ff>1</span>)
-	<span style=color:#a6e22e>signal</span>.<span style=color:#a6e22e>Notify</span>(<span style=color:#a6e22e>sigChan</span>, <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Interrupt</span>, <span style=color:#a6e22e>syscall</span>.<span style=color:#a6e22e>SIGINT</span>, <span style=color:#a6e22e>syscall</span>.<span style=color:#a6e22e>SIGTERM</span>)
-
+	<span style=color:#a6e22e>eg</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>errgroup</span>.<span style=color:#a6e22e>Group</span>{}
 	<span style=color:#75715e>// Start the gRPC server
-</span><span style=color:#75715e></span>	<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
-		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>Serve</span>(<span style=color:#a6e22e>listener</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
-			<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#e6db74>&#34;failed to serve: &#34;</span>, <span style=color:#a6e22e>err</span>)
-		}
-		<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Command service is running on port %d&#34;</span>, <span style=color:#a6e22e>port</span>)
-	}()
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Go</span>(<span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>error</span> { <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#a6e22e>host</span>, <span style=color:#a6e22e>h2c</span>.<span style=color:#a6e22e>NewHandler</span>(<span style=color:#a6e22e>mux</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>http2</span>.<span style=color:#a6e22e>Server</span>{})) })
+	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Query service is running on host %s&#34;</span>, <span style=color:#a6e22e>host</span>)
 
-	<span style=color:#75715e>// Wait for a signal to stop the server
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>sig</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>sigChan</span>
-	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Command service is shutting down: %s&#34;</span>, <span style=color:#a6e22e>sig</span>)
-
-	<span style=color:#75715e>// Stop the gRPC server gracefully
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>GracefulStop</span>()
+	<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Wait</span>()
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#e6db74>&#34;failed to serve: &#34;</span>, <span style=color:#a6e22e>err</span>)
+	}
 }
-</code></pre></div><h3 id=handler>Handler</h3>
-<h3 id=service>Service</h3>
+</code></pre></div><p><code>{PROJECT_ROOT/microservices/command_service/cmd/server/main.go</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>host</span> = <span style=color:#e6db74>&#34;localhost:8081&#34;</span>
+
+	<span style=color:#a6e22e>mux</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>NewServeMux</span>()
+	<span style=color:#a6e22e>path</span>, <span style=color:#a6e22e>handler</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>NewTaskServiceHandler</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>taskServer</span>{})
+	<span style=color:#a6e22e>mux</span>.<span style=color:#a6e22e>Handle</span>(<span style=color:#a6e22e>path</span>, <span style=color:#a6e22e>handler</span>)
+	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;... Listening on&#34;</span>, <span style=color:#a6e22e>host</span>)
+
+	<span style=color:#a6e22e>eg</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>errgroup</span>.<span style=color:#a6e22e>Group</span>{}
+	<span style=color:#75715e>// Start the gRPC server
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Go</span>(<span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>error</span> { <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#a6e22e>host</span>, <span style=color:#a6e22e>h2c</span>.<span style=color:#a6e22e>NewHandler</span>(<span style=color:#a6e22e>mux</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>http2</span>.<span style=color:#a6e22e>Server</span>{})) })
+	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Command service is running on host %s&#34;</span>, <span style=color:#a6e22e>host</span>)
+
+	<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Wait</span>()
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#e6db74>&#34;failed to serve: &#34;</span>, <span style=color:#a6e22e>err</span>)
+	}
+}
+</code></pre></div><h3 id=implementing-taskservice>Implementing TaskService</h3>
+<p>Let&rsquo;s implement <code>TaskService.ListTaskByTag</code> in query service.</p>
+<p>In reality, you will use some sort of DB, but here just return values for simplicity.</p>
+<p><code>{PROJECT_ROOT/microservices/query_service/cmd/server/main.go</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>taskServer</span> <span style=color:#66d9ef>struct</span> {
+	<span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>UnimplementedTaskServiceHandler</span>
+}
+
+<span style=color:#75715e>// Just return a list of tasks for simplicity
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>taskServer</span>) <span style=color:#a6e22e>ListTasksByTag</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>req</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>Request</span>[<span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>ListTasksByTagRequest</span>]) (<span style=color:#f92672>*</span><span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>Response</span>[<span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>ListTasksByTagResponse</span>], <span style=color:#66d9ef>error</span>) {
+	<span style=color:#a6e22e>tasks</span> <span style=color:#f92672>:=</span> []<span style=color:#f92672>*</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>Task</span>{
+		{
+			<span style=color:#a6e22e>Id</span>:   <span style=color:#ae81ff>1</span>,
+			<span style=color:#a6e22e>Text</span>: <span style=color:#e6db74>&#34;This is a task&#34;</span>,
+			<span style=color:#a6e22e>Tags</span>: []<span style=color:#66d9ef>string</span>{<span style=color:#a6e22e>req</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>TagName</span>},
+		},
+		{
+			<span style=color:#a6e22e>Id</span>:   <span style=color:#ae81ff>2</span>,
+			<span style=color:#a6e22e>Text</span>: <span style=color:#e6db74>&#34;This is a task&#34;</span>,
+			<span style=color:#a6e22e>Tags</span>: []<span style=color:#66d9ef>string</span>{<span style=color:#a6e22e>req</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>TagName</span>},
+		},
+	}
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewResponse</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>ListTasksByTagResponse</span>{<span style=color:#a6e22e>Tasks</span>: <span style=color:#a6e22e>tasks</span>}), <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><p>Let&rsquo;s implement <code>TaskService.CreateTask</code> in command service.</p>
+<p>In reality, you will use some sort of DB, but here just return values for simplicity.</p>
+<p><code>{PROJECT_ROOT/microservices/command_service/cmd/server/main.go</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// taskServer implements the TaskService API.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>taskServer</span> <span style=color:#66d9ef>struct</span> {
+	<span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>UnimplementedTaskServiceHandler</span>
+}
+
+<span style=color:#75715e>// Just return a task for simplicity
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>taskServer</span>) <span style=color:#a6e22e>CreateTask</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>req</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>Request</span>[<span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>CreateTaskRequest</span>]) (<span style=color:#f92672>*</span><span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>Response</span>[<span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>CreateTaskResponse</span>], <span style=color:#66d9ef>error</span>) {
+	<span style=color:#a6e22e>task</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>Task</span>{
+		<span style=color:#a6e22e>Id</span>:   <span style=color:#ae81ff>1</span>,
+		<span style=color:#a6e22e>Text</span>: <span style=color:#a6e22e>req</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Text</span>,
+		<span style=color:#a6e22e>Tags</span>: <span style=color:#a6e22e>req</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Tags</span>,
+	}
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewResponse</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>CreateTaskResponse</span>{<span style=color:#a6e22e>Task</span>: <span style=color:#a6e22e>task</span>}), <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><p>You can check if the servers returns expected result by buf curl</p>
+<p>Start the query service.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd microservices/query_service
+go run cmd/server/main.go
+</code></pre></div><p>Start the command service.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd microservices/command_service
+go run cmd/server/main.go
+</code></pre></div><p>Curl API</p>
+<p>ListTasks in query service.</p>
+<p><code>{PROJECT_ROOT}/proto_go/</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>buf curl <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --schema proto <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --data <span style=color:#e6db74>&#39;&#39;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  http://localhost:8082/task.TaskService/ListTasksByTag
+</code></pre></div><p>Create Tasks in command service</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>buf curl <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --schema proto <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --data <span style=color:#e6db74>&#39;{&#34;text&#34;: &#34;task&#34;, &#34;tags&#34;: [&#34;tag1&#34;, &#34;tag2&#34;]}&#39;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  http://localhost:8081/task.TaskService/CreateTask
+</code></pre></div><p>So far we have implemented two micro services, let&rsquo;s implement BFF using GraphQL next.</p>
 <h1 id=bff>BFF</h1>
 <p>Backend For Frontend (BFF) is an architectural pattern where a dedicated backend service is created for each frontend application or client type.</p>
 <p>Its primary role is to act as an intermediary between the frontend and the backend services.</p>
 <p>BFF aggregates data from multiple backend services and provides tailored APIs optimized for specific frontend requirements.</p>
 <p>BFF decouples the frontend from the complexities of backend services. It allows frontend teams to evolve their applications independently without being tied to backend changes.</p>
 <p>By reducing over-fetching and under-fetching of data, BFF improves performance and ensures a smoother user experience.</p>
-<p>Speak to two microservices and return results to clients in the project.</p>
+<p>Speak to two microservices and return results to clients in this project.</p>
 <h1 id=graphql>GraphQL</h1>
 <p>GraphQL is a query language for APIs and a runtime for executing those queries with existing data.</p>
 <p>GraphQL enables clients to request only the data they need. Clients can specify the shape and structure of the response, avoiding unnecessary data retrieval.</p>
 <p>Unlike traditional REST APIs, GraphQL provides a more flexible and efficient approach to data fetching. It allows clients to retrieve nested data in a single request.</p>
 <h1 id=implementing-bff>Implementing BFF</h1>
 <p>In practice, the BFF aggregates data from microservices and constructs GraphQL responses for clients. This ensures that frontend applications receive precisely the data they require, enhancing performance and maintainability.</p>
-<p>We are going to use <a href=https://github.com/99designs/gqlgen>gqlgen</a></p>
+<p>We are going to use <a href=https://github.com/99designs/gqlgen>gqlgen</a> to generate code automatically from GraphQL schema for this project.</p>
 <p>Add github.com/99designs/gqlgen to your project&rsquo;s tools.go</p>
+<p><code>{PROJECT_ROOT}/bff/</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>printf <span style=color:#e6db74>&#39;// +build tools\npackage tools\nimport (_ &#34;github.com/99designs/gqlgen&#34;\n _ &#34;github.com/99designs/gqlgen/graphql/introspection&#34;)&#39;</span> | gofmt &gt; tools.go
 
 go mod tidy
@@ -227,9 +292,10 @@ go mod tidy
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>go run github.com/99designs/gqlgen init
 
 go mod tidy
-</code></pre></div><h2 id=update-graphql-schema>Update GraphQL Schema</h2>
+</code></pre></div><p>Now you get the template of GraphQL server.</p>
+<h2 id=define-your-graphql-schema>Define Your GraphQL Schema</h2>
 <p>Update graph/schema.graphqls like below.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-graphql data-lang=graphql><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Query</span> {
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-graphqls data-lang=graphqls><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Query</span> {
   getTask(id: <span style=color:#a6e22e>ID</span>!): <span style=color:#a6e22e>Task</span>
 
   getTasksByTag(tag: <span style=color:#a6e22e>String</span>!): [<span style=color:#a6e22e>Task</span>]
@@ -317,21 +383,22 @@ go mod tidy
 </code></pre></div><h2 id=implementing-resolvers>Implementing resolvers</h2>
 <p>Let&rsquo;s implement resolvers to get and create data via microservices.</p>
 <p><code>bff/graph/schema.resolvers.go</code></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// GetTask is the resolver for the getTask field.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>queryResolver</span>) <span style=color:#a6e22e>GetTask</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>id</span> <span style=color:#66d9ef>string</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, <span style=color:#66d9ef>error</span>) {
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// GetTasksByTag is the resolver for the getTasksByTag field.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>queryResolver</span>) <span style=color:#a6e22e>GetTasksByTag</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tag</span> <span style=color:#66d9ef>string</span>) ([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, <span style=color:#66d9ef>error</span>) {
 	<span style=color:#75715e>// Access to query service
 </span><span style=color:#75715e></span>	<span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>NewTaskServiceClient</span>(<span style=color:#e6db74>&#34;http://localhost:8082&#34;</span>)
-	<span style=color:#a6e22e>res</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>GetTask</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>GetTaskRequest</span>{
-		<span style=color:#a6e22e>TaskId</span>: <span style=color:#e6db74>&#34;1&#34;</span>,
+	<span style=color:#a6e22e>res</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>ListTasksByTag</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>ListTasksByTagRequest</span>{
+		<span style=color:#a6e22e>TagName</span>: <span style=color:#e6db74>&#34;tag1&#34;</span>,
 	}))
 	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
 		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
 	}
-	<span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>{
-		<span style=color:#a6e22e>ID</span>:   string(<span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Id</span>),
-		<span style=color:#a6e22e>Text</span>: <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Text</span>,
-		<span style=color:#a6e22e>Tags</span>: <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Tags</span>}, <span style=color:#66d9ef>nil</span>
-}
+
+	<span style=color:#a6e22e>models</span> <span style=color:#f92672>:=</span> make([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, len(<span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Tasks</span>))
+	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>t</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Tasks</span> {
+		<span style=color:#a6e22e>models</span>[<span style=color:#a6e22e>i</span>] = <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>{<span style=color:#a6e22e>ID</span>: string(<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Id</span>), <span style=color:#a6e22e>Text</span>: <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Text</span>, <span style=color:#a6e22e>Tags</span>: <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Tags</span>}
+	}
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>models</span>, <span style=color:#66d9ef>nil</span>
 </code></pre></div><p>Let&rsquo;s run all servers and check if bff server returns expected values</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd bff
 go run cmd/server/main.go
