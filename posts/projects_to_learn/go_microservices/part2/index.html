@@ -1,0 +1,383 @@
+<!doctype html><html class=no-js lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<title>Learn gRPC, Go and Kubernetes by building Microservices: Part 2 - GraphQL BFF - Kei's Blog</title>
+<script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
+<meta name=description content>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Learn gRPC, Go and Kubernetes by building Microservices: Part 2 - GraphQL BFF">
+<meta name=twitter:description content="Intro This is the second post in a series about learning gRPC, Go and Kubernetes by building Microservices in Go. Here is a list of posts in the series:
+Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Orchestrating by Kubernetes
+BFF Backend For Frontend (BFF) is an architectural pattern where a dedicated backend service is created for each frontend application or client type.
+Its primary role is to act as an intermediary between the frontend and the backend services.">
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=dns-prefetch href=//fonts.gstatic.com>
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=/css/custom.css>
+<link rel="shortcut icon" href=/favicon.ico>
+</head>
+<body class=body>
+<div class="container container--outer">
+<header class=header>
+<div class="container header__container">
+<div class=logo>
+<a class=logo__link href=/ title="Kei's Blog" rel=home>
+<div class="logo__item logo__text">
+<div class=logo__title>Kei's Blog</div>
+</div>
+</a>
+</div>
+<div class=divider></div>
+</div>
+</header>
+<div class="wrapper flex">
+<div class=primary>
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>Learn gRPC, Go and Kubernetes by building Microservices: Part 2 - GraphQL BFF</h1>
+<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2024-04-20T00:00:00Z>April 20, 2024</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/projects/ rel=category>Projects</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>, <a class=meta__link href=/categories/microservice/ rel=category>Microservice</a>, <a class=meta__link href=/categories/grpc/ rel=category>gRPC</a>, <a class=meta__link href=/categories/kubernetes/ rel=category>Kubernetes</a>
+</span>
+</div></div>
+</header>
+<div class="post__toc toc">
+<div class=toc__title>Page content</div>
+<div class=toc__menu>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#define-your-graphql-schema>Define Your GraphQL Schema</a></li>
+<li><a href=#preventing-over-fetching>Preventing over-fetching</a></li>
+<li><a href=#implementing-resolvers>Implementing resolvers</a></li>
+</ul>
+</nav>
+</div>
+</div><div class="content post__content clearfix">
+<h1 id=intro>Intro</h1>
+<p>This is the second post in a series about learning gRPC, Go and Kubernetes by building Microservices in Go.
+Here is a list of posts in the series:</p>
+<p><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1>Part 1 - gRPC Microservices</a>
+<a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2>Part 2 - GraphQL BFF</a>
+<a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></p>
+<h1 id=bff>BFF</h1>
+<p>Backend For Frontend (BFF) is an architectural pattern where a dedicated backend service is created for each frontend application or client type.</p>
+<p>Its primary role is to act as an intermediary between the frontend and the backend services.</p>
+<p>BFF aggregates data from multiple backend services and provides tailored APIs optimized for specific frontend requirements.</p>
+<p>BFF decouples the frontend from the complexities of backend services. It allows frontend teams to evolve their applications independently without being tied to backend changes.</p>
+<p>By reducing over-fetching and under-fetching of data, BFF improves performance and ensures a smoother user experience.</p>
+<p>Speak to two microservices and return results to clients in this project.</p>
+<h1 id=graphql>GraphQL</h1>
+<p>GraphQL is a query language for APIs and a runtime for executing those queries with existing data.</p>
+<p>GraphQL enables clients to request only the data they need. Clients can specify the shape and structure of the response, avoiding unnecessary data retrieval.</p>
+<p>Unlike traditional REST APIs, GraphQL provides a more flexible and efficient approach to data fetching. It allows clients to retrieve nested data in a single request.</p>
+<h1 id=implementing-bff>Implementing BFF</h1>
+<p>In practice, the BFF aggregates data from microservices and constructs GraphQL responses for clients. This ensures that frontend applications receive precisely the data they require, enhancing performance and maintainability.</p>
+<p>We are going to use <a href=https://github.com/99designs/gqlgen>gqlgen</a> to generate code automatically from GraphQL schema for this project.</p>
+<p>Add github.com/99designs/gqlgen to your project&rsquo;s tools.go</p>
+<p><code>{PROJECT_ROOT}/bff/</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>printf <span style=color:#e6db74>&#39;// +build tools\npackage tools\nimport (_ &#34;github.com/99designs/gqlgen&#34;\n _ &#34;github.com/99designs/gqlgen/graphql/introspection&#34;)&#39;</span> | gofmt &gt; tools.go
+
+go mod tidy
+</code></pre></div><p>Initialize gqlgen config and generate models</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>go run github.com/99designs/gqlgen init
+
+go mod tidy
+</code></pre></div><p>Now you get the template of GraphQL server.</p>
+<h2 id=define-your-graphql-schema>Define Your GraphQL Schema</h2>
+<p>Update graph/schema.graphqls like below.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-graphqls data-lang=graphqls><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Query</span> {
+  getTask(id: <span style=color:#a6e22e>ID</span>!): <span style=color:#a6e22e>Task</span>
+
+  getTasksByTag(tag: <span style=color:#a6e22e>String</span>!): [<span style=color:#a6e22e>Task</span>]
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Mutation</span> {
+  createTask(<span style=color:#66d9ef>input</span>: <span style=color:#a6e22e>NewTask</span>!): <span style=color:#a6e22e>Task</span>!
+}
+
+<span style=color:#a6e22e>type</span> Task {
+  Id: <span style=color:#a6e22e>ID</span>!
+  Text: <span style=color:#a6e22e>String</span>!
+  Tags: [<span style=color:#a6e22e>String</span>!]
+  Attachments: [<span style=color:#a6e22e>Attachment</span>!]
+}
+
+<span style=color:#66d9ef>input</span> <span style=color:#a6e22e>NewTask</span> {
+  Text: <span style=color:#a6e22e>String</span>!
+  Tags: [<span style=color:#a6e22e>String</span>!]
+  Attachments: [<span style=color:#a6e22e>NewAttachment</span>!]
+
+}
+
+<span style=color:#66d9ef>scalar</span> <span style=color:#a6e22e>Time</span>
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Attachment</span> {
+  Name: <span style=color:#a6e22e>String</span>!
+  Date: <span style=color:#a6e22e>Time</span>
+  Contents: <span style=color:#a6e22e>String</span>
+}
+
+<span style=color:#66d9ef>input</span> <span style=color:#a6e22e>NewAttachment</span> {
+  Name: <span style=color:#a6e22e>String</span>!
+  Date: <span style=color:#a6e22e>Time</span>
+  Contents: <span style=color:#a6e22e>String</span>
+}
+</code></pre></div><p>I added a new model named Attachment which does not exist in microservices' model.</p>
+<p>This model is for showing GraphQL benefits of fetching only necessary data.</p>
+<p>Generate code from the schema</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>go run github.com/99designs/gqlgen generate
+</code></pre></div><h2 id=preventing-over-fetching>Preventing over-fetching</h2>
+<p>Suppose we do not want to load the Attachment on the Task unless the user actually asked for it.</p>
+<p>To archive that, replace the generated Task model with something slightly more realistic.</p>
+<p>First let’s enable autobind, allowing gqlgen to use your custom models if it can find them rather than generating them.</p>
+<p>We do this by uncommenting the autobind config line in gqlgen.yml:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># gqlgen will search for any type names in the schema in these go packages</span>
+<span style=color:#75715e># if they match it will use them, otherwise it will generate them.</span>
+<span style=color:#f92672>autobind</span>:
+ - <span style=color:#e6db74>&#34;bff/graph/model&#34;</span>
+</code></pre></div><p>And add Task fields resolver config in gqlgen.yml to generate resolver for Attachment field</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># This section declares type mapping between the GraphQL and go type systems</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># The first line in each type will be used as defaults for resolver arguments and</span>
+<span style=color:#75715e># modelgen, the others will be allowed when binding to fields. Configure them to</span>
+<span style=color:#75715e># your liking</span>
+<span style=color:#f92672>models</span>:
+  <span style=color:#f92672>ID</span>:
+    <span style=color:#f92672>model</span>:
+      - <span style=color:#ae81ff>github.com/99designs/gqlgen/graphql.ID</span>
+      - <span style=color:#ae81ff>github.com/99designs/gqlgen/graphql.Int</span>
+      - <span style=color:#ae81ff>github.com/99designs/gqlgen/graphql.Int64</span>
+      - <span style=color:#ae81ff>github.com/99designs/gqlgen/graphql.Int32</span>
+  <span style=color:#f92672>Int</span>:
+    <span style=color:#f92672>model</span>:
+      - <span style=color:#ae81ff>github.com/99designs/gqlgen/graphql.Int</span>
+      - <span style=color:#ae81ff>github.com/99designs/gqlgen/graphql.Int64</span>
+      - <span style=color:#ae81ff>github.com/99designs/gqlgen/graphql.Int32</span>
+  <span style=color:#f92672>Task</span>:
+    <span style=color:#f92672>fields</span>:
+      <span style=color:#f92672>Attachments</span>:
+</code></pre></div><p>Next, create a new file called graph/model/task.go</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>model</span>
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Task</span> <span style=color:#66d9ef>struct</span> {
+	<span style=color:#a6e22e>ID</span>   <span style=color:#66d9ef>string</span>   <span style=color:#e6db74>`json:&#34;Id&#34;`</span>
+	<span style=color:#a6e22e>Text</span> <span style=color:#66d9ef>string</span>   <span style=color:#e6db74>`json:&#34;Text&#34;`</span>
+	<span style=color:#a6e22e>Tags</span> []<span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;Tags,omitempty&#34;`</span>
+	<span style=color:#a6e22e>Attachment</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Attachment</span> <span style=color:#e6db74>`json:&#34;Attachment,omitempty&#34;`</span>
+}
+</code></pre></div><p>You can see Attachments resolver was implemented.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// Attachments is the resolver for the Attachments field.
+</span><span style=color:#75715e>// If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>taskResolver</span>) <span style=color:#a6e22e>Attachments</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>obj</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>) ([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Attachment</span>, <span style=color:#66d9ef>error</span>) {
+	panic(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;not implemented&#34;</span>))
+</code></pre></div><h2 id=implementing-resolvers>Implementing resolvers</h2>
+<p>Let&rsquo;s implement resolvers to get and create data via microservices.</p>
+<p><code>bff/graph/schema.resolvers.go</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// GetTasksByTag is the resolver for the getTasksByTag field.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>queryResolver</span>) <span style=color:#a6e22e>GetTasksByTag</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tag</span> <span style=color:#66d9ef>string</span>) ([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, <span style=color:#66d9ef>error</span>) {
+	<span style=color:#75715e>// Access to query service
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>NewTaskServiceClient</span>(<span style=color:#e6db74>&#34;http://localhost:8082&#34;</span>)
+	<span style=color:#a6e22e>res</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>ListTasksByTag</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>ListTasksByTagRequest</span>{
+		<span style=color:#a6e22e>TagName</span>: <span style=color:#e6db74>&#34;tag1&#34;</span>,
+	}))
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
+	}
+
+	<span style=color:#a6e22e>models</span> <span style=color:#f92672>:=</span> make([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, len(<span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Tasks</span>))
+	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>t</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Tasks</span> {
+		<span style=color:#a6e22e>models</span>[<span style=color:#a6e22e>i</span>] = <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>{<span style=color:#a6e22e>ID</span>: string(<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Id</span>), <span style=color:#a6e22e>Text</span>: <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Text</span>, <span style=color:#a6e22e>Tags</span>: <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Tags</span>}
+	}
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>models</span>, <span style=color:#66d9ef>nil</span>
+</code></pre></div><p>Let&rsquo;s run all servers and check if bff server returns expected values</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd bff
+go run cmd/server/main.go
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd microservices/query_service
+go run cmd/server/main.go
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd microservices/command_service
+go run cmd/server/main.go
+</code></pre></div><p>Go to <a href=http://localhost:8080/>localhost:8080</a> to interact with bff servers.</p>
+<p>GraphQL query</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-graphql data-lang=graphql><span style=color:#66d9ef>query</span>{
+  <span style=color:#a6e22e>getTasksByTag</span>(tag: <span style=color:#e6db74>&#34;tag1&#34;</span>) {
+    <span style=color:#a6e22e>Text</span>
+    Tags
+    Attachments {
+      Name
+      Date
+      Contents
+    }
+  }
+}
+</code></pre></div><figure><img src=./graphql_playground.png alt="GraphQL Playground" width=100%>
+</figure>
+<h1 id=summary>Summary</h1>
+<p>We have learned about BFF and GraphQL and implemented BFF.</p>
+<p>In part 3 we will orchestrate services by Kubernetes.</p>
+</div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/go/ rel=tag>Go</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/kubernetes/ rel=tag>Kubernetes</a>
+</li>
+</ul>
+</div>
+</footer>
+</article>
+</main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer from Japan
+</div>
+</div>
+</div>
+<aside class=sidebar>
+<div class="widget-recent widget">
+<h4 class=widget__title>Recent Posts</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part1/>Learn gRPC, Go and Kubernetes by building Microservices: Part 1 - gRPC MicroServices</a></li>
+<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part2/>Learn gRPC, Go and Kubernetes by building Microservices: Part 2 - GraphQL BFF</a></li>
+<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part3/>Learn gRPC, Go and Kubernetes by building Microservices: Part 3 - Kubernetes</a></li>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/job_queues_go/>Implementation of Job Queue model using goroutine and channel</a></li>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/go_concurrency_model/>Go Concurrency Model</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-categories widget">
+<h4 class=widget__title>Categories</h4>
+<div class=widget__content>
+<ul class=widget__list>
+<li class=widget__item>
+<a class=widget__link href=/categories/concurrency/>Concurrency</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/cors/>CORS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/cs/>CS</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/dsa/>DSA</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/frontend/>Frontend</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/go/>Go</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/grpc/>gRPC</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/http-cookies/>HTTP cookies</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/kubernetes/>Kubernetes</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/microservice/>Microservice</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/middleware/>Middleware</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/ml/>ML</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/network/>Network</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/programming-language/>Programming Language</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/projects/>Projects</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/public-cloud/>Public Cloud</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/security/>Security</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/software-design/>Software Design</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/system-design/>System Design</a></li>
+</ul>
+</div>
+</div>
+<div class="widget-taglist widget">
+<h4 class=widget__title>Tags</h4>
+<div class=widget__content>
+<a class="widget-taglist__link widget__link btn" href=/tags/2fa/ title=2FA>2FA</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/array/ title=Array>Array</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/asynchronous-programming/ title="Asynchronous Programming">Asynchronous Programming</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/aws/ title=AWS>AWS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/bfs/ title=BFS>BFS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/c++/ title=C++>C++</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/cnn/ title=CNN>CNN</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/db/ title=DB>DB</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/design-pattern/ title="Design Pattern">Design Pattern</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/dfs/ title=DFS>DFS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/distributed-system/ title="Distributed System">Distributed System</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/english-article/ title="English Article">English Article</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/gcp/ title=GCP>GCP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/graph/ title=Graph>Graph</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/hash-set/ title="Hash Set">Hash Set</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/hash-table/ title="Hash Table">Hash Table</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/heap/ title=Heap>Heap</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/http-cookies/ title="HTTP cookies">HTTP cookies</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/japanese-article/ title="Japanese Article">Japanese Article</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/javascript/ title=JavaScript>JavaScript</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/kubernetes/ title=Kubernetes>Kubernetes</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/linked-list/ title="Linked List">Linked List</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/merge-sort/ title="Merge Sort">Merge Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/network/ title=Network>Network</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oauth/ title=OAuth>OAuth</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/oop/ title=OOP>OOP</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/os/ title=OS>OS</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/python/ title=Python>Python</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/queue/ title=Queue>Queue</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/quick-sort/ title="Quick Sort">Quick Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/react/ title=React>React</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redis/ title=Redis>Redis</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/redux/ title=Redux>Redux</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/sort/ title=Sort>Sort</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/stack/ title=Stack>Stack</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/terraform/ title=Terraform>Terraform</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/terraform-cloud/ title="Terraform Cloud">Terraform Cloud</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/trie/ title=Trie>Trie</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/union-find/ title=Union-Find>Union-Find</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web/ title=Web>Web</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
+</div>
+</div>
+<div class="widget-social widget">
+<h4 class="widget-social__title widget__title">Social</h4>
+<div class="widget-social__content widget__content">
+<div class="widget-social__item widget__item">
+<a class="widget-social__link widget__link btn" title=GitHub rel="noopener noreferrer" href=https://github.com/moonorange target=_blank><svg class="widget-social__link-icon icon icon-github" width="24" height="24" viewBox="0 0 384 374"><path d="m192 0C85.9.0.0 85.8.0 191.7c0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2.0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8.0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7.0.0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4.0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5.0 25.6-.2 46.3-.2 52.6.0 5.1 3.5 11.1 13.2 9.2C329 348.2 384 276.4 384 191.7 384 85.8 298 0 192 0z"/></svg>
+<span>GitHub</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<footer class=footer>
+<div class="container footer__container flex">
+<div class=footer__copyright>
+&copy; 2024 Keigo Kida.
+<span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
+</div>
+</div>
+</footer>
+</div>
+<script async defer src=/js/menu.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

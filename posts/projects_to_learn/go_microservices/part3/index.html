@@ -3,19 +3,21 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>AWS - Kei's Blog</title>
+<title>Learn gRPC, Go and Kubernetes by building Microservices: Part 3 - Kubernetes - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="AWS">
-<meta name=twitter:description content="Kei's personal blog about tech">
+<meta name=twitter:title content="Learn gRPC, Go and Kubernetes by building Microservices: Part 3 - Kubernetes">
+<meta name=twitter:description content="Intro This is the third and last post in a series about learning gRPC, Go and Kubernetes by building Microservices in Go.
+Here is a list of posts in the series:
+Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Orchestrating by Kubernetes
+Orchestrate services by Kubernetes Understanding Kubernetes Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 <link rel=stylesheet href=/css/style.css>
 <link rel=stylesheet href=/css/custom.css>
-<link rel=alternate type=application/rss+xml href=/tags/aws/index.xml title="Kei's Blog">
 <link rel="shortcut icon" href=/favicon.ico>
 </head>
 <body class=body>
@@ -34,68 +36,80 @@
 </header>
 <div class="wrapper flex">
 <div class=primary>
-<main class="main list" role=main>
-<header class=main__header>
-<h1 class=main__title>AWS</h1>
-</header><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/public_cloud/terraform_provisioning_en/ rel=bookmark>
-Infrastructure Setup Guide on AWS with Terraform
-</a>
-</h2>
-<div class="list__meta meta">
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>Learn gRPC, Go and Kubernetes by building Microservices: Part 3 - Kubernetes</h1>
+<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-12-17T00:00:00Z>December 17, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/public-cloud/ rel=category>Public Cloud</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2024-04-20T00:00:00Z>April 20, 2024</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/projects/ rel=category>Projects</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>, <a class=meta__link href=/categories/microservice/ rel=category>Microservice</a>, <a class=meta__link href=/categories/grpc/ rel=category>gRPC</a>, <a class=meta__link href=/categories/kubernetes/ rel=category>Kubernetes</a>
 </span>
 </div></div>
 </header>
-<div class="content list__excerpt post__content clearfix">
-Infrastructure Setup Guide This document outlines the steps for building a deployment environment for a web service on using AWS and Terraform. Infrastructure CI/CD is also achieved through Terraform Cloud and GitHub Actions. Basic explanations about Terraform are provided. Please note that the information in this document is current as of December 17, 2021. The tools you are using, such as Terraform and Terraform Cloud, may have been updated, so
+<div class="post__toc toc">
+<div class=toc__title>Page content</div>
+<div class=toc__menu>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#understanding-kubernetes>Understanding Kubernetes</a></li>
+<li><a href=#deploying-services-locally-with-minikube>Deploying Services Locally with Minikube</a></li>
+<li><a href=#what-is-minikube>What is Minikube?</a></li>
+<li><a href=#testing-the-project-locally>Testing the Project Locally</a></li>
+</ul>
+</nav>
 </div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/public_cloud/terraform_provisioning_en/>Read more…</a>
+</div><div class="content post__content clearfix">
+<h1 id=intro>Intro</h1>
+<p>This is the third and last post in a series about learning gRPC, Go and Kubernetes by building Microservices in Go.</p>
+<p>Here is a list of posts in the series:</p>
+<p><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1>Part 1 - gRPC Microservices</a>
+<a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2>Part 2 - GraphQL BFF</a>
+<a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></p>
+<h1 id=orchestrate-services-by-kubernetes>Orchestrate services by Kubernetes</h1>
+<h2 id=understanding-kubernetes>Understanding Kubernetes</h2>
+<p>Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.</p>
+<p>Kubernetes abstracts away the underlying infrastructure complexity. It automates tasks like container scheduling, scaling, and load balancing.</p>
+<p>By simplifying deployment and management, Kubernetes allows developers to focus on building and deploying applications without worrying about infrastructure details.</p>
+<h2 id=deploying-services-locally-with-minikube>Deploying Services Locally with Minikube</h2>
+<h2 id=what-is-minikube>What is Minikube?</h2>
+<p>Minikube is a powerful tool that allows us to run a Kubernetes cluster locally.</p>
+<p>It’s particularly useful for development and testing purposes.</p>
+<p>Minikube creates a lightweight, single-node Kubernetes cluster on your local machine.</p>
+<p>With Minikube, you can simulate a production-like environment without the need for a full-scale Kubernetes cluster.</p>
+<h2 id=testing-the-project-locally>Testing the Project Locally</h2>
+<p>We’ll leverage Minikube to test our project.</p>
+<h1 id=summary>Summary</h1>
+<p>In this series of articles, we’ve explored the Backend For Frontend (BFF) pattern, microservices, and gRPC. Additionally, we’ve touched upon Kubernetes and Minikube for orchestration and local testing.</p>
+<p>While there are many other concepts related to microservices, such as Distributed Transactions, I hope this article has provided you with a foundational understanding of the microservices ecosystem.</p>
 </div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/public_cloud/terraform_provisioning/ rel=bookmark>
-Terraformでのインフラ環境構築の手順書
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-12-17T00:00:00Z>December 17, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/public-cloud/ rel=category>Public Cloud</a>
-</span>
-</div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
-インフラ構築の手順書 Terraformを使いWebサービスのデプロイ環境を構築していく際の手順を記述する。 Terraform CloudとGithub Acti
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/go/ rel=tag>Go</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/kubernetes/ rel=tag>Kubernetes</a>
+</li>
+</ul>
 </div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/public_cloud/terraform_provisioning/>Read more…</a>
-</div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/public_cloud/infrastructure_setup_aws/ rel=bookmark>
-awsでのインフラ構築について
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2020-02-12T00:00:00Z>February 12, 2020</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/public-cloud/ rel=category>Public Cloud</a>
-</span>
-</div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
-chapter 1 サーバーというのは、「Linux」や「WindowsServer」など、サーバー用の OS をインストールしたコンピュータのこと VPC AmazonVirtualPrivateCloud の略。ユー
-</div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/public_cloud/infrastructure_setup_aws/>Read more…</a>
-</div>
+</footer>
 </article>
 </main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer from Japan
+</div>
+</div>
 </div>
 <aside class=sidebar>
 <div class="widget-recent widget">
@@ -226,5 +240,6 @@ chapter 1 サーバーというのは、「Linux」や「WindowsServer」など�
 </footer>
 </div>
 <script async defer src=/js/menu.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>

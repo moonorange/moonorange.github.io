@@ -39,6 +39,47 @@
 <article class="list__item post">
 <header class=list__header>
 <h2 class="list__title post__title">
+<a href=/posts/security/2fa/ rel=bookmark>
+Implementing TOTP in Go
+</a>
+</h2>
+<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2023-04-01T00:00:00Z>April 01, 2023</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/security/ rel=category>Security</a>
+</span>
+</div></div>
+</header>
+<div class="content list__excerpt post__content clearfix">
+Introduction In this article, I would like to try implementing a code that generates a one-time password, which is often used in many two-factor authentication functions, called Time-based One-time Password (TOTP), using Go.
+What is Two-Factor Authentication? Before writing the TOTP generation code, let&rsquo;s briefly review what two-factor authentication is.
+There are mainly three types of factors for authentication: knowledge, possession, and biometrics.
+Knowledge: Something only the user knows or remembers, such as a login password.
+</div>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/security/2fa/>Read more…</a>
+</div>
+</article><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
+<a href=/posts/cs/hpbn/ rel=bookmark>
+High Performance Browser Networking
+</a>
+</h2>
+<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2023-01-17T00:00:00Z>January 17, 2023</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/network/ rel=category>Network</a>
+</span>
+</div></div>
+</header>
+<div class="content list__excerpt post__content clearfix">
+WIP
+Chapter 2 Building Blocks of TCP TCP is what provides the abstraction of a reliable network running over an unreliable channel.
+TCP abstracts important parts of network such as retransmission of lost data, congestion control, data integrity, and in-order delivery
+Chapter 3 Building Blocks of UDP Ref. https://hpbn.co/
+</div>
+</article><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
 <a href=/posts/software_design/ddia/ rel=bookmark>
 Designing Data-Intensive Applications
 </a>
@@ -210,48 +251,6 @@ package queue import "sync" type node struct { data interface{} next *node } typ
 <div class="list__footer clearfix">
 <a class="list__footer-readmore btn" href=/posts/dsa/queue_stacks/>Read more…</a>
 </div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/dsa/heap/ rel=bookmark>
-Heap
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-04-13T00:00:00Z>April 13, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
-</span>
-</div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
-Heap Heap is a special Tree-based data structure in which tree is a complete binary tree. Heaps are basically are binary trees with more properties and specifications and there are mainly two types of heaps.
-Rules
-A heap must be a complete binary tree. All of the levels of the tree must be completely filled except maybe the last one. The last level has all keys as left as possible Types of heap Min Heap
-</div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/dsa/heap/>Read more…</a>
-</div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/dsa/tries/ rel=bookmark>
-Tries
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-04-10T00:00:00Z>April 10, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
-</span>
-</div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
-Tries It is commonly used to represent a dictionary for looking up words in a vocabulary
-Implementation https://leetcode.com/problems/implement-trie-prefix-tree/
-Trie() Initializes the trie object. void insert(String word) Inserts the string word into the trie. boolean search(String word) Returns true if the string word is in the trie (i.e., was inserted before), and false otherwise. boolean startsWith(String prefix) Returns true if there is a previously inserted string word that has the prefix, and false otherwise.
-</div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/dsa/tries/>Read more…</a>
-</div>
 </article>
 </main>
 <div class=pagination>
@@ -265,11 +264,11 @@ Trie() Initializes the trie object. void insert(String word) Inserts the string 
 <h4 class=widget__title>Recent Posts</h4>
 <div class=widget__content>
 <ul class=widget__list>
-<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/>Learn gRPC, Go and Kubernetes by building Microservices</a></li>
+<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part1/>Learn gRPC, Go and Kubernetes by building Microservices: Part 1 - gRPC MicroServices</a></li>
+<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part2/>Learn gRPC, Go and Kubernetes by building Microservices: Part 2 - GraphQL BFF</a></li>
+<li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part3/>Learn gRPC, Go and Kubernetes by building Microservices: Part 3 - Kubernetes</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/job_queues_go/>Implementation of Job Queue model using goroutine and channel</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/go_concurrency_model/>Go Concurrency Model</a></li>
-<li class=widget__item><a class=widget__link href=/posts/dsa/sort/merge_sort/>Implementation of Merge Sort in Python</a></li>
-<li class=widget__item><a class=widget__link href=/posts/dsa/sort/quick_sort/>Implementation of Quick Sort in Python</a></li>
 </ul>
 </div>
 </div>
