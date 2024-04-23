@@ -68,9 +68,11 @@ Here is a list of posts in the series:">
 <p>In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL.</p>
 <p>This project serves as an educational endeavor to understand the intricacies of microservices communication and the benefits of using gRPC and GraphQL.</p>
 <p>Here is a list of posts in the series:</p>
-<p><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1>Part 1 - gRPC Microservices</a>
-<a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2>Part 2 - GraphQL BFF</a>
-<a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></p>
+<ul>
+<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1>Part 1 - gRPC Microservices</a></li>
+<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2>Part 2 - GraphQL BFF</a></li>
+<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></li>
+</ul>
 <h1 id=project-structureoverview>Project Structure(Overview)</h1>
 <p>Our project revolves around three essential components:</p>
 <ul>
@@ -91,8 +93,57 @@ Here is a list of posts in the series:">
 <figure><img src=./project_arch.png alt="Project Architecture" width=80% height=80%>
 </figure>
 <p>Explore the full code <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
-<h1 id=microservices>Microservices</h1>
-<p>The CQRS pattern separates read and write responsibilities within our system.</p>
+<p>Directory structure is like below</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>tree .
+.
+├── Makefile
+├── README.md
+├── bff
+│   ├── client
+│   │   └── task_client.go
+│   ├── cmd
+│   │   └── server
+│   │       └── main.go
+│   ├── go.mod
+│   ├── go.sum
+│   ├── gqlgen.yml
+│   ├── graph
+│   │   ├── generated.go
+│   │   ├── model
+│   │   │   ├── models_gen.go
+│   │   │   └── task.go
+│   │   ├── resolver.go
+│   │   ├── schema.graphqls
+│   │   └── schema.resolvers.go
+│   └── tools.go
+├── go.mod
+├── go.sum
+├── microservices
+│   ├── command_service
+│   │   ├── cmd
+│   │   │   └── server
+│   │   │       └── main.go
+│   │   ├── go.mod
+│   │   └── go.sum
+│   └── query_service
+│       ├── cmd
+│       │   └── server
+│       │       └── main.go
+│       ├── go.mod
+│       └── go.sum
+└── proto_go
+    ├── buf.gen.yaml
+    ├── gen
+    │   ├── genconnect
+    │   │   └── task.connect.go
+    │   └── task.pb.go
+    ├── go.mod
+    ├── go.sum
+    └── proto
+        ├── buf.yaml
+        └── task.proto
+</code></pre></div><h1 id=microservices>Microservices</h1>
+<p>The CQRS(Command and Query Responsibility Segregation) pattern separates read and write responsibilities within our system.</p>
 <p>While it’s not necessary and over-engineering for small projects, understanding it can enhance your architectural knowledge.</p>
 <p>We will use gRPC for communication between services.</p>
 <h2 id=understanding-grpc>Understanding gRPC</h2>
@@ -259,13 +310,12 @@ go run cmd/server/main.go
 </span><span style=color:#ae81ff></span>  --schema proto <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  --data <span style=color:#e6db74>&#39;&#39;</span> <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  http://localhost:8082/task.TaskService/ListTasksByTag
-</code></pre></div><p>Create Tasks in command service</p>
+</code></pre></div><p>CreateTask in command service</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>buf curl <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  --schema proto <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  --data <span style=color:#e6db74>&#39;{&#34;text&#34;: &#34;task&#34;, &#34;tags&#34;: [&#34;tag1&#34;, &#34;tag2&#34;]}&#39;</span> <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  http://localhost:8081/task.TaskService/CreateTask
-</code></pre></div><p>So far we have implemented two micro services, let&rsquo;s implement BFF using GraphQL next.</p>
-<h1 id=summary>Summary</h1>
+</code></pre></div><h1 id=summary>Summary</h1>
 <p>In this post, we have delved into the fundamentals of gRPC and Protocol Buffers.</p>
 <p>Also, we have implemented two microservices: Query Service and Command Service.</p>
 <p>In part 2 we will explore GraphQL and construct our BFF layer.</p>

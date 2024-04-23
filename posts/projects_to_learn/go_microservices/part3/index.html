@@ -10,9 +10,9 @@
 <meta name=twitter:title content="Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 3 - Kubernetes">
 <meta name=twitter:description content="Intro This is the third and last post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 Here is a list of posts in the series:
-Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Orchestrating by Kubernetes
-Full code is in here
-Orchestrate services by Kubernetes Understanding Kubernetes Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.">
+ Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Orchestrating by Kubernetes  Full code is in here
+Directory structure is like below
+tree . . ├── Makefile ├── README.md ├── bff │ ├── client │ │ └── task_client.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -53,9 +53,8 @@ Orchestrate services by Kubernetes Understanding Kubernetes Kubernetes is an ope
 <nav id=TableOfContents>
 <ul>
 <li><a href=#understanding-kubernetes>Understanding Kubernetes</a></li>
-<li><a href=#deploying-services-locally-with-minikube>Deploying Services Locally with Minikube</a></li>
-<li><a href=#what-is-minikube>What is Minikube?</a></li>
-<li><a href=#testing-the-project-locally>Testing the Project Locally</a></li>
+<li><a href=#understanding-minikube>Understanding Minikube</a></li>
+<li><a href=#understanding-helm>Understanding Helm</a></li>
 </ul>
 </nav>
 </div>
@@ -63,26 +62,81 @@ Orchestrate services by Kubernetes Understanding Kubernetes Kubernetes is an ope
 <h1 id=intro>Intro</h1>
 <p>This is the third and last post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.</p>
 <p>Here is a list of posts in the series:</p>
-<p><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1>Part 1 - gRPC Microservices</a>
-<a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2>Part 2 - GraphQL BFF</a>
-<a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></p>
+<ul>
+<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1>Part 1 - gRPC Microservices</a></li>
+<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2>Part 2 - GraphQL BFF</a></li>
+<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></li>
+</ul>
 <p>Full code is in <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
-<h1 id=orchestrate-services-by-kubernetes>Orchestrate services by Kubernetes</h1>
+<p>Directory structure is like below</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>tree .
+.
+├── Makefile
+├── README.md
+├── bff
+│   ├── client
+│   │   └── task_client.go
+│   ├── cmd
+│   │   └── server
+│   │       └── main.go
+│   ├── go.mod
+│   ├── go.sum
+│   ├── gqlgen.yml
+│   ├── graph
+│   │   ├── generated.go
+│   │   ├── model
+│   │   │   ├── models_gen.go
+│   │   │   └── task.go
+│   │   ├── resolver.go
+│   │   ├── schema.graphqls
+│   │   └── schema.resolvers.go
+│   └── tools.go
+├── go.mod
+├── go.sum
+├── microservices
+│   ├── command_service
+│   │   ├── cmd
+│   │   │   └── server
+│   │   │       └── main.go
+│   │   ├── go.mod
+│   │   └── go.sum
+│   └── query_service
+│       ├── cmd
+│       │   └── server
+│       │       └── main.go
+│       ├── go.mod
+│       └── go.sum
+└── proto_go
+    ├── buf.gen.yaml
+    ├── gen
+    │   ├── genconnect
+    │   │   └── task.connect.go
+    │   └── task.pb.go
+    ├── go.mod
+    ├── go.sum
+    └── proto
+        ├── buf.yaml
+        └── task.proto
+</code></pre></div><h1 id=orchestrate-services-by-kubernetes>Orchestrate services by Kubernetes</h1>
 <h2 id=understanding-kubernetes>Understanding Kubernetes</h2>
 <p>Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.</p>
-<p>Kubernetes abstracts away the underlying infrastructure complexity. It automates tasks like container scheduling, scaling, and load balancing.</p>
-<p>By simplifying deployment and management, Kubernetes allows developers to focus on building and deploying applications without worrying about infrastructure details.</p>
-<h2 id=deploying-services-locally-with-minikube>Deploying Services Locally with Minikube</h2>
-<h2 id=what-is-minikube>What is Minikube?</h2>
+<p>You can define the desired state and</p>
+<h2 id=understanding-minikube>Understanding Minikube</h2>
 <p>Minikube is a powerful tool that allows us to run a Kubernetes cluster locally.</p>
 <p>It’s particularly useful for development and testing purposes.</p>
 <p>Minikube creates a lightweight, single-node Kubernetes cluster on your local machine.</p>
 <p>With Minikube, you can simulate a production-like environment without the need for a full-scale Kubernetes cluster.</p>
-<h2 id=testing-the-project-locally>Testing the Project Locally</h2>
-<p>We’ll leverage Minikube to test our project.</p>
+<p>We’ll leverage Minikube to run our project locally.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>brew install minikube
+</code></pre></div><h2 id=understanding-helm>Understanding Helm</h2>
+<p>Helm is a package manager for Kubernetes.</p>
+<p>It reduces</p>
 <h1 id=summary>Summary</h1>
 <p>In this series of articles, we’ve explored the Backend For Frontend (BFF) pattern, microservices, and gRPC. Additionally, we’ve touched upon Kubernetes and Minikube for orchestration and local testing.</p>
 <p>While there are many other concepts related to microservices, such as Distributed Transactions, I hope this article has provided you with a foundational understanding of the microservices ecosystem.</p>
+<h1 id=references>References</h1>
+<p><a href="https://www.youtube.com/watch?v=X48VuDVv0do">Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]
+</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
