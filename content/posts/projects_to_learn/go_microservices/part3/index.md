@@ -101,6 +101,9 @@ Services:
 Ingress:
 - Expose http and https routes from external components to services within the cluster
 
+Volumes:
+- Storage which can exists beyond the lifetime of a pod if it's persistent volumens
+
 You can describe what will be deployed in Kubernetes cluster by Kubernetes manifest files, which are JSON or YAML files.
 
 ## Understanding Minikube
