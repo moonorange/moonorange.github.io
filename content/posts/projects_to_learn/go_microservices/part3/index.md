@@ -76,7 +76,32 @@ tree .
 
 Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.
 
-You can define the desired state and 
+Important and basic components of Kubernetes is below:
+
+{{<figure src="./k8s_components.png" alt="k8s Basic Components" width="100%">}}
+
+Nodes:
+- A node is a physical or virtual machine
+
+Cluster:
+- Set of worker machines(nodes)
+- Every cluster has at least one worker node
+
+Pods:
+- Smallest unit of K8s
+- Abstraction over container with shared storage and network resources
+- The "one-container-per-Pod" model is the most common Kubernetes use case
+- Pods are ephemeral resources. Each pod gets its own IP address(New IP address on re-creation)
+
+Services:
+- Provide endpoints(Permanent IP address) for pods
+- Make the set of pods available on the network
+- Load Balancer for pods
+
+Ingress:
+- Expose http and https routes from external components to services within the cluster
+
+You can describe what will be deployed in Kubernetes cluster by Kubernetes manifest files, which are JSON or YAML files.
 
 ## Understanding Minikube
 
@@ -98,7 +123,7 @@ brew install minikube
 
 Helm is a package manager for Kubernetes.
 
-It reduces
+As I explained in the Understanding Kubernetes chapter, you can describe Kubernetes objects by manifest files, but it will be tedious and complicated to manage them if you have many files.
 
 # Summary
 
@@ -108,5 +133,6 @@ While there are many other concepts related to microservices, such as Distribute
 
 # References
 
-[Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]
-](https://www.youtube.com/watch?v=X48VuDVv0do)
+[Kubernetes Documentation](https://kubernetes.io/docs/home/)
+
+[Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]](https://www.youtube.com/watch?v=X48VuDVv0do)
