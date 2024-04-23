@@ -12,7 +12,7 @@
 Here is a list of posts in the series:
  Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Orchestrating by Kubernetes  Full code is in here
 Directory structure is like below
-tree . . ├── Makefile ├── README.md ├── bff │ ├── client │ │ └── task_client.">
+tree . . ├── Makefile ├── README.md ├── bff // BFF talking to clients by GraphQL │ ├── client │ │ └── task_client.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -73,7 +73,7 @@ tree . . ├── Makefile ├── README.md ├── bff │ ├── cli
 .
 ├── Makefile
 ├── README.md
-├── bff
+├── bff // BFF talking to clients by GraphQL
 │   ├── client
 │   │   └── task_client.go
 │   ├── cmd
@@ -93,7 +93,7 @@ tree . . ├── Makefile ├── README.md ├── bff │ ├── cli
 │   └── tools.go
 ├── go.mod
 ├── go.sum
-├── microservices
+├── microservices // Microservices, query and command services
 │   ├── command_service
 │   │   ├── cmd
 │   │   │   └── server
@@ -106,7 +106,7 @@ tree . . ├── Makefile ├── README.md ├── bff │ ├── cli
 │       │       └── main.go
 │       ├── go.mod
 │       └── go.sum
-└── proto_go
+└── proto_go // protobuf and auto-generated server and client stubs from the protobuf
     ├── buf.gen.yaml
     ├── gen
     │   ├── genconnect
