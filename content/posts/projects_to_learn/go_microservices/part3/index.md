@@ -78,8 +78,6 @@ Kubernetes is an open-source container orchestration platform. Its purpose is to
 
 Important and basic components of Kubernetes is below:
 
-{{<figure src="./k8s_components.png" alt="k8s Basic Components" width="100%">}}
-
 Nodes:
 - A node is a physical or virtual machine
 
@@ -103,6 +101,8 @@ Ingress:
 
 Volumes:
 - Storage which can exists beyond the lifetime of a pod if it's persistent volumens
+
+{{<figure src="./k8s_components.png" alt="k8s Basic Components" width="50%">}}
 
 You can describe what will be deployed in Kubernetes cluster by Kubernetes manifest files, which are JSON or YAML files.
 
