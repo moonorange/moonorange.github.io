@@ -120,7 +120,36 @@ tree . . ├── Makefile ├── README.md ├── bff // BFF talking to 
 </code></pre></div><h1 id=orchestrate-services-by-kubernetes>Orchestrate services by Kubernetes</h1>
 <h2 id=understanding-kubernetes>Understanding Kubernetes</h2>
 <p>Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.</p>
-<p>You can define the desired state and</p>
+<p>Important and basic components of Kubernetes is below:</p>
+<figure><img src=./k8s_components.png alt="k8s Basic Components" width=100%>
+</figure>
+<p>Nodes:</p>
+<ul>
+<li>A node is a physical or virtual machine</li>
+</ul>
+<p>Cluster:</p>
+<ul>
+<li>Set of worker machines(nodes)</li>
+<li>Every cluster has at least one worker node</li>
+</ul>
+<p>Pods:</p>
+<ul>
+<li>Smallest unit of K8s</li>
+<li>Abstraction over container with shared storage and network resources</li>
+<li>The &ldquo;one-container-per-Pod&rdquo; model is the most common Kubernetes use case</li>
+<li>Pods are ephemeral resources. Each pod gets its own IP address(New IP address on re-creation)</li>
+</ul>
+<p>Services:</p>
+<ul>
+<li>Provide endpoints(Permanent IP address) for pods</li>
+<li>Make the set of pods available on the network</li>
+<li>Load Balancer for pods</li>
+</ul>
+<p>Ingress:</p>
+<ul>
+<li>Expose http and https routes from external components to services within the cluster</li>
+</ul>
+<p>You can describe what will be deployed in Kubernetes cluster by Kubernetes manifest files, which are JSON or YAML files.</p>
 <h2 id=understanding-minikube>Understanding Minikube</h2>
 <p>Minikube is a powerful tool that allows us to run a Kubernetes cluster locally.</p>
 <p>It’s particularly useful for development and testing purposes.</p>
@@ -130,13 +159,13 @@ tree . . ├── Makefile ├── README.md ├── bff // BFF talking to 
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>brew install minikube
 </code></pre></div><h2 id=understanding-helm>Understanding Helm</h2>
 <p>Helm is a package manager for Kubernetes.</p>
-<p>It reduces</p>
+<p>As I explained in the Understanding Kubernetes chapter, you can describe Kubernetes objects by manifest files, but it will be tedious and complicated to manage them if you have many files.</p>
 <h1 id=summary>Summary</h1>
 <p>In this series of articles, we’ve explored the Backend For Frontend (BFF) pattern, microservices, and gRPC. Additionally, we’ve touched upon Kubernetes and Minikube for orchestration and local testing.</p>
 <p>While there are many other concepts related to microservices, such as Distributed Transactions, I hope this article has provided you with a foundational understanding of the microservices ecosystem.</p>
 <h1 id=references>References</h1>
-<p><a href="https://www.youtube.com/watch?v=X48VuDVv0do">Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]
-</a></p>
+<p><a href=https://kubernetes.io/docs/home/>Kubernetes Documentation</a></p>
+<p><a href="https://www.youtube.com/watch?v=X48VuDVv0do">Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
