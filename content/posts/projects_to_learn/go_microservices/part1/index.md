@@ -23,7 +23,7 @@ Here is a list of posts in the series:
 
 Our project revolves around three essential components:
 
-- Microservices (gRPC):
+## Microservices (gRPC):
 
 We’ll implement two microservices adhering to the Command Query Responsibility Segregation (CQRS) pattern:
 
@@ -31,13 +31,13 @@ Command Service: Responsible for executing write operations, handling commands, 
 
 Query Service: Retrieves data and responds to read queries.
 
-- Backend For Frontend (BFF):
+## Backend For Frontend (BFF):
 
 This layer acts as an intermediary between the frontend and the microservices.
 
 It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.
 
-- Kubernetes for Orchestration and Deployment:
+## Kubernetes for Orchestration and Deployment:
 
 We’ll leverage Kubernetes to manage our microservices.
 
