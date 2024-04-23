@@ -23,7 +23,7 @@ tree .
 .
 ├── Makefile
 ├── README.md
-├── bff
+├── bff // BFF talking to clients by GraphQL
 │   ├── client
 │   │   └── task_client.go
 │   ├── cmd
@@ -43,7 +43,7 @@ tree .
 │   └── tools.go
 ├── go.mod
 ├── go.sum
-├── microservices
+├── microservices // Microservices, query and command services
 │   ├── command_service
 │   │   ├── cmd
 │   │   │   └── server
@@ -56,7 +56,7 @@ tree .
 │       │       └── main.go
 │       ├── go.mod
 │       └── go.sum
-└── proto_go
+└── proto_go // protobuf and auto-generated server and client stubs from the protobuf
     ├── buf.gen.yaml
     ├── gen
     │   ├── genconnect
