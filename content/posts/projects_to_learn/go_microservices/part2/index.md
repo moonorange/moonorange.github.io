@@ -1,6 +1,6 @@
 ---
 title: 'Learn gRPC, GraphQL and Kubernetes by building Microservices in Go: Part 2 - GraphQL BFF'
-date: '2024-04-20'
+date: '2024-04-22'
 categories: ["Projects", "Go", "Microservice", "gRPC", "GraphQL", "Kubernetes"]
 tags: ["Go", "English Article", "Kubernetes"]
 ---
