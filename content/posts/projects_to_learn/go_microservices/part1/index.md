@@ -15,9 +15,9 @@ This project serves as an educational endeavor to understand the intricacies of 
 
 Here is a list of posts in the series:
 
-[Part 1 - gRPC Microservices](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1)
-[Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
-[Part 3 - Orchestrating by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
+- [Part 1 - gRPC Microservices](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1)
+- [Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
+- [Part 3 - Orchestrating by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
 
 # Project Structure(Overview)
 
@@ -45,9 +45,62 @@ We’ll leverage Kubernetes to manage our microservices.
 
 Explore the full code [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
+Directory structure is like below
+
+```sh
+tree .
+.
+├── Makefile
+├── README.md
+├── bff
+│   ├── client
+│   │   └── task_client.go
+│   ├── cmd
+│   │   └── server
+│   │       └── main.go
+│   ├── go.mod
+│   ├── go.sum
+│   ├── gqlgen.yml
+│   ├── graph
+│   │   ├── generated.go
+│   │   ├── model
+│   │   │   ├── models_gen.go
+│   │   │   └── task.go
+│   │   ├── resolver.go
+│   │   ├── schema.graphqls
+│   │   └── schema.resolvers.go
+│   └── tools.go
+├── go.mod
+├── go.sum
+├── microservices
+│   ├── command_service
+│   │   ├── cmd
+│   │   │   └── server
+│   │   │       └── main.go
+│   │   ├── go.mod
+│   │   └── go.sum
+│   └── query_service
+│       ├── cmd
+│       │   └── server
+│       │       └── main.go
+│       ├── go.mod
+│       └── go.sum
+└── proto_go
+    ├── buf.gen.yaml
+    ├── gen
+    │   ├── genconnect
+    │   │   └── task.connect.go
+    │   └── task.pb.go
+    ├── go.mod
+    ├── go.sum
+    └── proto
+        ├── buf.yaml
+        └── task.proto
+```
+
 # Microservices
 
-The CQRS pattern separates read and write responsibilities within our system.
+The CQRS(Command and Query Responsibility Segregation) pattern separates read and write responsibilities within our system.
 
 While it’s not necessary and over-engineering for small projects, understanding it can enhance your architectural knowledge.
 
@@ -277,7 +330,7 @@ buf curl \
   http://localhost:8082/task.TaskService/ListTasksByTag
 ```
 
-Create Tasks in command service
+CreateTask in command service
 
 ```sh
 buf curl \
@@ -285,9 +338,6 @@ buf curl \
   --data '{"text": "task", "tags": ["tag1", "tag2"]}' \
   http://localhost:8081/task.TaskService/CreateTask
 ```
-
-So far we have implemented two micro services, let's implement BFF using GraphQL next.
-
 
 # Summary
 
