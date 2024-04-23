@@ -51,6 +51,11 @@ Here is a list of posts in the series:">
 <div class=toc__menu>
 <nav id=TableOfContents>
 <ul>
+<li><a href=#microservices-grpc>Microservices (gRPC):</a></li>
+<li><a href=#backend-for-frontend-bff>Backend For Frontend (BFF):</a></li>
+<li><a href=#kubernetes-for-orchestration-and-deployment>Kubernetes for Orchestration and Deployment:</a></li>
+</ul>
+<ul>
 <li><a href=#understanding-grpc>Understanding gRPC</a></li>
 <li><a href=#protocol-buffers-protobuf>Protocol Buffers (protobuf)</a></li>
 <li><a href=#defining-protobuf>Defining protobuf</a></li>
@@ -75,20 +80,14 @@ Here is a list of posts in the series:">
 </ul>
 <h1 id=project-structureoverview>Project Structure(Overview)</h1>
 <p>Our project revolves around three essential components:</p>
-<ul>
-<li>Microservices (gRPC):</li>
-</ul>
+<h2 id=microservices-grpc>Microservices (gRPC):</h2>
 <p>We’ll implement two microservices adhering to the Command Query Responsibility Segregation (CQRS) pattern:</p>
 <p>Command Service: Responsible for executing write operations, handling commands, and modifying data.</p>
 <p>Query Service: Retrieves data and responds to read queries.</p>
-<ul>
-<li>Backend For Frontend (BFF):</li>
-</ul>
+<h2 id=backend-for-frontend-bff>Backend For Frontend (BFF):</h2>
 <p>This layer acts as an intermediary between the frontend and the microservices.</p>
 <p>It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.</p>
-<ul>
-<li>Kubernetes for Orchestration and Deployment:</li>
-</ul>
+<h2 id=kubernetes-for-orchestration-and-deployment>Kubernetes for Orchestration and Deployment:</h2>
 <p>We’ll leverage Kubernetes to manage our microservices.</p>
 <figure><img src=./project_arch.png alt="Project Architecture" width=80% height=80%>
 </figure>
