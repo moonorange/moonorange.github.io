@@ -10,7 +10,7 @@
 <meta name=twitter:title content="Learn gRPC, GraphQL and Kubernetes by building Microservices in Go: Part 2 - GraphQL BFF">
 <meta name=twitter:description content="Intro This is the second post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go. Here is a list of posts in the series:
  Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Deploy services by Kubernetes  Full code is in here
-BFF Directory structure is like below
+BFF Directory structure:
 tree . . ├── bff // BFF talking to clients by GraphQL │ ├── client │ │ └── task_client.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
@@ -54,6 +54,7 @@ tree . . ├── bff // BFF talking to clients by GraphQL │ ├── clien
 <li><a href=#define-your-graphql-schema>Define Your GraphQL Schema</a></li>
 <li><a href=#preventing-over-fetching>Preventing over-fetching</a></li>
 <li><a href=#implementing-resolvers>Implementing resolvers</a></li>
+<li><a href=#running-the-servers>Running the servers</a></li>
 </ul>
 </nav>
 </div>
@@ -67,7 +68,7 @@ Here is a list of posts in the series:</p>
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Deploy services by Kubernetes</a></li>
 </ul>
 <p>Full code is in <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
-<p>BFF Directory structure is like below</p>
+<p>BFF Directory structure:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>tree .
 .
 ├── bff // BFF talking to clients by GraphQL
@@ -94,26 +95,25 @@ Here is a list of posts in the series:</p>
 <p>BFF aggregates data from multiple backend services and provides tailored APIs optimized for specific frontend requirements.</p>
 <p>BFF decouples the frontend from the complexities of backend services. It allows frontend teams to evolve their applications independently without being tied to backend changes.</p>
 <p>By reducing over-fetching and under-fetching of data, BFF improves performance and ensures a smoother user experience.</p>
-<p>Speak to two microservices and return results to clients in this project.</p>
+<p>In our project, the BFF speaks to two backend services and provides APIs for frontend.</p>
 <h1 id=graphql>GraphQL</h1>
 <p>GraphQL is a query language for APIs and a runtime for executing those queries with existing data.</p>
 <p>GraphQL enables clients to request only the data they need. Clients can specify the shape and structure of the response, avoiding unnecessary data retrieval.</p>
 <p>Unlike traditional REST APIs, GraphQL provides a more flexible and efficient approach to data fetching. It allows clients to retrieve nested data in a single request.</p>
 <h1 id=implementing-bff>Implementing BFF</h1>
-<p>In practice, the BFF aggregates data from microservices and constructs GraphQL responses for clients. This ensures that frontend applications receive precisely the data they require, enhancing performance and maintainability.</p>
-<p>We are going to use <a href=https://github.com/99designs/gqlgen>gqlgen</a> to generate code automatically from GraphQL schema for this project.</p>
-<p>Add github.com/99designs/gqlgen to your project&rsquo;s tools.go</p>
+<p>We&rsquo;ll use <a href=https://github.com/99designs/gqlgen>gqlgen</a> to generate code automatically from our GraphQL schema.</p>
+<p>First, add github.com/99designs/gqlgen to your project&rsquo;s tools.go:</p>
 <p><code>{PROJECT_ROOT}/bff/</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>printf <span style=color:#e6db74>&#39;// +build tools\npackage tools\nimport (_ &#34;github.com/99designs/gqlgen&#34;\n _ &#34;github.com/99designs/gqlgen/graphql/introspection&#34;)&#39;</span> | gofmt &gt; tools.go
 
 go mod tidy
-</code></pre></div><p>Initialize gqlgen config and generate models</p>
+</code></pre></div><p>Next, initialize gqlgen config and generate models:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>go run github.com/99designs/gqlgen init
 
 go mod tidy
-</code></pre></div><p>Now you get the template of GraphQL server.</p>
+</code></pre></div><p>You get the template of GraphQL server.</p>
 <h2 id=define-your-graphql-schema>Define Your GraphQL Schema</h2>
-<p>Update graph/schema.graphqls like below.</p>
+<p>Now, let&rsquo;s define our GraphQL schema in graph/schema.graphqls.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-graphqls data-lang=graphqls><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Query</span> {
   getTask(id: <span style=color:#a6e22e>ID</span>!): <span style=color:#a6e22e>Task</span>
 
@@ -153,13 +153,13 @@ go mod tidy
 }
 </code></pre></div><p>I added a new model named Attachment which does not exist in microservices' model.</p>
 <p>This model is for showing GraphQL benefits of fetching only necessary data.</p>
-<p>Generate code from the schema</p>
+<p>Generate code from the schema.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>go run github.com/99designs/gqlgen generate
 </code></pre></div><h2 id=preventing-over-fetching>Preventing over-fetching</h2>
 <p>Suppose we do not want to load the Attachment on the Task unless the user actually asked for it.</p>
-<p>To archive that, replace the generated Task model with something slightly more realistic.</p>
-<p>First let’s enable autobind, allowing gqlgen to use your custom models if it can find them rather than generating them.</p>
-<p>We do this by uncommenting the autobind config line in gqlgen.yml:</p>
+<p>To archive that, we will replace the generated Task model.</p>
+<p>First let’s enable autobind, allowing gqlgen to use our custom models rather than generating them.</p>
+<p>We will do this by uncommenting the autobind config line in gqlgen.yml:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># gqlgen will search for any type names in the schema in these go packages</span>
 <span style=color:#75715e># if they match it will use them, otherwise it will generate them.</span>
 <span style=color:#f92672>autobind</span>:
@@ -195,30 +195,92 @@ go mod tidy
 	<span style=color:#a6e22e>Attachment</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Attachment</span> <span style=color:#e6db74>`json:&#34;Attachment,omitempty&#34;`</span>
 }
 </code></pre></div><p>You can see Attachments resolver was implemented.</p>
+<p>This will be called only when users asked for Attachments field.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// Attachments is the resolver for the Attachments field.
 </span><span style=color:#75715e>// If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver
 </span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>taskResolver</span>) <span style=color:#a6e22e>Attachments</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>obj</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>) ([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Attachment</span>, <span style=color:#66d9ef>error</span>) {
 	panic(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;not implemented&#34;</span>))
 </code></pre></div><h2 id=implementing-resolvers>Implementing resolvers</h2>
-<p>Let&rsquo;s implement resolvers to get and create data via microservices.</p>
-<p><code>bff/graph/schema.resolvers.go</code></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// GetTasksByTag is the resolver for the getTasksByTag field.
-</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>queryResolver</span>) <span style=color:#a6e22e>GetTasksByTag</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tag</span> <span style=color:#66d9ef>string</span>) ([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, <span style=color:#66d9ef>error</span>) {
+<p>We&rsquo;ll implement clients and resolvers to interact with microservices and retrieve or create data.</p>
+<p>This resolver will communicate with our backend services to fulfill GraphQL queries and mutations.</p>
+<p><code>bff/client/task_client.go</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>client</span>
+
+<span style=color:#f92672>import</span> (
+	<span style=color:#e6db74>&#34;net/http&#34;</span>
+	<span style=color:#e6db74>&#34;os&#34;</span>
+
+	<span style=color:#e6db74>&#34;connectrpc.com/connect&#34;</span>
+	<span style=color:#e6db74>&#34;github.com/moonorange/gomicroservice/protogo/gen/genconnect&#34;</span>
+	<span style=color:#e6db74>&#34;github.com/sirupsen/logrus&#34;</span>
+)
+
+<span style=color:#66d9ef>var</span> (
+	<span style=color:#a6e22e>queryClient</span>   <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>TaskServiceClient</span>
+	<span style=color:#a6e22e>commandClient</span> <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>TaskServiceClient</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewQueryServiceClient</span>() <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>TaskServiceClient</span> {
+	<span style=color:#a6e22e>queryHost</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Getenv</span>(<span style=color:#e6db74>&#34;QUERY_SERVICE_HOST&#34;</span>)
+	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Info</span>(<span style=color:#e6db74>&#34;queryHost: &#34;</span>, <span style=color:#a6e22e>queryHost</span>)
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>queryHost</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+		<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#e6db74>&#34;empty QUERY_SERVICE_HOST&#34;</span>)
+	}
+	<span style=color:#75715e>// Set up a connection to the server.
+</span><span style=color:#75715e></span>	<span style=color:#75715e>// Create a gRPC client using the connect.WithGRPC() option
+</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>queryClient</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>queryClient</span>
+	}
+	<span style=color:#a6e22e>queryClient</span> = <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>NewTaskServiceClient</span>(
+		<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>DefaultClient</span>,
+		<span style=color:#e6db74>&#34;http://&#34;</span><span style=color:#f92672>+</span><span style=color:#a6e22e>queryHost</span>,
+		<span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>WithGRPC</span>(),
+	)
+
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>queryClient</span>
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewCommandServiceClient</span>() <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>TaskServiceClient</span> {
+	<span style=color:#a6e22e>commandHost</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Getenv</span>(<span style=color:#e6db74>&#34;COMMAND_SERVICE_HOST&#34;</span>)
+	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Info</span>(<span style=color:#e6db74>&#34;commandHost: &#34;</span>, <span style=color:#a6e22e>commandHost</span>)
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>commandHost</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+		<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#e6db74>&#34;empty COMMAND_SERVICE_HOST&#34;</span>)
+	}
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>commandClient</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>commandClient</span>
+	}
+	<span style=color:#75715e>// Set up a connection to the server.
+</span><span style=color:#75715e></span>	<span style=color:#75715e>// Create a gRPC client using the connect.WithGRPC() option
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>commandClient</span> = <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>NewTaskServiceClient</span>(
+		<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>DefaultClient</span>,
+		<span style=color:#e6db74>&#34;http://&#34;</span><span style=color:#f92672>+</span><span style=color:#a6e22e>commandHost</span>,
+		<span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>WithGRPC</span>(),
+	)
+
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>commandClient</span>
+}
+</code></pre></div><p><code>bff/graph/schema.resolvers.go</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>init</span>() {
+  <span style=color:#a6e22e>queryClient</span> = <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>NewQueryServiceClient</span>()
+  <span style=color:#a6e22e>commandClient</span> = <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>NewCommandServiceClient</span>()
+}
+
+<span style=color:#75715e>// GetTask is the resolver for the getTask field.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>queryResolver</span>) <span style=color:#a6e22e>GetTask</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>id</span> <span style=color:#66d9ef>string</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, <span style=color:#66d9ef>error</span>) {
 	<span style=color:#75715e>// Access to query service
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>NewTaskServiceClient</span>(<span style=color:#e6db74>&#34;http://localhost:8082&#34;</span>)
-	<span style=color:#a6e22e>res</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>ListTasksByTag</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>ListTasksByTagRequest</span>{
-		<span style=color:#a6e22e>TagName</span>: <span style=color:#e6db74>&#34;tag1&#34;</span>,
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>res</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>queryClient</span>.<span style=color:#a6e22e>GetTask</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>GetTaskRequest</span>{
+		<span style=color:#a6e22e>TaskId</span>: <span style=color:#e6db74>&#34;1&#34;</span>,
 	}))
 	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
 		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
 	}
-
-	<span style=color:#a6e22e>models</span> <span style=color:#f92672>:=</span> make([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, len(<span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Tasks</span>))
-	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>t</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Tasks</span> {
-		<span style=color:#a6e22e>models</span>[<span style=color:#a6e22e>i</span>] = <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>{<span style=color:#a6e22e>ID</span>: string(<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Id</span>), <span style=color:#a6e22e>Text</span>: <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Text</span>, <span style=color:#a6e22e>Tags</span>: <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Tags</span>}
-	}
-	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>models</span>, <span style=color:#66d9ef>nil</span>
-</code></pre></div><p>Let&rsquo;s run all servers and check if bff server returns expected values</p>
+	<span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>{
+		<span style=color:#a6e22e>ID</span>:   string(<span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Id</span>),
+		<span style=color:#a6e22e>Text</span>: <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Text</span>,
+		<span style=color:#a6e22e>Tags</span>: <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Tags</span>}, <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><h2 id=running-the-servers>Running the servers</h2>
+<p>With our BFF and microservices in place, it&rsquo;s time to run the servers and test our GraphQL endpoints:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd bff
 go run cmd/server/main.go
 </code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd microservices/query_service
@@ -226,8 +288,8 @@ go run cmd/server/main.go
 </code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd microservices/command_service
 go run cmd/server/main.go
 </code></pre></div><p>Go to <a href=http://localhost:8080/>localhost:8080</a> to interact with bff servers.</p>
-<p>GraphQL query</p>
-<p>GetTasksByTag</p>
+<p>Use the provided GraphQL queries and mutations to interact with the BFF server and verify that it returns the expected results.</p>
+<p><strong>GetTasksByTag:</strong></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-graphql data-lang=graphql><span style=color:#66d9ef>query</span>{
   <span style=color:#a6e22e>getTasksByTag</span>(tag: <span style=color:#e6db74>&#34;tag1&#34;</span>) {
     <span style=color:#a6e22e>Text</span>
@@ -239,7 +301,7 @@ go run cmd/server/main.go
     }
   }
 }
-</code></pre></div><p>CreateTask</p>
+</code></pre></div><p><strong>CreateTask:</strong></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-graphql data-lang=graphql><span style=color:#66d9ef>mutation</span> {
   <span style=color:#a6e22e>createTask</span>(<span style=color:#66d9ef>input</span>: {
     <span style=color:#a6e22e>Text</span>: <span style=color:#e6db74>&#34;My new task&#34;</span>
@@ -265,8 +327,9 @@ go run cmd/server/main.go
 </code></pre></div><figure><img src=./graphql_playground.png alt="GraphQL Playground" width=100%>
 </figure>
 <h1 id=summary>Summary</h1>
-<p>We have learned about BFF and GraphQL and implemented BFF.</p>
-<p>In part 3 we will orchestrate services by Kubernetes.</p>
+<p>In this post, we&rsquo;ve explored the concept of BFF, implemented a GraphQL BFF service in Go, and learned how to optimize data fetching with GraphQL.</p>
+<p>Check for the next part, where we&rsquo;ll deploy our microservices with Kubernetes.</p>
+<p><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Deploy services by Kubernetes</a></p>
 <h1 id=references>References</h1>
 <p><a href=https://eli.thegreenplace.net/2021/rest-servers-in-go-part-7-graphql/>REST Servers in Go: Part 7 - GraphQL</a></p>
 <p><a href=https://gqlgen.com/getting-started/>Building GraphQL servers in golang</a></p>
