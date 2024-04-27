@@ -11,8 +11,8 @@
 <meta name=twitter:description content="Intro This is the third and last post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 Here is a list of posts in the series:
  Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Orchestrating by Kubernetes  Full code is in here
-Directory structure is like below
-tree . . ├── Makefile ├── README.md ├── bff // BFF talking to clients by GraphQL │ ├── client │ │ └── task_client.">
+k8s Directory structure is like below.
+tree . . Deploy Services on Kubernetes Understanding Kubernetes Kubernetes is an open-source container orchestration platform.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -55,6 +55,8 @@ tree . . ├── Makefile ├── README.md ├── bff // BFF talking to 
 <li><a href=#understanding-kubernetes>Understanding Kubernetes</a></li>
 <li><a href=#understanding-minikube>Understanding Minikube</a></li>
 <li><a href=#understanding-helm>Understanding Helm</a></li>
+<li><a href=#containerization>Containerization</a></li>
+<li><a href=#deploy-on-kubernetes>Deploy on Kubernetes</a></li>
 </ul>
 </nav>
 </div>
@@ -68,92 +70,46 @@ tree . . ├── Makefile ├── README.md ├── bff // BFF talking to 
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></li>
 </ul>
 <p>Full code is in <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
-<p>Directory structure is like below</p>
+<p>k8s Directory structure is like below.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>tree .
 .
-├── Makefile
-├── README.md
-├── bff // BFF talking to clients by GraphQL
-│   ├── client
-│   │   └── task_client.go
-│   ├── cmd
-│   │   └── server
-│   │       └── main.go
-│   ├── go.mod
-│   ├── go.sum
-│   ├── gqlgen.yml
-│   ├── graph
-│   │   ├── generated.go
-│   │   ├── model
-│   │   │   ├── models_gen.go
-│   │   │   └── task.go
-│   │   ├── resolver.go
-│   │   ├── schema.graphqls
-│   │   └── schema.resolvers.go
-│   └── tools.go
-├── go.mod
-├── go.sum
-├── microservices // Microservices, query and command services
-│   ├── command_service
-│   │   ├── cmd
-│   │   │   └── server
-│   │   │       └── main.go
-│   │   ├── go.mod
-│   │   └── go.sum
-│   └── query_service
-│       ├── cmd
-│       │   └── server
-│       │       └── main.go
-│       ├── go.mod
-│       └── go.sum
-└── proto_go // protobuf and auto-generated server and client stubs from the protobuf
-    ├── buf.gen.yaml
-    ├── gen
-    │   ├── genconnect
-    │   │   └── task.connect.go
-    │   └── task.pb.go
-    ├── go.mod
-    ├── go.sum
-    └── proto
-        ├── buf.yaml
-        └── task.proto
-</code></pre></div><h1 id=orchestrate-services-by-kubernetes>Orchestrate services by Kubernetes</h1>
+</code></pre></div><h1 id=deploy-services-on-kubernetes>Deploy Services on Kubernetes</h1>
 <h2 id=understanding-kubernetes>Understanding Kubernetes</h2>
 <p>Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.</p>
-<p>Important and basic components of Kubernetes is below:</p>
+<p>Key components of Kubernetes include:</p>
 <p>Nodes:</p>
 <ul>
-<li>A node is a physical or virtual machine</li>
+<li>Represent either physical or virtual machines in a Kubernetes cluster.</li>
 </ul>
 <p>Cluster:</p>
 <ul>
-<li>Set of worker machines(nodes)</li>
-<li>Every cluster has at least one worker node</li>
+<li>A collection of worker nodes that work together.</li>
+<li>Every Kubernetes cluster must have at least one worker node.</li>
 </ul>
 <p>Pods:</p>
 <ul>
-<li>Smallest unit of K8s</li>
-<li>Abstraction over container with shared storage and network resources</li>
-<li>The &ldquo;one-container-per-Pod&rdquo; model is the most common Kubernetes use case</li>
-<li>Pods are ephemeral resources. Each pod gets its own IP address(New IP address on re-creation)</li>
+<li>The smallest deployable units in Kubernetes.</li>
+<li>Represent one or more containers that share resources such as storage and network.</li>
+<li>The most common use case is the &ldquo;one-container-per-Pod&rdquo; model.</li>
+<li>Pods are ephemeral, with each pod getting its own IP address, which changes upon recreation.</li>
 </ul>
 <p>Services:</p>
 <ul>
-<li>Provide endpoints(Permanent IP address) for pods</li>
-<li>Make the set of pods available on the network</li>
-<li>Load Balancer for pods</li>
+<li>Provide stable endpoints (with permanent IP addresses) for pods.</li>
+<li>Make a set of pods available on the network and can act as load balancers for those pods.</li>
 </ul>
 <p>Ingress:</p>
 <ul>
-<li>Expose http and https routes from external components to services within the cluster</li>
+<li>Exposes HTTP and HTTPS routes from external components to services within the cluster.</li>
 </ul>
 <p>Volumes:</p>
 <ul>
-<li>Storage which can exists beyond the lifetime of a pod if it&rsquo;s persistent volumens</li>
+<li>Volumes provide storage that can exist beyond the lifetime of a pod, especially with persistent volumes.</li>
 </ul>
 <figure><img src=./k8s_components.png alt="k8s Basic Components" width=50%>
 </figure>
-<p>You can describe what will be deployed in Kubernetes cluster by Kubernetes manifest files, which are JSON or YAML files.</p>
+<p>You can describe the desired state of your Kubernetes cluster using Kubernetes manifest files, typically written in JSON or YAML format.</p>
+<p>Kubernetes pods can be configured imperatively or declaratively, with manifest files commonly used for declarative configuration.</p>
 <h2 id=understanding-minikube>Understanding Minikube</h2>
 <p>Minikube is a powerful tool that allows us to run a Kubernetes cluster locally.</p>
 <p>It’s particularly useful for development and testing purposes.</p>
@@ -162,14 +118,232 @@ tree . . ├── Makefile ├── README.md ├── bff // BFF talking to 
 <p>We’ll leverage Minikube to run our project locally.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>brew install minikube
 </code></pre></div><h2 id=understanding-helm>Understanding Helm</h2>
-<p>Helm is a package manager for Kubernetes.</p>
-<p>As I explained in the Understanding Kubernetes chapter, you can describe Kubernetes objects by manifest files, but it will be tedious and complicated to manage them if you have many files.</p>
+<p>Helm is a package manager for Kubernetes that simplifies the management and deployment of applications on Kubernetes clusters.</p>
+<p>As described in the previous chapter on Understanding Kubernetes, managing Kubernetes objects solely through manifest files can become tedious and complex, especially as the number of files increases.</p>
+<h2 id=containerization>Containerization</h2>
+<p>Let&rsquo;s start with containerizing applications.</p>
+<p>The code below is for bff, but it&rsquo;s almost the same in query and command services.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Dockerfile data-lang=Dockerfile><span style=color:#75715e># Use the official Golang image as base</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>FROM</span><span style=color:#e6db74> golang:1.22.2-alpine AS builder</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Set the working directory inside the container</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>WORKDIR</span><span style=color:#e6db74> /app</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Copy the Go module files first to help Docker utilize the Docker layer caching mechanism more efficiently</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>COPY</span> go.mod go.sum ./<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Download and install dependencies</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>RUN</span> go mod download<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Copy the rest of the application source code</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>COPY</span> . .<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Build the application&#39;s binary</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Compiles the code into a static binary meaning it includes all necessary dependencies within the binary itself with CGO Disabled.</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># -a: tells the Go toolchain to rebuild all packages, even if they are up to date.</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># -installsuffix: Used with CGO to distinguish between CGO-enabled and CGO-disabled builds</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># -ldflags &#39;-extldflags &#34;-static&#34;&#39;: Sets the external linker flags to include -static, which instructs the linker to statically link all libraries, including C libraries, into the binary.</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>RUN</span> CGO_ENABLED<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> GOOS<span style=color:#f92672>=</span>linux go build -a -installsuffix cgo -ldflags <span style=color:#e6db74>&#39;-extldflags &#34;-static&#34;&#39;</span> -o bff ./cmd/server<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Start a new stage from scratch for multi-stage builds.</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># This is to reduce the finale docker image size and to isolate build depencies</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>FROM</span><span style=color:#e6db74> alpine:latest</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Set the current working directory inside the container</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>WORKDIR</span><span style=color:#e6db74> /app</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Copy the compiled binary from the previous stage</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>COPY</span> --from<span style=color:#f92672>=</span>builder /app/bff .<span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Expose the port on which the server will run</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>EXPOSE</span><span style=color:#e6db74> 8080</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Command to run the application when starting the container</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>CMD</span> [<span style=color:#e6db74>&#34;./bff&#34;</span>] <span style=color:#960050;background-color:#1e0010>
+</span></code></pre></div><p>Build and Push the images to DockerHub</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>docker login
+</code></pre></div><p>Place the Makefile in the project root(gomicroservice).</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Makefile data-lang=Makefile><span style=color:#75715e># Define variables for image names and paths
+</span><span style=color:#75715e></span>BFF_IMAGE <span style=color:#f92672>:=</span> bff:latest
+QUERY_IMAGE <span style=color:#f92672>:=</span> query_service:latest
+COMMAND_IMAGE <span style=color:#f92672>:=</span> command_service:latest
+DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
+
+<span style=color:#a6e22e>build</span><span style=color:#f92672>:</span>
+	docker build -t <span style=color:#66d9ef>$(</span>BFF_IMAGE<span style=color:#66d9ef>)</span> ./bff
+	docker build -t <span style=color:#66d9ef>$(</span>QUERY_IMAGE<span style=color:#66d9ef>)</span> ./microservices/query_service
+	docker build -t <span style=color:#66d9ef>$(</span>COMMAND_IMAGE<span style=color:#66d9ef>)</span> ./microservices/command_service
+	docker tag <span style=color:#66d9ef>$(</span>BFF_IMAGE<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>DOCKERHUB_REPO<span style=color:#66d9ef>)</span>:bff
+	docker tag <span style=color:#66d9ef>$(</span>QUERY_IMAGE<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>DOCKERHUB_REPO<span style=color:#66d9ef>)</span>:query_service
+	docker tag <span style=color:#66d9ef>$(</span>COMMAND_IMAGE<span style=color:#66d9ef>)</span> <span style=color:#66d9ef>$(</span>DOCKERHUB_REPO<span style=color:#66d9ef>)</span>:command_service
+
+<span style=color:#a6e22e>push_images</span><span style=color:#f92672>:</span>
+	docker push <span style=color:#66d9ef>$(</span>DOCKERHUB_REPO<span style=color:#66d9ef>)</span>:bff
+	docker push <span style=color:#66d9ef>$(</span>DOCKERHUB_REPO<span style=color:#66d9ef>)</span>:query_service
+	docker push <span style=color:#66d9ef>$(</span>DOCKERHUB_REPO<span style=color:#66d9ef>)</span>:command_service
+
+<span style=color:#a6e22e>build_push</span><span style=color:#f92672>:</span> build push_images
+
+<span style=color:#a6e22e>.PHONY</span><span style=color:#f92672>:</span> build push_images build_push
+</code></pre></div><p>Run the following command to push and build images to DockerHub.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>make build_push
+</code></pre></div><p>Check all three images were pushed in DockerHub.</p>
+<figure><img src=./dockerhub.png alt=DockerHub width=50%>
+</figure>
+<h2 id=deploy-on-kubernetes>Deploy on Kubernetes</h2>
+<p>Start Minikube.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>minikube start
+</code></pre></div><p>Let&rsquo;s use Helm to deploy services on Minikube.</p>
+<p>k8s</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>helm create microservice
+</code></pre></div><p>Change deployment.yaml</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>apps/v1</span>
+<span style=color:#f92672>kind</span>: <span style=color:#ae81ff>Deployment</span>
+<span style=color:#f92672>metadata</span>:
+  <span style=color:#f92672>name</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
+<span style=color:#f92672>spec</span>:
+  <span style=color:#f92672>replicas</span>: {{ <span style=color:#ae81ff>.Values.replicaCount }}</span>
+  <span style=color:#f92672>selector</span>:
+    <span style=color:#f92672>matchLabels</span>:
+      <span style=color:#f92672>app</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
+  <span style=color:#f92672>template</span>:
+    <span style=color:#f92672>metadata</span>:
+      <span style=color:#f92672>labels</span>:
+        <span style=color:#f92672>app</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
+    <span style=color:#f92672>spec</span>:
+      <span style=color:#f92672>containers</span>:
+        - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>bff</span>
+          <span style=color:#f92672>image</span>: <span style=color:#e6db74>&#34;{{ .Values.container.image.repository }}:{{ .Values.container.image.tag }}&#34;</span>
+          <span style=color:#f92672>imagePullPolicy</span>: {{ <span style=color:#ae81ff>.Values.container.image.pullPolicy }}</span>
+          <span style=color:#f92672>ports</span>:
+            - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>http</span>
+              <span style=color:#f92672>containerPort</span>: {{ <span style=color:#ae81ff>.Values.service.port }}</span>
+              <span style=color:#f92672>protocol</span>: <span style=color:#ae81ff>TCP</span>
+          <span style=color:#f92672>env</span>:
+            - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>PORT</span>
+              <span style=color:#f92672>value</span>: <span style=color:#e6db74>&#34;{{ .Values.service.port }}&#34;</span>
+            - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>QUERY_SERVICE_HOST</span>
+              <span style=color:#f92672>value</span>: <span style=color:#e6db74>&#34;{{ .Values.container.dns.query }}.default.svc.cluster.local:{{ .Values.service.queryPort }}&#34;</span>
+            - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>COMMAND_SERVICE_HOST</span>
+              <span style=color:#f92672>value</span>: <span style=color:#e6db74>&#34;{{ .Values.container.dns.command }}.default.svc.cluster.local:{{ .Values.service.commandPort }}&#34;</span>
+</code></pre></div><p>service.yaml</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>v1</span>
+<span style=color:#f92672>kind</span>: <span style=color:#ae81ff>Service</span>
+<span style=color:#f92672>metadata</span>:
+  <span style=color:#f92672>name</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
+  <span style=color:#f92672>labels</span>:
+    <span style=color:#f92672>app</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
+<span style=color:#f92672>spec</span>:
+  <span style=color:#f92672>type</span>: {{ <span style=color:#ae81ff>.Values.service.type }}</span>
+  <span style=color:#f92672>ports</span>:
+    - <span style=color:#f92672>port</span>: {{ <span style=color:#ae81ff>.Values.service.port }}</span>
+      <span style=color:#f92672>targetPort</span>: <span style=color:#ae81ff>http</span>
+      <span style=color:#f92672>protocol</span>: <span style=color:#ae81ff>TCP</span>
+      <span style=color:#f92672>name</span>: <span style=color:#ae81ff>http</span>
+  <span style=color:#f92672>selector</span>:
+    <span style=color:#f92672>app</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
+</code></pre></div><p>values.yaml</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># Default values for microservice.</span>
+<span style=color:#75715e># This is a YAML-formatted file.</span>
+<span style=color:#75715e># Declare variables to be passed into your templates.</span>
+
+<span style=color:#f92672>name</span>: <span style=color:#ae81ff>microservice</span>
+<span style=color:#f92672>replicaCount</span>: <span style=color:#ae81ff>1</span>
+<span style=color:#f92672>container</span>:
+  <span style=color:#f92672>image</span>:
+    <span style=color:#f92672>repository</span>: <span style=color:#ae81ff>keigokida/gomicroservices</span>
+    <span style=color:#f92672>tag</span>: <span style=color:#ae81ff>microservice</span>
+    <span style=color:#f92672>pullPolicy</span>: <span style=color:#ae81ff>IfNotPresent</span>
+  <span style=color:#f92672>dns</span>:
+    <span style=color:#f92672>query</span>: <span style=color:#ae81ff>query-service</span>
+    <span style=color:#f92672>command</span>: <span style=color:#ae81ff>command-service</span>
+
+<span style=color:#f92672>service</span>:
+  <span style=color:#f92672>type</span>: <span style=color:#ae81ff>ClusterIP</span>
+  <span style=color:#f92672>port</span>: <span style=color:#ae81ff>8080</span>
+  <span style=color:#f92672>queryPort</span>: <span style=color:#ae81ff>8081</span>
+  <span style=color:#f92672>commandPort</span>: <span style=color:#ae81ff>8082</span>
+
+<span style=color:#f92672>ingress</span>:
+  <span style=color:#f92672>enabled</span>: <span style=color:#66d9ef>false</span>
+  <span style=color:#f92672>className</span>: <span style=color:#e6db74>&#34;&#34;</span>
+  <span style=color:#f92672>annotations</span>: {}
+  <span style=color:#f92672>hosts</span>:
+    - <span style=color:#f92672>host</span>: <span style=color:#ae81ff>microservice.local</span>
+      <span style=color:#f92672>paths</span>:
+        - <span style=color:#f92672>path</span>: <span style=color:#ae81ff>/</span>
+          <span style=color:#f92672>pathType</span>: <span style=color:#ae81ff>ImplementationSpecific</span>
+  <span style=color:#f92672>tls</span>: []
+</code></pre></div><p>Chart.yaml</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>v2</span>
+<span style=color:#f92672>name</span>: <span style=color:#ae81ff>microservice</span>
+<span style=color:#f92672>description</span>: <span style=color:#ae81ff>A Helm chart for my microservice</span>
+
+<span style=color:#75715e># A chart can be either an &#39;application&#39; or a &#39;library&#39; chart.</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># Application charts are a collection of templates that can be packaged into versioned archives</span>
+<span style=color:#75715e># to be deployed.</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># Library charts provide useful utilities or functions for the chart developer. They&#39;re included as</span>
+<span style=color:#75715e># a dependency of application charts to inject those utilities and functions into the rendering</span>
+<span style=color:#75715e># pipeline. Library charts do not define any templates and therefore cannot be deployed.</span>
+<span style=color:#f92672>type</span>: <span style=color:#ae81ff>application</span>
+
+<span style=color:#75715e># This is the chart version. This version number should be incremented each time you make changes</span>
+<span style=color:#75715e># to the chart and its templates, including the app version.</span>
+<span style=color:#75715e># Versions are expected to follow Semantic Versioning (https://semver.org/)</span>
+<span style=color:#f92672>version</span>: <span style=color:#ae81ff>0.1.0</span>
+
+<span style=color:#75715e># This is the version number of the application being deployed. This version number should be</span>
+<span style=color:#75715e># incremented each time you make changes to the application. Versions are not expected to</span>
+<span style=color:#75715e># follow Semantic Versioning. They should reflect the version the application is using.</span>
+<span style=color:#75715e># It is recommended to use it with quotes.</span>
+<span style=color:#f92672>appVersion</span>: <span style=color:#e6db74>&#34;1.16.0&#34;</span>
+</code></pre></div><p>Create {bff,query-service,command-service.yaml}.yaml to inject values from these files.</p>
+<p>Make sure to use NodePort for bff to allow access from external service</p>
+<p>bff.yaml</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>name</span>: <span style=color:#ae81ff>bff</span>
+<span style=color:#f92672>replicaCount</span>: <span style=color:#ae81ff>1</span>
+<span style=color:#f92672>container</span>:
+  <span style=color:#f92672>image</span>:
+    <span style=color:#f92672>repository</span>: <span style=color:#ae81ff>keigokida/gomicroservices</span>
+    <span style=color:#f92672>tag</span>: <span style=color:#ae81ff>bff</span>
+    <span style=color:#f92672>pullPolicy</span>: <span style=color:#ae81ff>IfNotPresent</span>
+  <span style=color:#f92672>dns</span>:
+    <span style=color:#f92672>query</span>: <span style=color:#ae81ff>query-service</span>
+    <span style=color:#f92672>command</span>: <span style=color:#ae81ff>command-service</span>
+
+<span style=color:#f92672>service</span>:
+  <span style=color:#f92672>type</span>: <span style=color:#ae81ff>NodePort</span>
+  <span style=color:#f92672>port</span>: <span style=color:#ae81ff>8080</span>
+  <span style=color:#f92672>queryPort</span>: <span style=color:#ae81ff>8081</span>
+  <span style=color:#f92672>commandPort</span>: <span style=color:#ae81ff>8082</span>
+</code></pre></div><p>After setting all files, you can deploy them by these command.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>helm install -f k8s/bff.yaml bff ./k8s/microservice
+helm install -f k8s/query-service.yaml query-service ./k8s/microservice
+helm install -f k8s/command-service.yaml command-service ./k8s/microservice
+</code></pre></div><p>Check all services were deployed successfully.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>kubectl get deployments
+</code></pre></div><p>Pods status should be like below.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>NAME              READY   UP-TO-DATE   AVAILABLE   AGE
+bff               1/1     <span style=color:#ae81ff>1</span>            <span style=color:#ae81ff>1</span>           10m
+command-service   1/1     <span style=color:#ae81ff>1</span>            <span style=color:#ae81ff>1</span>           10m
+query-service     1/1     <span style=color:#ae81ff>1</span>            <span style=color:#ae81ff>1</span>           10m
+</code></pre></div><p>If something is wrong, you can check the detailed status like this.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>kubectl describe deployment -n default bff
+</code></pre></div><p>If all pods are running successfully, let&rsquo;s move to check it from a browser.</p>
+<p>Check a bff service name.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>kubectl get service
+</code></pre></div><p>Get a URL to connect to a service</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>minikube minikube service bff
+</code></pre></div><p>You can finally check all servers are running, and return expected values.</p>
 <h1 id=summary>Summary</h1>
 <p>In this series of articles, we’ve explored the Backend For Frontend (BFF) pattern, microservices, and gRPC. Additionally, we’ve touched upon Kubernetes and Minikube for orchestration and local testing.</p>
-<p>While there are many other concepts related to microservices, such as Distributed Transactions, I hope this article has provided you with a foundational understanding of the microservices ecosystem.</p>
+<p>Although there are numerous other concepts related to microservices, including Service Mesh, Distributed Transactions, Distributed Logs, and Fault Tolerance, I hope that this article has equipped you with a foundational understanding of the microservices ecosystem.</p>
 <h1 id=references>References</h1>
 <p><a href=https://kubernetes.io/docs/home/>Kubernetes Documentation</a></p>
 <p><a href="https://www.youtube.com/watch?v=X48VuDVv0do">Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]</a></p>
+<p><a href=https://wkrzywiec.medium.com/how-to-deploy-application-on-kubernetes-with-helm-39f545ad33b8>How to deploy application on Kubernetes with Helm</a></p>
 </div>
 <footer class=post__footer>
 <div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>

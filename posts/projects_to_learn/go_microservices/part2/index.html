@@ -10,8 +10,8 @@
 <meta name=twitter:title content="Learn gRPC, GraphQL and Kubernetes by building Microservices in Go: Part 2 - GraphQL BFF">
 <meta name=twitter:description content="Intro This is the second post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go. Here is a list of posts in the series:
  Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Orchestrating by Kubernetes  Full code is in here
-Directory structure is like below
-tree . . ├── Makefile ├── README.md ├── bff // BFF talking to clients by GraphQL │ ├── client │ │ └── task_client.">
+BFF Directory structure is like below
+tree . . ├── bff // BFF talking to clients by GraphQL │ ├── client │ │ └── task_client.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -67,11 +67,9 @@ Here is a list of posts in the series:</p>
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></li>
 </ul>
 <p>Full code is in <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
-<p>Directory structure is like below</p>
+<p>BFF Directory structure is like below</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>tree .
 .
-├── Makefile
-├── README.md
 ├── bff // BFF talking to clients by GraphQL
 │   ├── client
 │   │   └── task_client.go
@@ -90,32 +88,6 @@ Here is a list of posts in the series:</p>
 │   │   ├── schema.graphqls
 │   │   └── schema.resolvers.go
 │   └── tools.go
-├── go.mod
-├── go.sum
-├── microservices // Microservices, query and command services
-│   ├── command_service
-│   │   ├── cmd
-│   │   │   └── server
-│   │   │       └── main.go
-│   │   ├── go.mod
-│   │   └── go.sum
-│   └── query_service
-│       ├── cmd
-│       │   └── server
-│       │       └── main.go
-│       ├── go.mod
-│       └── go.sum
-└── proto_go // protobuf and auto-generated server and client stubs from the protobuf
-    ├── buf.gen.yaml
-    ├── gen
-    │   ├── genconnect
-    │   │   └── task.connect.go
-    │   └── task.pb.go
-    ├── go.mod
-    ├── go.sum
-    └── proto
-        ├── buf.yaml
-        └── task.proto
 </code></pre></div><h1 id=bff>BFF</h1>
 <p>Backend For Frontend (BFF) is an architectural pattern where a dedicated backend service is created for each frontend application or client type.</p>
 <p>Its primary role is to act as an intermediary between the frontend and the backend services.</p>
