@@ -233,8 +233,20 @@ buf generate proto
 <p>As I explained, we will implement two gRPC servers, Command Service and Query Service.</p>
 <p>We&rsquo;ll begin by creating two gRPC servers: Command Service and Query Service. The following code illustrates setting up a gRPC server:</p>
 <p><code>{PROJECT_ROOT/microservices/query_service/cmd/server/main.go</code></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-	<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>host</span> = <span style=color:#e6db74>&#34;localhost:8082&#34;</span>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>const</span> (
+	<span style=color:#a6e22e>defaultPort</span> = <span style=color:#e6db74>&#34;8082&#34;</span>
+	<span style=color:#a6e22e>defaultHost</span> = <span style=color:#e6db74>&#34;localhost&#34;</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#a6e22e>port</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Getenv</span>(<span style=color:#e6db74>&#34;PORT&#34;</span>)
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>port</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+		<span style=color:#a6e22e>port</span> = <span style=color:#a6e22e>defaultPort</span>
+	}
+	<span style=color:#a6e22e>host</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Getenv</span>(<span style=color:#e6db74>&#34;QUERY_SERVICE_HOST&#34;</span>)
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>host</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+		<span style=color:#a6e22e>host</span> = <span style=color:#a6e22e>defaultHost</span>
+	}
 
 	<span style=color:#a6e22e>mux</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>NewServeMux</span>()
 	<span style=color:#a6e22e>path</span>, <span style=color:#a6e22e>handler</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>NewTaskServiceHandler</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>taskServer</span>{})
@@ -243,7 +255,7 @@ buf generate proto
 
 	<span style=color:#a6e22e>eg</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>errgroup</span>.<span style=color:#a6e22e>Group</span>{}
 	<span style=color:#75715e>// Start the gRPC server
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Go</span>(<span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>error</span> { <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#a6e22e>host</span>, <span style=color:#a6e22e>h2c</span>.<span style=color:#a6e22e>NewHandler</span>(<span style=color:#a6e22e>mux</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>http2</span>.<span style=color:#a6e22e>Server</span>{})) })
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Go</span>(<span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>error</span> { <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#e6db74>&#34;:&#34;</span><span style=color:#f92672>+</span><span style=color:#a6e22e>port</span>, <span style=color:#a6e22e>h2c</span>.<span style=color:#a6e22e>NewHandler</span>(<span style=color:#a6e22e>mux</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>http2</span>.<span style=color:#a6e22e>Server</span>{})) })
 	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Query service is running on host %s&#34;</span>, <span style=color:#a6e22e>host</span>)
 
 	<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Wait</span>()
@@ -252,8 +264,20 @@ buf generate proto
 	}
 }
 </code></pre></div><p><code>{PROJECT_ROOT/microservices/command_service/cmd/server/main.go</code></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-	<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>host</span> = <span style=color:#e6db74>&#34;localhost:8081&#34;</span>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>const</span> (
+	<span style=color:#a6e22e>defaultPort</span> = <span style=color:#e6db74>&#34;8082&#34;</span>
+	<span style=color:#a6e22e>defaultHost</span> = <span style=color:#e6db74>&#34;localhost&#34;</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#a6e22e>port</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Getenv</span>(<span style=color:#e6db74>&#34;PORT&#34;</span>)
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>port</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+		<span style=color:#a6e22e>port</span> = <span style=color:#a6e22e>defaultPort</span>
+	}
+	<span style=color:#a6e22e>host</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Getenv</span>(<span style=color:#e6db74>&#34;COMMAND_SERVICE_HOST&#34;</span>)
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>host</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+		<span style=color:#a6e22e>host</span> = <span style=color:#a6e22e>defaultHost</span>
+	}
 
 	<span style=color:#a6e22e>mux</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>NewServeMux</span>()
 	<span style=color:#a6e22e>path</span>, <span style=color:#a6e22e>handler</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>NewTaskServiceHandler</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>taskServer</span>{})
@@ -262,7 +286,7 @@ buf generate proto
 
 	<span style=color:#a6e22e>eg</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>errgroup</span>.<span style=color:#a6e22e>Group</span>{}
 	<span style=color:#75715e>// Start the gRPC server
-</span><span style=color:#75715e></span>	<span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Go</span>(<span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>error</span> { <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#a6e22e>host</span>, <span style=color:#a6e22e>h2c</span>.<span style=color:#a6e22e>NewHandler</span>(<span style=color:#a6e22e>mux</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>http2</span>.<span style=color:#a6e22e>Server</span>{})) })
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Go</span>(<span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>error</span> { <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#e6db74>&#34;:&#34;</span><span style=color:#f92672>+</span><span style=color:#a6e22e>port</span>, <span style=color:#a6e22e>h2c</span>.<span style=color:#a6e22e>NewHandler</span>(<span style=color:#a6e22e>mux</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>http2</span>.<span style=color:#a6e22e>Server</span>{})) })
 	<span style=color:#a6e22e>logrus</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Command service is running on host %s&#34;</span>, <span style=color:#a6e22e>host</span>)
 
 	<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>eg</span>.<span style=color:#a6e22e>Wait</span>()
@@ -273,7 +297,7 @@ buf generate proto
 </code></pre></div><h3 id=implementing-taskservice>Implementing TaskService</h3>
 <p>Next, we&rsquo;ll implement methods within the TaskService interface for both Query and Command Services.</p>
 <p>Here&rsquo;s a snippet demonstrating the implementation:</p>
-<p>In reality, you will use some sort of DB, but here just return values for simplicity.</p>
+<p>For simplicity, we&rsquo;re returning mock data instead of interacting with a real database.</p>
 <p><code>{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>taskServer</span> <span style=color:#66d9ef>struct</span> {
 	<span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>UnimplementedTaskServiceHandler</span>
@@ -295,7 +319,7 @@ buf generate proto
 	}
 	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewResponse</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>ListTasksByTagResponse</span>{<span style=color:#a6e22e>Tasks</span>: <span style=color:#a6e22e>tasks</span>}), <span style=color:#66d9ef>nil</span>
 }
-</code></pre></div><p>Let&rsquo;s implement <code>TaskService.CreateTask</code> in command service.</p>
+</code></pre></div><p>Let&rsquo;s implement <code>TaskService.CreateTask</code> in command service:</p>
 <p><code>{PROJECT_ROOT/microservices/command_service/cmd/server/main.go</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// taskServer implements the TaskService API.
 </span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>taskServer</span> <span style=color:#66d9ef>struct</span> {
@@ -311,21 +335,21 @@ buf generate proto
 	}
 	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewResponse</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>CreateTaskResponse</span>{<span style=color:#a6e22e>Task</span>: <span style=color:#a6e22e>task</span>}), <span style=color:#66d9ef>nil</span>
 }
-</code></pre></div><p>You can check if the servers returns expected result by buf curl</p>
-<p>Start the query service.</p>
+</code></pre></div><p>You can verify if the servers return expected result by buf curl</p>
+<p>Start the query service:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd microservices/query_service
 go run cmd/server/main.go
-</code></pre></div><p>Start the command service.</p>
+</code></pre></div><p>Start the command service:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd microservices/command_service
 go run cmd/server/main.go
-</code></pre></div><p>Curl API</p>
-<p>ListTasks in query service.</p>
+</code></pre></div><p>Curl API:</p>
+<p>ListTasks in the QueryService:</p>
 <p><code>{PROJECT_ROOT}/proto_go/</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>buf curl <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  --schema proto <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  --data <span style=color:#e6db74>&#39;&#39;</span> <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  http://localhost:8082/task.TaskService/ListTasksByTag
-</code></pre></div><p>CreateTask in command service</p>
+</code></pre></div><p>CreateTask in CommandService:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>buf curl <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  --schema proto <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  --data <span style=color:#e6db74>&#39;{&#34;text&#34;: &#34;task&#34;, &#34;tags&#34;: [&#34;tag1&#34;, &#34;tag2&#34;]}&#39;</span> <span style=color:#ae81ff>\
