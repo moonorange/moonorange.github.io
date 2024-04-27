@@ -9,15 +9,15 @@ tags: ["Go", "English Article", "Kubernetes"]
 
 This is the first post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 
-In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL.
+In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL, and deploy services locally by Kubernetes.
 
-This project serves as an educational endeavor to understand the intricacies of microservices communication and the benefits of using gRPC and GraphQL.
+This project serves as an educational endeavor to understand the microservices communication and the benefits of using gRPC, GraphQL, and Kubernetes.
 
 Here is a list of posts in the series:
 
 - [Part 1 - gRPC Microservices](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1)
 - [Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
-- [Part 3 - Orchestrating by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
+- [Part 3 - Deploy services by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
 
 # Project Structure(Overview)
 
@@ -37,9 +37,9 @@ This layer acts as an intermediary between the frontend and the microservices.
 
 It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.
 
-## Kubernetes for Orchestration and Deployment:
+## Kubernetes for Deployment:
 
-We’ll leverage Kubernetes to manage our microservices.
+We’ll leverage Kubernetes to deploy our microservices.
 
 {{<figure src="./project_arch.png" alt="Project Architecture" width="80%" height="80%">}}
 

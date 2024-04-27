@@ -12,7 +12,7 @@ Here is a list of posts in the series:
 
 - [Part 1 - gRPC Microservices](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1)
 - [Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
-- [Part 3 - Orchestrating by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
+- [Part 3 - Deploy services by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
 
 Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
@@ -253,9 +253,38 @@ Go to [localhost:8080](http://localhost:8080/) to interact with bff servers.
 
 GraphQL query
 
+GetTasksByTag
+
 ```graphql
 query{
   getTasksByTag(tag: "tag1") {
+    Text
+    Tags
+    Attachments {
+      Name
+      Date
+      Contents
+    }
+  }
+}
+```
+
+CreateTask
+
+```graphql
+mutation {
+  createTask(input: {
+    Text: "My new task"
+    Tags: ["important", "work"]
+    Attachments: [
+      {
+        Name: "document.pdf"
+        Date: "2023-05-01T10:00:00Z"
+        Contents: "base64-encoded-file-contents"
+      }
+    ]
+  }) {
+    Id
     Text
     Tags
     Attachments {

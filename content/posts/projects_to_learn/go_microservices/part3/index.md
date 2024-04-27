@@ -13,7 +13,7 @@ Here is a list of posts in the series:
 
 - [Part 1 - gRPC Microservices](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1)
 - [Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
-- [Part 3 - Orchestrating by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
+- [Part 3 - Deploy services by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
 
 Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
@@ -170,7 +170,7 @@ make build_push
 
 Check all three images were pushed in DockerHub.
 
-{{<figure src="./dockerhub.png" alt="DockerHub" width="50%">}}
+{{<figure src="./dockerhub.png" alt="DockerHub" width="100%">}}
 
 
 
@@ -378,6 +378,8 @@ minikube minikube service bff
 ```
 
 You can finally check all servers are running, and return expected values.
+
+{{<figure src="./graphql_playground.png" alt="GraphQL Playground" width="100%">}}
 
 # Summary
 
