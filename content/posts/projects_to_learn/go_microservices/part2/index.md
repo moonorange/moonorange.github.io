@@ -1,7 +1,7 @@
 ---
 title: 'Learn gRPC, GraphQL and Kubernetes by building Microservices in Go: Part 2 - GraphQL BFF'
 date: '2024-04-22'
-categories: ["Projects", "Go", "Microservice", "gRPC", "GraphQL", "Kubernetes"]
+categories: ["Projects", "Go", "Microservice", "gRPC", "GraphQL", "Kubernetes", "GraphQL"]
 tags: ["Go", "English Article", "Kubernetes"]
 ---
 
@@ -43,7 +43,7 @@ tree .
 
 # BFF
 
-Backend For Frontend (BFF) is an architectural pattern where a dedicated backend service is created for each frontend application or client type.
+**Backend For Frontend (BFF)** is an architectural pattern where a dedicated backend service is created for each frontend application or client type.
 
 Its primary role is to act as an intermediary between the frontend and the backend services.
 
