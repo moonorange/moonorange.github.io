@@ -358,11 +358,13 @@ buf curl \
 
 # Summary
 
-In this post, we have delved into the fundamentals of gRPC and Protocol Buffers.
+In this post, we have dived into the fundamentals of gRPC and Protocol Buffers.
 
 Also, we have implemented two microservices: Query Service and Command Service.
 
 In part 2 we will explore GraphQL and construct our BFF layer.
+
+[Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
 
 # References
 

@@ -16,7 +16,7 @@ Here is a list of posts in the series:
 
 Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
-BFF Directory structure is like below
+BFF Directory structure:
 
 ```sh
 tree .
@@ -43,7 +43,7 @@ tree .
 
 # BFF
 
-Backend For Frontend (BFF) is an architectural pattern where a dedicated backend service is created for each frontend application or client type. 
+Backend For Frontend (BFF) is an architectural pattern where a dedicated backend service is created for each frontend application or client type.
 
 Its primary role is to act as an intermediary between the frontend and the backend services.
 
@@ -53,7 +53,7 @@ BFF decouples the frontend from the complexities of backend services. It allows 
 
 By reducing over-fetching and under-fetching of data, BFF improves performance and ensures a smoother user experience.
 
-Speak to two microservices and return results to clients in this project.
+In our project, the BFF speaks to two backend services and provides APIs for frontend.
 
 # GraphQL
 
@@ -65,11 +65,9 @@ Unlike traditional REST APIs, GraphQL provides a more flexible and efficient app
 
 # Implementing BFF
 
-In practice, the BFF aggregates data from microservices and constructs GraphQL responses for clients. This ensures that frontend applications receive precisely the data they require, enhancing performance and maintainability.
+We'll use [gqlgen](https://github.com/99designs/gqlgen) to generate code automatically from our GraphQL schema.
 
-We are going to use [gqlgen](https://github.com/99designs/gqlgen) to generate code automatically from GraphQL schema for this project.
-
-Add github.com/99designs/gqlgen to your project's tools.go
+First, add github.com/99designs/gqlgen to your project's tools.go:
 
 `{PROJECT_ROOT}/bff/`
 
@@ -79,7 +77,7 @@ printf '// +build tools\npackage tools\nimport (_ "github.com/99designs/gqlgen"\
 go mod tidy
 ```
 
-Initialize gqlgen config and generate models
+Next, initialize gqlgen config and generate models:
 
 ```sh
 go run github.com/99designs/gqlgen init
@@ -87,11 +85,11 @@ go run github.com/99designs/gqlgen init
 go mod tidy
 ```
 
-Now you get the template of GraphQL server.
+You get the template of GraphQL server.
 
 ## Define Your GraphQL Schema
 
-Update graph/schema.graphqls like below.
+Now, let's define our GraphQL schema in graph/schema.graphqls.
 
 ```graphqls
 type Query {
@@ -137,7 +135,7 @@ I added a new model named Attachment which does not exist in microservices' mode
 
 This model is for showing GraphQL benefits of fetching only necessary data.
 
-Generate code from the schema
+Generate code from the schema.
 
 ```sh
 go run github.com/99designs/gqlgen generate
@@ -147,11 +145,11 @@ go run github.com/99designs/gqlgen generate
 
 Suppose we do not want to load the Attachment on the Task unless the user actually asked for it.
 
-To archive that, replace the generated Task model with something slightly more realistic.
+To archive that, we will replace the generated Task model.
 
-First let’s enable autobind, allowing gqlgen to use your custom models if it can find them rather than generating them.
+First let’s enable autobind, allowing gqlgen to use our custom models rather than generating them.
 
-We do this by uncommenting the autobind config line in gqlgen.yml:
+We will do this by uncommenting the autobind config line in gqlgen.yml:
 
 ```yaml
 # gqlgen will search for any type names in the schema in these go packages
@@ -200,6 +198,8 @@ type Task struct {
 
 You can see Attachments resolver was implemented.
 
+This will be called only when users asked for Attachments field.
+
 ```go
 // Attachments is the resolver for the Attachments field.
 // If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver
@@ -209,30 +209,97 @@ func (r *taskResolver) Attachments(ctx context.Context, obj *model.Task) ([]*mod
 
 ## Implementing resolvers
 
-Let's implement resolvers to get and create data via microservices.
+We'll implement clients and resolvers to interact with microservices and retrieve or create data.
+
+This resolver will communicate with our backend services to fulfill GraphQL queries and mutations.
+
+`bff/client/task_client.go`
+
+```go
+package client
+
+import (
+	"net/http"
+	"os"
+
+	"connectrpc.com/connect"
+	"github.com/moonorange/gomicroservice/protogo/gen/genconnect"
+	"github.com/sirupsen/logrus"
+)
+
+var (
+	queryClient   genconnect.TaskServiceClient
+	commandClient genconnect.TaskServiceClient
+)
+
+func NewQueryServiceClient() genconnect.TaskServiceClient {
+	queryHost := os.Getenv("QUERY_SERVICE_HOST")
+	logrus.Info("queryHost: ", queryHost)
+	if queryHost == "" {
+		logrus.Fatal("empty QUERY_SERVICE_HOST")
+	}
+	// Set up a connection to the server.
+	// Create a gRPC client using the connect.WithGRPC() option
+	if queryClient != nil {
+		return queryClient
+	}
+	queryClient = genconnect.NewTaskServiceClient(
+		http.DefaultClient,
+		"http://"+queryHost,
+		connect.WithGRPC(),
+	)
+
+	return queryClient
+}
+
+func NewCommandServiceClient() genconnect.TaskServiceClient {
+	commandHost := os.Getenv("COMMAND_SERVICE_HOST")
+	logrus.Info("commandHost: ", commandHost)
+	if commandHost == "" {
+		logrus.Fatal("empty COMMAND_SERVICE_HOST")
+	}
+	if commandClient != nil {
+		return commandClient
+	}
+	// Set up a connection to the server.
+	// Create a gRPC client using the connect.WithGRPC() option
+	commandClient = genconnect.NewTaskServiceClient(
+		http.DefaultClient,
+		"http://"+commandHost,
+		connect.WithGRPC(),
+	)
+
+	return commandClient
+}
+```
 
 `bff/graph/schema.resolvers.go`
 
 ```go
-// GetTasksByTag is the resolver for the getTasksByTag field.
-func (r *queryResolver) GetTasksByTag(ctx context.Context, tag string) ([]*model.Task, error) {
+func init() {
+  queryClient = client.NewQueryServiceClient()
+  commandClient = client.NewCommandServiceClient()
+}
+
+// GetTask is the resolver for the getTask field.
+func (r *queryResolver) GetTask(ctx context.Context, id string) (*model.Task, error) {
 	// Access to query service
-	tc := client.NewTaskServiceClient("http://localhost:8082")
-	res, err := tc.ListTasksByTag(ctx, connect.NewRequest(&gen.ListTasksByTagRequest{
-		TagName: "tag1",
+	res, err := queryClient.GetTask(ctx, connect.NewRequest(&gen.GetTaskRequest{
+		TaskId: "1",
 	}))
 	if err != nil {
 		return nil, err
 	}
-
-	models := make([]*model.Task, len(res.Msg.Tasks))
-	for i, t := range res.Msg.Tasks {
-		models[i] = &model.Task{ID: string(t.Id), Text: t.Text, Tags: t.Tags}
-	}
-	return models, nil
+	return &model.Task{
+		ID:   string(res.Msg.Task.Id),
+		Text: res.Msg.Task.Text,
+		Tags: res.Msg.Task.Tags}, nil
+}
 ```
 
-Let's run all servers and check if bff server returns expected values
+## Running the servers
+
+With our BFF and microservices in place, it's time to run the servers and test our GraphQL endpoints:
 
 ```sh
 cd bff
@@ -251,9 +318,9 @@ go run cmd/server/main.go
 
 Go to [localhost:8080](http://localhost:8080/) to interact with bff servers.
 
-GraphQL query
+Use the provided GraphQL queries and mutations to interact with the BFF server and verify that it returns the expected results.
 
-GetTasksByTag
+**GetTasksByTag:**
 
 ```graphql
 query{
@@ -269,7 +336,7 @@ query{
 }
 ```
 
-CreateTask
+**CreateTask:**
 
 ```graphql
 mutation {
@@ -300,9 +367,11 @@ mutation {
 
 # Summary
 
-We have learned about BFF and GraphQL and implemented BFF.
+In this post, we've explored the concept of BFF, implemented a GraphQL BFF service in Go, and learned how to optimize data fetching with GraphQL.
 
-In part 3 we will orchestrate services by Kubernetes.
+Check for the next part, where we'll deploy our microservices with Kubernetes.
+
+ [Part 3 - Deploy services by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
 
 # References
 
