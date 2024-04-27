@@ -17,6 +17,10 @@ Here is a list of posts in the series:
 
 Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
+We have implemented gRPC servers and BFF in parts 1 and 2.
+
+In part 3, we will deploy those services on Minikube using Kubernetes.
+
 k8s Directory structure is like below.
 
 ```sh

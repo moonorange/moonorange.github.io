@@ -7,7 +7,7 @@ tags: ["Go", "English Article", "Kubernetes"]
 
 # Intro
 
-This is the second post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go. 
+This is the second post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 Here is a list of posts in the series:
 
 - [Part 1 - gRPC Microservices](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1)
@@ -15,6 +15,10 @@ Here is a list of posts in the series:
 - [Part 3 - Deploy services by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
 
 Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
+
+We have implemented gRPC servers in part 1.
+
+In part 2, we will develop a BFF server that reads from and writes to these gRPC servers and communicates with clients using GraphQL.
 
 BFF Directory structure:
 
@@ -135,7 +139,7 @@ I added a new model named Attachment which does not exist in microservices' mode
 
 This model is for showing GraphQL benefits of fetching only necessary data.
 
-Generate code from the schema.
+Generate code from the schema:
 
 ```sh
 go run github.com/99designs/gqlgen generate
@@ -145,11 +149,11 @@ go run github.com/99designs/gqlgen generate
 
 Suppose we do not want to load the Attachment on the Task unless the user actually asked for it.
 
-To archive that, we will replace the generated Task model.
+To archive that, we will add the custom Task model.
 
-First let’s enable autobind, allowing gqlgen to use our custom models rather than generating them.
+First let’s enable autobind, allowing gqlgen to use our custom models.
 
-We will do this by uncommenting the autobind config line in gqlgen.yml:
+We can do this by uncommenting the autobind config line in gqlgen.yml:
 
 ```yaml
 # gqlgen will search for any type names in the schema in these go packages
@@ -205,6 +209,7 @@ This will be called only when users asked for Attachments field.
 // If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver
 func (r *taskResolver) Attachments(ctx context.Context, obj *model.Task) ([]*model.Attachment, error) {
 	panic(fmt.Errorf("not implemented"))
+}
 ```
 
 ## Implementing resolvers
