@@ -10,8 +10,8 @@
 <meta name=twitter:title content="Learn gRPC, GraphQL and Kubernetes by building Microservices in Go: Part 2 - GraphQL BFF">
 <meta name=twitter:description content="Intro This is the second post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go. Here is a list of posts in the series:
  Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Deploy services by Kubernetes  Full code is in here
-BFF Directory structure:
-tree . . ├── bff // BFF talking to clients by GraphQL │ ├── client │ │ └── task_client.">
+We have implemented gRPC servers in part 1.
+In part 2, we will develop a BFF server that reads from and writes to these gRPC servers and communicates with clients using GraphQL.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -68,6 +68,8 @@ Here is a list of posts in the series:</p>
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Deploy services by Kubernetes</a></li>
 </ul>
 <p>Full code is in <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
+<p>We have implemented gRPC servers in part 1.</p>
+<p>In part 2, we will develop a BFF server that reads from and writes to these gRPC servers and communicates with clients using GraphQL.</p>
 <p>BFF Directory structure:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>tree .
 .
@@ -153,13 +155,13 @@ go mod tidy
 }
 </code></pre></div><p>I added a new model named Attachment which does not exist in microservices' model.</p>
 <p>This model is for showing GraphQL benefits of fetching only necessary data.</p>
-<p>Generate code from the schema.</p>
+<p>Generate code from the schema:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>go run github.com/99designs/gqlgen generate
 </code></pre></div><h2 id=preventing-over-fetching>Preventing over-fetching</h2>
 <p>Suppose we do not want to load the Attachment on the Task unless the user actually asked for it.</p>
-<p>To archive that, we will replace the generated Task model.</p>
-<p>First let’s enable autobind, allowing gqlgen to use our custom models rather than generating them.</p>
-<p>We will do this by uncommenting the autobind config line in gqlgen.yml:</p>
+<p>To archive that, we will add the custom Task model.</p>
+<p>First let’s enable autobind, allowing gqlgen to use our custom models.</p>
+<p>We can do this by uncommenting the autobind config line in gqlgen.yml:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># gqlgen will search for any type names in the schema in these go packages</span>
 <span style=color:#75715e># if they match it will use them, otherwise it will generate them.</span>
 <span style=color:#f92672>autobind</span>:
@@ -200,6 +202,7 @@ go mod tidy
 </span><span style=color:#75715e>// If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver
 </span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>taskResolver</span>) <span style=color:#a6e22e>Attachments</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>obj</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>) ([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Attachment</span>, <span style=color:#66d9ef>error</span>) {
 	panic(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;not implemented&#34;</span>))
+}
 </code></pre></div><h2 id=implementing-resolvers>Implementing resolvers</h2>
 <p>We&rsquo;ll implement clients and resolvers to interact with microservices and retrieve or create data.</p>
 <p>This resolver will communicate with our backend services to fulfill GraphQL queries and mutations.</p>
