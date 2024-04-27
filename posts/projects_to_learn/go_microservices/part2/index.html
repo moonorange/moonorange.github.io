@@ -9,7 +9,7 @@
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Learn gRPC, GraphQL and Kubernetes by building Microservices in Go: Part 2 - GraphQL BFF">
 <meta name=twitter:description content="Intro This is the second post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go. Here is a list of posts in the series:
- Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Orchestrating by Kubernetes  Full code is in here
+ Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Deploy services by Kubernetes  Full code is in here
 BFF Directory structure is like below
 tree . . ├── bff // BFF talking to clients by GraphQL │ ├── client │ │ └── task_client.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
@@ -64,7 +64,7 @@ Here is a list of posts in the series:</p>
 <ul>
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1>Part 1 - gRPC Microservices</a></li>
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2>Part 2 - GraphQL BFF</a></li>
-<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></li>
+<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Deploy services by Kubernetes</a></li>
 </ul>
 <p>Full code is in <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
 <p>BFF Directory structure is like below</p>
@@ -227,8 +227,32 @@ go run cmd/server/main.go
 go run cmd/server/main.go
 </code></pre></div><p>Go to <a href=http://localhost:8080/>localhost:8080</a> to interact with bff servers.</p>
 <p>GraphQL query</p>
+<p>GetTasksByTag</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-graphql data-lang=graphql><span style=color:#66d9ef>query</span>{
   <span style=color:#a6e22e>getTasksByTag</span>(tag: <span style=color:#e6db74>&#34;tag1&#34;</span>) {
+    <span style=color:#a6e22e>Text</span>
+    Tags
+    Attachments {
+      Name
+      Date
+      Contents
+    }
+  }
+}
+</code></pre></div><p>CreateTask</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-graphql data-lang=graphql><span style=color:#66d9ef>mutation</span> {
+  <span style=color:#a6e22e>createTask</span>(<span style=color:#66d9ef>input</span>: {
+    <span style=color:#a6e22e>Text</span>: <span style=color:#e6db74>&#34;My new task&#34;</span>
+    <span style=color:#a6e22e>Tags</span>: [<span style=color:#e6db74>&#34;important&#34;</span>, <span style=color:#e6db74>&#34;work&#34;</span>]
+    <span style=color:#a6e22e>Attachments</span>: [
+      {
+        <span style=color:#a6e22e>Name</span>: <span style=color:#e6db74>&#34;document.pdf&#34;</span>
+        <span style=color:#a6e22e>Date</span>: <span style=color:#e6db74>&#34;2023-05-01T10:00:00Z&#34;</span>
+        <span style=color:#a6e22e>Contents</span>: <span style=color:#e6db74>&#34;base64-encoded-file-contents&#34;</span>
+      }
+    ]
+  }) {
+    <span style=color:#a6e22e>Id</span>
     <span style=color:#a6e22e>Text</span>
     Tags
     Attachments {

@@ -9,9 +9,8 @@
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - Building gRPC Microservices">
 <meta name=twitter:description content="Intro This is the first post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
-In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL.
-This project serves as an educational endeavor to understand the intricacies of microservices communication and the benefits of using gRPC and GraphQL.
-Here is a list of posts in the series:">
+In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL, and deploy services locally by Kubernetes.
+This project serves as an educational endeavor to understand the microservices communication and the benefits of using gRPC, GraphQL, and Kubernetes.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -53,7 +52,7 @@ Here is a list of posts in the series:">
 <ul>
 <li><a href=#microservices-grpc>Microservices (gRPC):</a></li>
 <li><a href=#backend-for-frontend-bff>Backend For Frontend (BFF):</a></li>
-<li><a href=#kubernetes-for-orchestration-and-deployment>Kubernetes for Orchestration and Deployment:</a></li>
+<li><a href=#kubernetes-for-deployment>Kubernetes for Deployment:</a></li>
 </ul>
 <ul>
 <li><a href=#understanding-grpc>Understanding gRPC</a></li>
@@ -70,13 +69,13 @@ Here is a list of posts in the series:">
 </div><div class="content post__content clearfix">
 <h1 id=intro>Intro</h1>
 <p>This is the first post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.</p>
-<p>In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL.</p>
-<p>This project serves as an educational endeavor to understand the intricacies of microservices communication and the benefits of using gRPC and GraphQL.</p>
+<p>In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL, and deploy services locally by Kubernetes.</p>
+<p>This project serves as an educational endeavor to understand the microservices communication and the benefits of using gRPC, GraphQL, and Kubernetes.</p>
 <p>Here is a list of posts in the series:</p>
 <ul>
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1>Part 1 - gRPC Microservices</a></li>
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2>Part 2 - GraphQL BFF</a></li>
-<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></li>
+<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Deploy services by Kubernetes</a></li>
 </ul>
 <h1 id=project-structureoverview>Project Structure(Overview)</h1>
 <p>Our project revolves around three essential components:</p>
@@ -87,8 +86,8 @@ Here is a list of posts in the series:">
 <h2 id=backend-for-frontend-bff>Backend For Frontend (BFF):</h2>
 <p>This layer acts as an intermediary between the frontend and the microservices.</p>
 <p>It handles frontend-specific logic, aggregating data from various microservices and presenting it to the client.</p>
-<h2 id=kubernetes-for-orchestration-and-deployment>Kubernetes for Orchestration and Deployment:</h2>
-<p>We’ll leverage Kubernetes to manage our microservices.</p>
+<h2 id=kubernetes-for-deployment>Kubernetes for Deployment:</h2>
+<p>We’ll leverage Kubernetes to deploy our microservices.</p>
 <figure><img src=./project_arch.png alt="Project Architecture" width=80% height=80%>
 </figure>
 <p>Explore the full code <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>

@@ -10,7 +10,7 @@
 <meta name=twitter:title content="Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 3 - Kubernetes">
 <meta name=twitter:description content="Intro This is the third and last post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 Here is a list of posts in the series:
- Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Orchestrating by Kubernetes  Full code is in here
+ Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Deploy services by Kubernetes  Full code is in here
 k8s Directory structure is like below.
 tree . . Deploy Services on Kubernetes Understanding Kubernetes Kubernetes is an open-source container orchestration platform.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
@@ -67,7 +67,7 @@ tree . . Deploy Services on Kubernetes Understanding Kubernetes Kubernetes is an
 <ul>
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part1>Part 1 - gRPC Microservices</a></li>
 <li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2>Part 2 - GraphQL BFF</a></li>
-<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Orchestrating by Kubernetes</a></li>
+<li><a href=https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3>Part 3 - Deploy services by Kubernetes</a></li>
 </ul>
 <p>Full code is in <a href=https://github.com/moonorange/go_programs/tree/main/microservices_tutorial>here</a></p>
 <p>k8s Directory structure is like below.</p>
@@ -188,7 +188,7 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
 </code></pre></div><p>Run the following command to push and build images to DockerHub.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>make build_push
 </code></pre></div><p>Check all three images were pushed in DockerHub.</p>
-<figure><img src=./dockerhub.png alt=DockerHub width=50%>
+<figure><img src=./dockerhub.png alt=DockerHub width=100%>
 </figure>
 <h2 id=deploy-on-kubernetes>Deploy on Kubernetes</h2>
 <p>Start Minikube.</p>
@@ -337,6 +337,8 @@ query-service     1/1     <span style=color:#ae81ff>1</span>            <span st
 </code></pre></div><p>Get a URL to connect to a service</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>minikube minikube service bff
 </code></pre></div><p>You can finally check all servers are running, and return expected values.</p>
+<figure><img src=./graphql_playground.png alt="GraphQL Playground" width=100%>
+</figure>
 <h1 id=summary>Summary</h1>
 <p>In this series of articles, we’ve explored the Backend For Frontend (BFF) pattern, microservices, and gRPC. Additionally, we’ve touched upon Kubernetes and Minikube for orchestration and local testing.</p>
 <p>Although there are numerous other concepts related to microservices, including Service Mesh, Distributed Transactions, Distributed Logs, and Fault Tolerance, I hope that this article has equipped you with a foundational understanding of the microservices ecosystem.</p>
