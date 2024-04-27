@@ -22,6 +22,20 @@ k8s Directory structure is like below.
 ```sh
 tree .
 .
+├── k8s // k8s has Kubernetes resources
+│   ├── bff.yaml
+│   ├── command-service.yaml
+│   ├── microservice
+│   │   ├── Chart.yaml
+│   │   ├── charts
+│   │   ├── templates
+│   │   │   ├── NOTES.txt
+│   │   │   ├── deployment.yaml
+│   │   │   ├── service.yaml
+│   │   │   └── tests
+│   │   │       └── test-connection.yaml
+│   │   └── values.yaml
+│   └── query-service.yaml
 ```
 
 # Deploy Services on Kubernetes
@@ -32,27 +46,27 @@ Kubernetes is an open-source container orchestration platform. Its purpose is to
 
 Key components of Kubernetes include:
 
-Nodes:
+**Nodes:**
 - Represent either physical or virtual machines in a Kubernetes cluster.
 
-Cluster:
+**Cluster:**
 - A collection of worker nodes that work together.
 - Every Kubernetes cluster must have at least one worker node.
 
-Pods:
+**Pods:**
 - The smallest deployable units in Kubernetes.
 - Represent one or more containers that share resources such as storage and network.
 - The most common use case is the "one-container-per-Pod" model.
 - Pods are ephemeral, with each pod getting its own IP address, which changes upon recreation.
 
-Services:
+**Services:**
 - Provide stable endpoints (with permanent IP addresses) for pods.
 - Make a set of pods available on the network and can act as load balancers for those pods.
 
-Ingress:
+**Ingress:**
 - Exposes HTTP and HTTPS routes from external components to services within the cluster.
 
-Volumes:
+**Volumes:**
 - Volumes provide storage that can exist beyond the lifetime of a pod, especially with persistent volumes.
 
 {{<figure src="./k8s_components.png" alt="k8s Basic Components" width="50%">}}
@@ -77,17 +91,33 @@ We’ll leverage Minikube to run our project locally.
 brew install minikube
 ```
 
+Once installed, you can start Minikube using:
+
+```sh
+minikube start
+```
+
 ## Understanding Helm
 
-Helm is a package manager for Kubernetes that simplifies the management and deployment of applications on Kubernetes clusters.
+Helm is a package manager for Kubernetes that simplifies the management and deployment of applications.
 
-As described in the previous chapter on Understanding Kubernetes, managing Kubernetes objects solely through manifest files can become tedious and complex, especially as the number of files increases.
+It introduces the concept of charts, which are packages of pre-configured Kubernetes resources and configurations.
+
+Helm charts can be customized using templates and values, making them reusable and adaptable to different environments.
+
+Helm charts consist of several files, including:
+
+- Chart.yaml: Contains metadata about the chart, such as its name, version, and description.
+- values.yaml: Defines default values used to parameterize the chart's templates.
+- templates: Contains the actual Kubernetes resource definitions, written using Go template syntax.
+
+By leveraging Helm, you can streamline the deployment process and ensure consistency across different environments.
 
 ## Containerization
 
-Let's start with containerizing applications.
+To begin, let's containerizing our microservices.
 
-The code below is for bff, but it's almost the same in query and command services.
+The following code snippet is for the bff service, although the Dockerfile is nearly identical for the query and command services as well.
 
 ```Dockerfile
 # Use the official Golang image as base
@@ -131,11 +161,15 @@ CMD ["./bff"]
 
 Build and Push the images to DockerHub
 
+Follow these steps to build and push the images to DockerHub:
+
+**Login to DockerHub**: Execute the following command to login to DockerHub:
+
 ```sh
 docker login
 ```
 
-Place the Makefile in the project root(gomicroservice).
+**Place the Makefile**: Ensure the Makefile provided below is placed in the project root directory (gomicroservice):
 
 ```Makefile
 # Define variables for image names and paths
@@ -162,35 +196,31 @@ build_push: build push_images
 .PHONY: build push_images build_push
 ```
 
-Run the following command to push and build images to DockerHub.
+**Build and Push Images**: Execute the following command to build and push the images to DockerHub:
 
 ```sh
 make build_push
 ```
 
-Check all three images were pushed in DockerHub.
+**Verify on DockerHub**: After the process completes, verify that all three images were successfully pushed to DockerHub.
 
 {{<figure src="./dockerhub.png" alt="DockerHub" width="100%">}}
 
+## Deploying on Kubernetes
 
-
-## Deploy on Kubernetes
-
-Start Minikube.
+Start Minikube:
 
 ```sh
 minikube start
 ```
 
-Let's use Helm to deploy services on Minikube.
-
-k8s
+Utilize Helm to deploy services on Minikube:
 
 ```sh
 helm create microservice
 ```
 
-Change deployment.yaml
+Modify the deployment.yaml file as follows:
 
 ```yaml
 apiVersion: apps/v1
@@ -224,7 +254,7 @@ spec:
               value: "{{ .Values.container.dns.command }}.default.svc.cluster.local:{{ .Values.service.commandPort }}"
 ```
 
-service.yaml
+Modify the service.yaml file as follows:
 
 ```yaml
 apiVersion: v1
@@ -244,7 +274,7 @@ spec:
     app: {{ .Values.name }}
 ```
 
-values.yaml
+Modify the values.yaml file as follows:
 
 ```yaml
 # Default values for microservice.
@@ -280,7 +310,7 @@ ingress:
   tls: []
 ```
 
-Chart.yaml
+Modify the Chart.yaml file as follows:
 
 ```yaml
 apiVersion: v2
@@ -309,11 +339,14 @@ version: 0.1.0
 appVersion: "1.16.0"
 ```
 
-Create {bff,query-service,command-service.yaml}.yaml to inject values from these files.
 
-Make sure to use NodePort for bff to allow access from external service
+The provided Charts.yaml, deployment.yaml and service.yaml files demonstrate how to define Kubernetes resources for deploying microservices. 
 
-bff.yaml
+These files use Helm templating to inject values from the values.yaml file, allowing for customization and reusability.
+
+Next, create separate YAML files (e.g., bff.yaml, query-service.yaml, command-service.yaml) to inject values specific to each service.
+
+Ensure that NodePort is used for the bff service to allow access from external services:
 
 ```yaml
 name: bff
@@ -334,7 +367,9 @@ service:
   commandPort: 8082
 ```
 
-After setting all files, you can deploy them by these command.
+Once the Kubernetes resources are defined, you can use Helm to install the charts and deploy the microservices onto the Kubernetes cluster. 
+
+By running helm install, developers can deploy the microservices with a single command:
 
 ```sh
 helm install -f k8s/bff.yaml bff ./k8s/microservice
@@ -342,13 +377,13 @@ helm install -f k8s/query-service.yaml query-service ./k8s/microservice
 helm install -f k8s/command-service.yaml command-service ./k8s/microservice
 ```
 
-Check all services were deployed successfully.
+Verify that all services were deployed successfully:
 
 ```sh
 kubectl get deployments
 ```
 
-Pods status should be like below.
+Pod status should resemble the following:
 
 ```sh
 NAME              READY   UP-TO-DATE   AVAILABLE   AGE
@@ -357,33 +392,33 @@ command-service   1/1     1            1           10m
 query-service     1/1     1            1           10m
 ```
 
-If something is wrong, you can check the detailed status like this.
+To troubleshoot any issues, check the detailed status of each deployment:
 
 ```sh
 kubectl describe deployment -n default bff
 ```
 
-If all pods are running successfully, let's move to check it from a browser.
+If all pods are running successfully, proceed to check the services from a browser.
 
-Check a bff service name.
+Retrieve the service name for the bff service:
 
 ```sh
 kubectl get service
 ```
 
-Get a URL to connect to a service
+Obtain a URL to connect to the service:
 
 ```sh
 minikube minikube service bff
 ```
 
-You can finally check all servers are running, and return expected values.
+Finally, verify that all servers are running and returning expected values.
 
 {{<figure src="./graphql_playground.png" alt="GraphQL Playground" width="100%">}}
 
 # Summary
 
-In this series of articles, we’ve explored the Backend For Frontend (BFF) pattern, microservices, and gRPC. Additionally, we’ve touched upon Kubernetes and Minikube for orchestration and local testing.
+In this series of articles, we’ve explored the Backend For Frontend (BFF) pattern, microservices, and gRPC. Additionally, we’ve touched upon Kubernetes and Minikube for deploying services locally.
 
 Although there are numerous other concepts related to microservices, including Service Mesh, Distributed Transactions, Distributed Logs, and Fault Tolerance, I hope that this article has equipped you with a foundational understanding of the microservices ecosystem.
 

@@ -52,7 +52,8 @@ tree .
 .
 ├── Makefile
 ├── README.md
-├── bff // BFF talking to clients by GraphQL
+├── bff
+│   ├── Dockerfile
 │   ├── client
 │   │   └── task_client.go
 │   ├── cmd
@@ -72,20 +73,36 @@ tree .
 │   └── tools.go
 ├── go.mod
 ├── go.sum
-├── microservices // Microservices, query and command services
+├── k8s
+│   ├── bff.yaml
+│   ├── command-service.yaml
+│   ├── microservice
+│   │   ├── Chart.yaml
+│   │   ├── charts
+│   │   ├── templates
+│   │   │   ├── NOTES.txt
+│   │   │   ├── deployment.yaml
+│   │   │   ├── service.yaml
+│   │   │   └── tests
+│   │   │       └── test-connection.yaml
+│   │   └── values.yaml
+│   └── query-service.yaml
+├── microservices
 │   ├── command_service
+│   │   ├── Dockerfile
 │   │   ├── cmd
 │   │   │   └── server
 │   │   │       └── main.go
 │   │   ├── go.mod
 │   │   └── go.sum
 │   └── query_service
+│       ├── Dockerfile
 │       ├── cmd
 │       │   └── server
 │       │       └── main.go
 │       ├── go.mod
 │       └── go.sum
-└── proto_go // protobuf and auto-generated server and client stubs from the protobuf
+└── protogo
     ├── buf.gen.yaml
     ├── gen
     │   ├── genconnect
