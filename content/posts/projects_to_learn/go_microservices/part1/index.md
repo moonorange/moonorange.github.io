@@ -45,7 +45,7 @@ We’ll leverage Kubernetes to manage our microservices.
 
 Explore the full code [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
-Directory structure is like below
+Entire Project structure is like below
 
 ```sh
 tree .

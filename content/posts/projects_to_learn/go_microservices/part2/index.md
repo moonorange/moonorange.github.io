@@ -16,13 +16,11 @@ Here is a list of posts in the series:
 
 Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
-Directory structure is like below
+BFF Directory structure is like below
 
 ```sh
 tree .
 .
-├── Makefile
-├── README.md
 ├── bff // BFF talking to clients by GraphQL
 │   ├── client
 │   │   └── task_client.go
@@ -41,32 +39,6 @@ tree .
 │   │   ├── schema.graphqls
 │   │   └── schema.resolvers.go
 │   └── tools.go
-├── go.mod
-├── go.sum
-├── microservices // Microservices, query and command services
-│   ├── command_service
-│   │   ├── cmd
-│   │   │   └── server
-│   │   │       └── main.go
-│   │   ├── go.mod
-│   │   └── go.sum
-│   └── query_service
-│       ├── cmd
-│       │   └── server
-│       │       └── main.go
-│       ├── go.mod
-│       └── go.sum
-└── proto_go // protobuf and auto-generated server and client stubs from the protobuf
-    ├── buf.gen.yaml
-    ├── gen
-    │   ├── genconnect
-    │   │   └── task.connect.go
-    │   └── task.pb.go
-    ├── go.mod
-    ├── go.sum
-    └── proto
-        ├── buf.yaml
-        └── task.proto
 ```
 
 # BFF

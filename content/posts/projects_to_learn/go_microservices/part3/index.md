@@ -17,98 +17,53 @@ Here is a list of posts in the series:
 
 Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
-Directory structure is like below
+k8s Directory structure is like below.
 
 ```sh
 tree .
 .
-├── Makefile
-├── README.md
-├── bff // BFF talking to clients by GraphQL
-│   ├── client
-│   │   └── task_client.go
-│   ├── cmd
-│   │   └── server
-│   │       └── main.go
-│   ├── go.mod
-│   ├── go.sum
-│   ├── gqlgen.yml
-│   ├── graph
-│   │   ├── generated.go
-│   │   ├── model
-│   │   │   ├── models_gen.go
-│   │   │   └── task.go
-│   │   ├── resolver.go
-│   │   ├── schema.graphqls
-│   │   └── schema.resolvers.go
-│   └── tools.go
-├── go.mod
-├── go.sum
-├── microservices // Microservices, query and command services
-│   ├── command_service
-│   │   ├── cmd
-│   │   │   └── server
-│   │   │       └── main.go
-│   │   ├── go.mod
-│   │   └── go.sum
-│   └── query_service
-│       ├── cmd
-│       │   └── server
-│       │       └── main.go
-│       ├── go.mod
-│       └── go.sum
-└── proto_go // protobuf and auto-generated server and client stubs from the protobuf
-    ├── buf.gen.yaml
-    ├── gen
-    │   ├── genconnect
-    │   │   └── task.connect.go
-    │   └── task.pb.go
-    ├── go.mod
-    ├── go.sum
-    └── proto
-        ├── buf.yaml
-        └── task.proto
 ```
 
-# Orchestrate services by Kubernetes
+# Deploy Services on Kubernetes
 
 ## Understanding Kubernetes
 
 Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.
 
-Important and basic components of Kubernetes is below:
+Key components of Kubernetes include:
 
 Nodes:
-- A node is a physical or virtual machine
+- Represent either physical or virtual machines in a Kubernetes cluster.
 
 Cluster:
-- Set of worker machines(nodes)
-- Every cluster has at least one worker node
+- A collection of worker nodes that work together.
+- Every Kubernetes cluster must have at least one worker node.
 
 Pods:
-- Smallest unit of K8s
-- Abstraction over container with shared storage and network resources
-- The "one-container-per-Pod" model is the most common Kubernetes use case
-- Pods are ephemeral resources. Each pod gets its own IP address(New IP address on re-creation)
+- The smallest deployable units in Kubernetes.
+- Represent one or more containers that share resources such as storage and network.
+- The most common use case is the "one-container-per-Pod" model.
+- Pods are ephemeral, with each pod getting its own IP address, which changes upon recreation.
 
 Services:
-- Provide endpoints(Permanent IP address) for pods
-- Make the set of pods available on the network
-- Load Balancer for pods
+- Provide stable endpoints (with permanent IP addresses) for pods.
+- Make a set of pods available on the network and can act as load balancers for those pods.
 
 Ingress:
-- Expose http and https routes from external components to services within the cluster
+- Exposes HTTP and HTTPS routes from external components to services within the cluster.
 
 Volumes:
-- Storage which can exists beyond the lifetime of a pod if it's persistent volumens
+- Volumes provide storage that can exist beyond the lifetime of a pod, especially with persistent volumes.
 
 {{<figure src="./k8s_components.png" alt="k8s Basic Components" width="50%">}}
 
-You can describe what will be deployed in Kubernetes cluster by Kubernetes manifest files, which are JSON or YAML files.
+You can describe the desired state of your Kubernetes cluster using Kubernetes manifest files, typically written in JSON or YAML format.
+
+Kubernetes pods can be configured imperatively or declaratively, with manifest files commonly used for declarative configuration.
 
 ## Understanding Minikube
 
-Minikube is a powerful tool that allows us to run a Kubernetes cluster locally. 
+Minikube is a powerful tool that allows us to run a Kubernetes cluster locally.
 
 It’s particularly useful for development and testing purposes.
 
@@ -124,18 +79,316 @@ brew install minikube
 
 ## Understanding Helm
 
-Helm is a package manager for Kubernetes.
+Helm is a package manager for Kubernetes that simplifies the management and deployment of applications on Kubernetes clusters.
 
-As I explained in the Understanding Kubernetes chapter, you can describe Kubernetes objects by manifest files, but it will be tedious and complicated to manage them if you have many files.
+As described in the previous chapter on Understanding Kubernetes, managing Kubernetes objects solely through manifest files can become tedious and complex, especially as the number of files increases.
+
+## Containerization
+
+Let's start with containerizing applications.
+
+The code below is for bff, but it's almost the same in query and command services.
+
+```Dockerfile
+# Use the official Golang image as base
+FROM golang:1.22.2-alpine AS builder
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the Go module files first to help Docker utilize the Docker layer caching mechanism more efficiently
+COPY go.mod go.sum ./
+
+# Download and install dependencies
+RUN go mod download
+
+# Copy the rest of the application source code
+COPY . .
+
+# Build the application's binary
+# Compiles the code into a static binary meaning it includes all necessary dependencies within the binary itself with CGO Disabled.
+# -a: tells the Go toolchain to rebuild all packages, even if they are up to date.
+# -installsuffix: Used with CGO to distinguish between CGO-enabled and CGO-disabled builds
+# -ldflags '-extldflags "-static"': Sets the external linker flags to include -static, which instructs the linker to statically link all libraries, including C libraries, into the binary.
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflags "-static"' -o bff ./cmd/server
+
+# Start a new stage from scratch for multi-stage builds.
+# This is to reduce the finale docker image size and to isolate build depencies
+FROM alpine:latest
+
+# Set the current working directory inside the container
+WORKDIR /app
+
+# Copy the compiled binary from the previous stage
+COPY --from=builder /app/bff .
+
+# Expose the port on which the server will run
+EXPOSE 8080
+
+# Command to run the application when starting the container
+CMD ["./bff"] 
+```
+
+Build and Push the images to DockerHub
+
+```sh
+docker login
+```
+
+Place the Makefile in the project root(gomicroservice).
+
+```Makefile
+# Define variables for image names and paths
+BFF_IMAGE := bff:latest
+QUERY_IMAGE := query_service:latest
+COMMAND_IMAGE := command_service:latest
+DOCKERHUB_REPO := keigokida/gomicroservices
+
+build:
+	docker build -t $(BFF_IMAGE) ./bff
+	docker build -t $(QUERY_IMAGE) ./microservices/query_service
+	docker build -t $(COMMAND_IMAGE) ./microservices/command_service
+	docker tag $(BFF_IMAGE) $(DOCKERHUB_REPO):bff
+	docker tag $(QUERY_IMAGE) $(DOCKERHUB_REPO):query_service
+	docker tag $(COMMAND_IMAGE) $(DOCKERHUB_REPO):command_service
+
+push_images:
+	docker push $(DOCKERHUB_REPO):bff
+	docker push $(DOCKERHUB_REPO):query_service
+	docker push $(DOCKERHUB_REPO):command_service
+
+build_push: build push_images
+
+.PHONY: build push_images build_push
+```
+
+Run the following command to push and build images to DockerHub.
+
+```sh
+make build_push
+```
+
+Check all three images were pushed in DockerHub.
+
+{{<figure src="./dockerhub.png" alt="DockerHub" width="50%">}}
+
+
+
+## Deploy on Kubernetes
+
+Start Minikube.
+
+```sh
+minikube start
+```
+
+Let's use Helm to deploy services on Minikube.
+
+k8s
+
+```sh
+helm create microservice
+```
+
+Change deployment.yaml
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      containers:
+        - name: bff
+          image: "{{ .Values.container.image.repository }}:{{ .Values.container.image.tag }}"
+          imagePullPolicy: {{ .Values.container.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "{{ .Values.service.port }}"
+            - name: QUERY_SERVICE_HOST
+              value: "{{ .Values.container.dns.query }}.default.svc.cluster.local:{{ .Values.service.queryPort }}"
+            - name: COMMAND_SERVICE_HOST
+              value: "{{ .Values.container.dns.command }}.default.svc.cluster.local:{{ .Values.service.commandPort }}"
+```
+
+service.yaml
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ .Values.name }}
+```
+
+values.yaml
+
+```yaml
+# Default values for microservice.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: microservice
+replicaCount: 1
+container:
+  image:
+    repository: keigokida/gomicroservices
+    tag: microservice
+    pullPolicy: IfNotPresent
+  dns:
+    query: query-service
+    command: command-service
+
+service:
+  type: ClusterIP
+  port: 8080
+  queryPort: 8081
+  commandPort: 8082
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: microservice.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+```
+
+Chart.yaml
+
+```yaml
+apiVersion: v2
+name: microservice
+description: A Helm chart for my microservice
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.1.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+# It is recommended to use it with quotes.
+appVersion: "1.16.0"
+```
+
+Create {bff,query-service,command-service.yaml}.yaml to inject values from these files.
+
+Make sure to use NodePort for bff to allow access from external service
+
+bff.yaml
+
+```yaml
+name: bff
+replicaCount: 1
+container:
+  image:
+    repository: keigokida/gomicroservices
+    tag: bff
+    pullPolicy: IfNotPresent
+  dns:
+    query: query-service
+    command: command-service
+
+service:
+  type: NodePort
+  port: 8080
+  queryPort: 8081
+  commandPort: 8082
+```
+
+After setting all files, you can deploy them by these command.
+
+```sh
+helm install -f k8s/bff.yaml bff ./k8s/microservice
+helm install -f k8s/query-service.yaml query-service ./k8s/microservice
+helm install -f k8s/command-service.yaml command-service ./k8s/microservice
+```
+
+Check all services were deployed successfully.
+
+```sh
+kubectl get deployments
+```
+
+Pods status should be like below.
+
+```sh
+NAME              READY   UP-TO-DATE   AVAILABLE   AGE
+bff               1/1     1            1           10m
+command-service   1/1     1            1           10m
+query-service     1/1     1            1           10m
+```
+
+If something is wrong, you can check the detailed status like this.
+
+```sh
+kubectl describe deployment -n default bff
+```
+
+If all pods are running successfully, let's move to check it from a browser.
+
+Check a bff service name.
+
+```sh
+kubectl get service
+```
+
+Get a URL to connect to a service
+
+```sh
+minikube minikube service bff
+```
+
+You can finally check all servers are running, and return expected values.
 
 # Summary
 
 In this series of articles, we’ve explored the Backend For Frontend (BFF) pattern, microservices, and gRPC. Additionally, we’ve touched upon Kubernetes and Minikube for orchestration and local testing.
 
-While there are many other concepts related to microservices, such as Distributed Transactions, I hope this article has provided you with a foundational understanding of the microservices ecosystem.
+Although there are numerous other concepts related to microservices, including Service Mesh, Distributed Transactions, Distributed Logs, and Fault Tolerance, I hope that this article has equipped you with a foundational understanding of the microservices ecosystem.
 
 # References
 
 [Kubernetes Documentation](https://kubernetes.io/docs/home/)
 
 [Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]](https://www.youtube.com/watch?v=X48VuDVv0do)
+
+[How to deploy application on Kubernetes with Helm](https://wkrzywiec.medium.com/how-to-deploy-application-on-kubernetes-with-helm-39f545ad33b8)
