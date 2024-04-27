@@ -193,7 +193,7 @@ message ListTasksByTagResponse {
 }
 ```
 
-After defining protobuf, we can automatically generate code from protobuf. 
+After defining protobuf, we can automatically generate code from protobuf.
 
 We'll use [buf](https://github.com/bufbuild/buf) for managing protobuf in our project.
 
@@ -221,8 +221,20 @@ We'll begin by creating two gRPC servers: Command Service and Query Service. The
 `{PROJECT_ROOT/microservices/query_service/cmd/server/main.go`
 
 ```go
+const (
+	defaultPort = "8082"
+	defaultHost = "localhost"
+)
+
 func main() {
-	const host = "localhost:8082"
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = defaultPort
+	}
+	host := os.Getenv("QUERY_SERVICE_HOST")
+	if host == "" {
+		host = defaultHost
+	}
 
 	mux := http.NewServeMux()
 	path, handler := genconnect.NewTaskServiceHandler(&taskServer{})
@@ -231,7 +243,7 @@ func main() {
 
 	eg := errgroup.Group{}
 	// Start the gRPC server
-	eg.Go(func() error { return http.ListenAndServe(host, h2c.NewHandler(mux, &http2.Server{})) })
+	eg.Go(func() error { return http.ListenAndServe(":"+port, h2c.NewHandler(mux, &http2.Server{})) })
 	logrus.Printf("Query service is running on host %s", host)
 
 	err := eg.Wait()
@@ -244,8 +256,20 @@ func main() {
 `{PROJECT_ROOT/microservices/command_service/cmd/server/main.go`
 
 ```go
+const (
+	defaultPort = "8082"
+	defaultHost = "localhost"
+)
+
 func main() {
-	const host = "localhost:8081"
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = defaultPort
+	}
+	host := os.Getenv("COMMAND_SERVICE_HOST")
+	if host == "" {
+		host = defaultHost
+	}
 
 	mux := http.NewServeMux()
 	path, handler := genconnect.NewTaskServiceHandler(&taskServer{})
@@ -254,7 +278,7 @@ func main() {
 
 	eg := errgroup.Group{}
 	// Start the gRPC server
-	eg.Go(func() error { return http.ListenAndServe(host, h2c.NewHandler(mux, &http2.Server{})) })
+	eg.Go(func() error { return http.ListenAndServe(":"+port, h2c.NewHandler(mux, &http2.Server{})) })
 	logrus.Printf("Command service is running on host %s", host)
 
 	err := eg.Wait()
@@ -266,11 +290,11 @@ func main() {
 
 ### Implementing TaskService
 
-Next, we'll implement methods within the TaskService interface for both Query and Command Services. 
+Next, we'll implement methods within the TaskService interface for both Query and Command Services.
 
 Here's a snippet demonstrating the implementation:
 
-In reality, you will use some sort of DB, but here just return values for simplicity.
+For simplicity, we're returning mock data instead of interacting with a real database.
 
 `{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go`
 
@@ -297,7 +321,7 @@ func (t *taskServer) ListTasksByTag(ctx context.Context, req *connect.Request[ge
 }
 ```
 
-Let's implement `TaskService.CreateTask` in command service.
+Let's implement `TaskService.CreateTask` in command service:
 
 `{PROJECT_ROOT/microservices/command_service/cmd/server/main.go`
 
@@ -318,25 +342,25 @@ func (t *taskServer) CreateTask(ctx context.Context, req *connect.Request[gen.Cr
 }
 ```
 
-You can check if the servers returns expected result by buf curl
+You can verify if the servers return expected result by buf curl
 
-Start the query service.
+Start the query service:
 
 ```sh
 cd microservices/query_service
 go run cmd/server/main.go
 ```
 
-Start the command service.
+Start the command service:
 
 ```sh
 cd microservices/command_service
 go run cmd/server/main.go
 ```
 
-Curl API
+Curl API:
 
-ListTasks in query service.
+ListTasks in the QueryService:
 
 `{PROJECT_ROOT}/proto_go/`
 
@@ -347,7 +371,7 @@ buf curl \
   http://localhost:8082/task.TaskService/ListTasksByTag
 ```
 
-CreateTask in command service
+CreateTask in CommandService:
 
 ```sh
 buf curl \
