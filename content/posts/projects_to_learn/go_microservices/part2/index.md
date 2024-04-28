@@ -185,6 +185,7 @@ models:
   Task:
     fields:
       Attachments:
+        resolver: true
 ```
 
 Next, create a new file called graph/model/task.go
