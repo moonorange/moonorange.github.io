@@ -12,7 +12,7 @@ This is the first post in a series about learning gRPC, GraphQL and Kubernetes b
 In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture, leveraging gRPC and GraphQL.
 Additionally, we'll demonstrate how to deploy these services locally using Kubernetes.
 
-This project serves as an educational endeavor to understand the microservices communication and the benefits of using gRPC, GraphQL, and Kubernetes.
+This project serves as an educational endeavor to understand microservices communication and the benefits of using gRPC, GraphQL, and Kubernetes.
 
 Here is a list of posts in the series:
 
