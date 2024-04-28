@@ -119,7 +119,7 @@ By leveraging Helm, you can streamline the deployment process and ensure consist
 
 ## Containerization
 
-To begin, let's containerizing our microservices.
+To begin, let's containerize our microservices.
 
 The following code snippet is for the bff service, although the Dockerfile is nearly identical for the query and command services as well.
 

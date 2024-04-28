@@ -46,7 +46,7 @@ It handles frontend-specific logic, aggregating data from various microservices 
 
 We’ll leverage Kubernetes to deploy our microservices.
 
-Explore the full code [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
+Explore the full code [here](https://github.com/moonorange/gomicroservice)
 
 The directory structure is as follows:
 
