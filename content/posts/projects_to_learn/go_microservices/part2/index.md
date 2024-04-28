@@ -73,7 +73,7 @@ We'll use [gqlgen](https://github.com/99designs/gqlgen) to generate code automat
 
 First, add github.com/99designs/gqlgen to your project's tools.go:
 
-`{PROJECT_ROOT}/bff/`
+`{PROJECT_ROOT}/bff`:
 
 ```sh
 printf '// +build tools\npackage tools\nimport (_ "github.com/99designs/gqlgen"\n _ "github.com/99designs/gqlgen/graphql/introspection")' | gofmt > tools.go
@@ -89,7 +89,7 @@ go run github.com/99designs/gqlgen init
 go mod tidy
 ```
 
-You get the template of GraphQL server.
+This will create a template for our GraphQL server.
 
 ## Define Your GraphQL Schema
 
@@ -135,9 +135,9 @@ input NewAttachment {
 }
 ```
 
-I added a new model named Attachment which does not exist in microservices' model.
+I've introduced a new model named Attachment, which isn't present in the microservices' model.
 
-This model is for showing GraphQL benefits of fetching only necessary data.
+This addition is for demonstrating the benefit of GraphQL in fetching only necessary data.
 
 Generate code from the schema:
 
@@ -162,7 +162,7 @@ autobind:
  - "bff/graph/model"
 ```
 
-And add Task fields resolver config in gqlgen.yml to generate resolver for Attachment field
+And add Task fields resolver config in gqlgen.yml to generate resolver for Attachment field:
 
 ```yaml
 # This section declares type mapping between the GraphQL and go type systems
@@ -202,7 +202,7 @@ type Task struct {
 
 You can see Attachments resolver was implemented.
 
-This will be called only when users asked for Attachments field.
+This will be called only when users asked for the Attachments field.
 
 If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver
 
@@ -220,7 +220,7 @@ We'll implement clients and resolvers to interact with microservices and retriev
 
 This resolver will communicate with our backend services to fulfill GraphQL queries and mutations.
 
-`bff/client/task_client.go`
+`bff/client/task_client.go`:
 
 ```go
 package client
@@ -280,7 +280,7 @@ func NewCommandServiceClient() genconnect.TaskServiceClient {
 }
 ```
 
-`bff/graph/schema.resolvers.go`
+`bff/graph/schema.resolvers.go`:
 
 ```go
 func init() {
