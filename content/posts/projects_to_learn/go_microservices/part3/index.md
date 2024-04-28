@@ -21,7 +21,7 @@ We have implemented gRPC servers and BFF in parts 1 and 2.
 
 In part 3, we will deploy those services on Minikube using Kubernetes.
 
-k8s Directory structure is like below.
+k8s directory structure:
 
 ```sh
 tree .

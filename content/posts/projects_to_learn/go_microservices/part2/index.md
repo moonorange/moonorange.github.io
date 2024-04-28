@@ -20,7 +20,7 @@ We have implemented gRPC servers in part 1.
 
 In part 2, we will develop a BFF server that reads from and writes to these gRPC servers and communicates with clients using GraphQL.
 
-BFF Directory structure:
+BFF directory structure:
 
 ```sh
 tree .

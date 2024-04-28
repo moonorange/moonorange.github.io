@@ -21,6 +21,8 @@ Here is a list of posts in the series:
 
 # Project Structure(Overview)
 
+We will implement simple backend servers for a task management application.
+
 {{<figure src="./project_arch.png" alt="Project Architecture" width="80%" height="80%">}}
 
 Our project revolves around three essential components:
@@ -45,7 +47,7 @@ We’ll leverage Kubernetes to deploy our microservices.
 
 Explore the full code [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
-Entire Project structure is like below
+The directory structure is as follows:
 
 ```sh
 tree .
@@ -119,7 +121,7 @@ tree .
 
 The CQRS(Command and Query Responsibility Segregation) pattern separates read and write responsibilities within our system.
 
-While it’s not necessary and over-engineering for small projects, understanding it can enhance your architectural knowledge.
+While it’s not necessary and over-engineering for our project, understanding it can enhance your architectural knowledge.
 
 We will use gRPC for communication between services.
 
@@ -143,7 +145,7 @@ These language-agnostic schemas allow us to precisely specify the structure of o
 
 Let's kickstart by defining Protocol Buffer for our project:
 
-`{PROJECT_ROOT}/proto_go/proto/task.proto`
+`{PROJECT_ROOT}/proto_go/proto/task.proto`:
 
 ```proto
 syntax = "proto3";
@@ -201,7 +203,7 @@ Refer to the official document to leann how to install and use buf.
 
 Generate Go code from protobuf:
 
-`{PROJECT_ROOT}/proto_go/`
+`{PROJECT_ROOT}/proto_go/`:
 
 ```sh
 cd proto
@@ -218,7 +220,7 @@ As I explained, we will implement two gRPC servers, Command Service and Query Se
 
 We'll begin by creating two gRPC servers: Command Service and Query Service. The following code illustrates setting up a gRPC server:
 
-`{PROJECT_ROOT/microservices/query_service/cmd/server/main.go`
+`{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go`:
 
 ```go
 const (
@@ -253,7 +255,7 @@ func main() {
 }
 ```
 
-`{PROJECT_ROOT/microservices/command_service/cmd/server/main.go`
+`{PROJECT_ROOT}/microservices/command_service/cmd/server/main.go`:
 
 ```go
 const (
@@ -290,20 +292,20 @@ func main() {
 
 ### Implementing TaskService
 
-Next, we'll implement methods within the TaskService interface for both Query and Command Services.
+Next, we'll implement the TaskService APIs for both Query and Command Services.
 
 Here's a snippet demonstrating the implementation:
 
 For simplicity, we're returning mock data instead of interacting with a real database.
 
-`{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go`
+`{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go`:
 
 ```go
 type taskServer struct {
 	genconnect.UnimplementedTaskServiceHandler
 }
 
-// Just return a list of tasks for simplicity
+// Just return a mock list of tasks for simplicity
 func (t *taskServer) ListTasksByTag(ctx context.Context, req *connect.Request[gen.ListTasksByTagRequest]) (*connect.Response[gen.ListTasksByTagResponse], error) {
 	tasks := []*gen.Task{
 		{
@@ -321,9 +323,9 @@ func (t *taskServer) ListTasksByTag(ctx context.Context, req *connect.Request[ge
 }
 ```
 
-Let's implement `TaskService.CreateTask` in command service:
+Implement `TaskService.CreateTask` in command service:
 
-`{PROJECT_ROOT/microservices/command_service/cmd/server/main.go`
+`{PROJECT_ROOT}/microservices/command_service/cmd/server/main.go`:
 
 ```go
 // taskServer implements the TaskService API.
@@ -362,7 +364,7 @@ Curl API:
 
 ListTasks in the QueryService:
 
-`{PROJECT_ROOT}/proto_go/`
+`{PROJECT_ROOT}/proto_go/`:
 
 ```sh
 buf curl \
@@ -393,3 +395,5 @@ In part 2 we will explore GraphQL and construct our BFF layer.
 # References
 
 [Try the Buf CLI](https://buf.build/docs/tutorials/getting-started-with-buf-cli#resolve-go-dependencies)
+
+[Connect Docs](https://connectrpc.com/docs/go/getting-started/)
