@@ -9,7 +9,8 @@ tags: ["Go", "English Article", "Kubernetes"]
 
 This is the first post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 
-In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture utilizing gRPC and GraphQL, and deploy services locally by Kubernetes.
+In this series of posts, we will embark on a journey to implement a Backend For Frontend (BFF) and microservices architecture, leveraging gRPC and GraphQL.
+Additionally, we'll demonstrate how to deploy these services locally using Kubernetes.
 
 This project serves as an educational endeavor to understand the microservices communication and the benefits of using gRPC, GraphQL, and Kubernetes.
 
