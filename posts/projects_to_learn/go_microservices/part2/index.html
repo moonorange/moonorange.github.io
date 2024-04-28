@@ -198,6 +198,7 @@ go mod tidy
 }
 </code></pre></div><p>You can see Attachments resolver was implemented.</p>
 <p>This will be called only when users asked for Attachments field.</p>
+<p>If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// Attachments is the resolver for the Attachments field.
 </span><span style=color:#75715e>// If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver
 </span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>taskResolver</span>) <span style=color:#a6e22e>Attachments</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>obj</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>) ([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Attachment</span>, <span style=color:#66d9ef>error</span>) {
@@ -444,9 +445,11 @@ Software Engineer from Japan
 <a class="widget-taglist__link widget__link btn" href=/tags/gcp/ title=GCP>GCP</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/graph/ title=Graph>Graph</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/graphql/ title=GraphQL>GraphQL</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/hash-set/ title="Hash Set">Hash Set</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/hash-table/ title="Hash Table">Hash Table</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/heap/ title=Heap>Heap</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/helm/ title=Helm>Helm</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/http-cookies/ title="HTTP cookies">HTTP cookies</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/japanese-article/ title="Japanese Article">Japanese Article</a>

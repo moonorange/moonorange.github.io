@@ -43,7 +43,7 @@ In part 3, we will deploy those services on Minikube using Kubernetes.">
 <h1 class=post__title>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 3 - Kubernetes</h1>
 <div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2024-04-23T00:00:00Z>April 23, 2024</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/projects/ rel=category>Projects</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>, <a class=meta__link href=/categories/microservice/ rel=category>Microservice</a>, <a class=meta__link href=/categories/grpc/ rel=category>gRPC</a>, <a class=meta__link href=/categories/kubernetes/ rel=category>Kubernetes</a>, <a class=meta__link href=/categories/graphql/ rel=category>GraphQL</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2024-04-23T00:00:00Z>April 23, 2024</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/projects/ rel=category>Projects</a>, <a class=meta__link href=/categories/go/ rel=category>Go</a>, <a class=meta__link href=/categories/microservice/ rel=category>Microservice</a>, <a class=meta__link href=/categories/grpc/ rel=category>gRPC</a>, <a class=meta__link href=/categories/kubernetes/ rel=category>Kubernetes</a>
 </span>
 </div></div>
 </header>
@@ -172,7 +172,7 @@ In part 3, we will deploy those services on Minikube using Kubernetes.">
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>RUN</span> CGO_ENABLED<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> GOOS<span style=color:#f92672>=</span>linux go build -a -installsuffix cgo -ldflags <span style=color:#e6db74>&#39;-extldflags &#34;-static&#34;&#39;</span> -o bff ./cmd/server<span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Start a new stage from scratch for multi-stage builds.</span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># This is to reduce the finale docker image size and to isolate build depencies</span><span style=color:#960050;background-color:#1e0010>
+</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># This is to reduce the finale docker image size and to isolate build dependencies</span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>FROM</span><span style=color:#e6db74> alpine:latest</span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Set the current working directory inside the container</span><span style=color:#960050;background-color:#1e0010>
@@ -229,14 +229,19 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
 <span style=color:#f92672>metadata</span>:
   <span style=color:#f92672>name</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
 <span style=color:#f92672>spec</span>:
+  {<span style=color:#ae81ff>% comment %} This line specifies the desired number of replicas (pods) for the Deployment {% endcomment %}</span>
   <span style=color:#f92672>replicas</span>: {{ <span style=color:#ae81ff>.Values.replicaCount }}</span>
+  {<span style=color:#ae81ff>% comment %} The selector defines how the Deployment finds the pods it manages. {% endcomment %}</span>
   <span style=color:#f92672>selector</span>:
     <span style=color:#f92672>matchLabels</span>:
       <span style=color:#f92672>app</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
+  {<span style=color:#ae81ff>% comment %} This section defines the template for the pods that the Deployment will create and manage.</span>
+  <span style=color:#ae81ff>The labels defined here will be applied to the pods. {% endcomment %}</span>
   <span style=color:#f92672>template</span>:
     <span style=color:#f92672>metadata</span>:
       <span style=color:#f92672>labels</span>:
         <span style=color:#f92672>app</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
+    {<span style=color:#ae81ff>% comment %} This section defines the container(s) that will run in the pods managed by the Deployment. {% endcomment %}</span>
     <span style=color:#f92672>spec</span>:
       <span style=color:#f92672>containers</span>:
         - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>bff</span>
@@ -246,6 +251,7 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
             - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>http</span>
               <span style=color:#f92672>containerPort</span>: {{ <span style=color:#ae81ff>.Values.service.port }}</span>
               <span style=color:#f92672>protocol</span>: <span style=color:#ae81ff>TCP</span>
+          {<span style=color:#ae81ff>% comment %} env variables {% endcomment %}</span>
           <span style=color:#f92672>env</span>:
             - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>PORT</span>
               <span style=color:#f92672>value</span>: <span style=color:#e6db74>&#34;{{ .Values.service.port }}&#34;</span>
@@ -253,7 +259,11 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
               <span style=color:#f92672>value</span>: <span style=color:#e6db74>&#34;{{ .Values.container.dns.query }}.default.svc.cluster.local:{{ .Values.service.queryPort }}&#34;</span>
             - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>COMMAND_SERVICE_HOST</span>
               <span style=color:#f92672>value</span>: <span style=color:#e6db74>&#34;{{ .Values.container.dns.command }}.default.svc.cluster.local:{{ .Values.service.commandPort }}&#34;</span>
-</code></pre></div><p>Modify the service.yaml file as follows:</p>
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml> <span style=color:#f92672>selector</span>:
+    <span style=color:#f92672>matchLabels</span>:
+      <span style=color:#f92672>app</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
+</code></pre></div><p>The selector in the deployment determines which pods the deployment should manage.</p>
+<p>Modify the service.yaml file as follows:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>v1</span>
 <span style=color:#f92672>kind</span>: <span style=color:#ae81ff>Service</span>
 <span style=color:#f92672>metadata</span>:
@@ -269,7 +279,10 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
       <span style=color:#f92672>name</span>: <span style=color:#ae81ff>http</span>
   <span style=color:#f92672>selector</span>:
     <span style=color:#f92672>app</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
-</code></pre></div><p>Modify the values.yaml file as follows:</p>
+</code></pre></div><p>The selector in the service determines which pods should receive traffic from the service</p>
+<p>The <code>selector</code> should match with <code>matchLabels</code> in deployment.yaml.</p>
+<p>By ensuring that the labels and selectors match, the service can route traffic to the correct set of pods managed by the deployment.</p>
+<p>Modify the values.yaml file as follows:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># Default values for microservice.</span>
 <span style=color:#75715e># This is a YAML-formatted file.</span>
 <span style=color:#75715e># Declare variables to be passed into your templates.</span>
@@ -301,7 +314,8 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
         - <span style=color:#f92672>path</span>: <span style=color:#ae81ff>/</span>
           <span style=color:#f92672>pathType</span>: <span style=color:#ae81ff>ImplementationSpecific</span>
   <span style=color:#f92672>tls</span>: []
-</code></pre></div><p>Modify the Chart.yaml file as follows:</p>
+</code></pre></div><p>This is going to be default injected values.</p>
+<p>Modify the Chart.yaml file as follows:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>v2</span>
 <span style=color:#f92672>name</span>: <span style=color:#ae81ff>microservice</span>
 <span style=color:#f92672>description</span>: <span style=color:#ae81ff>A Helm chart for my microservice</span>
@@ -327,7 +341,7 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
 <span style=color:#75715e># It is recommended to use it with quotes.</span>
 <span style=color:#f92672>appVersion</span>: <span style=color:#e6db74>&#34;1.16.0&#34;</span>
 </code></pre></div><p>The provided Charts.yaml, deployment.yaml and service.yaml files demonstrate how to define Kubernetes resources for deploying microservices.</p>
-<p>These files use Helm templating to inject values from the values.yaml file, allowing for customization and reusability.</p>
+<p>These files use Helm templates to inject values from the values.yaml file, allowing for customization and reusability.</p>
 <p>Next, create separate YAML files (e.g., bff.yaml, query-service.yaml, command-service.yaml) to inject values specific to each service.</p>
 <p>Ensure that NodePort is used for the bff service to allow access from external services:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>name</span>: <span style=color:#ae81ff>bff</span>
@@ -346,8 +360,8 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
   <span style=color:#f92672>port</span>: <span style=color:#ae81ff>8080</span>
   <span style=color:#f92672>queryPort</span>: <span style=color:#ae81ff>8081</span>
   <span style=color:#f92672>commandPort</span>: <span style=color:#ae81ff>8082</span>
-</code></pre></div><p>Once the Kubernetes resources are defined, you can use Helm to install the charts and deploy the microservices onto the Kubernetes cluster.</p>
-<p>By running helm install, developers can deploy the microservices with a single command:</p>
+</code></pre></div><p>Once the Kubernetes resources are defined, we can use Helm to install the charts and deploy the microservices onto the Kubernetes cluster.</p>
+<p>By running helm install, we can deploy the microservices with a single command:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>helm install -f k8s/bff.yaml bff ./k8s/microservice
 helm install -f k8s/query-service.yaml query-service ./k8s/microservice
 helm install -f k8s/command-service.yaml command-service ./k8s/microservice
@@ -387,6 +401,12 @@ query-service     1/1     <span style=color:#ae81ff>1</span>            <span st
 </li>
 <li class=tags__item>
 <a class="tags__link btn" href=/tags/kubernetes/ rel=tag>Kubernetes</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/helm/ rel=tag>Helm</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/graphql/ rel=tag>GraphQL</a>
 </li>
 </ul>
 </div>
@@ -483,9 +503,11 @@ Software Engineer from Japan
 <a class="widget-taglist__link widget__link btn" href=/tags/gcp/ title=GCP>GCP</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/go/ title=Go>Go</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/graph/ title=Graph>Graph</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/graphql/ title=GraphQL>GraphQL</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/hash-set/ title="Hash Set">Hash Set</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/hash-table/ title="Hash Table">Hash Table</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/heap/ title=Heap>Heap</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/helm/ title=Helm>Helm</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/http-cookies/ title="HTTP cookies">HTTP cookies</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/ipc/ title=IPC>IPC</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/japanese-article/ title="Japanese Article">Japanese Article</a>
