@@ -204,6 +204,8 @@ You can see Attachments resolver was implemented.
 
 This will be called only when users asked for Attachments field.
 
+If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver
+
 ```go
 // Attachments is the resolver for the Attachments field.
 // If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver

@@ -1,8 +1,8 @@
 ---
 title: 'Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 3 - Kubernetes'
 date: '2024-04-23'
-categories: ["Projects", "Go", "Microservice", "gRPC", "Kubernetes", "GraphQL"]
-tags: ["Go", "English Article", "Kubernetes"]
+categories: ["Projects", "Go", "Microservice", "gRPC", "Kubernetes"]
+tags: ["Go", "English Article", "Kubernetes", "Helm", "GraphQL"]
 ---
 
 # Intro
@@ -147,7 +147,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflags "-static"' -o bff ./cmd/server
 
 # Start a new stage from scratch for multi-stage builds.
-# This is to reduce the finale docker image size and to isolate build depencies
+# This is to reduce the finale docker image size and to isolate build dependencies
 FROM alpine:latest
 
 # Set the current working directory inside the container
@@ -232,14 +232,19 @@ kind: Deployment
 metadata:
   name: {{ .Values.name }}
 spec:
+  {% comment %} This line specifies the desired number of replicas (pods) for the Deployment {% endcomment %}
   replicas: {{ .Values.replicaCount }}
+  {% comment %} The selector defines how the Deployment finds the pods it manages. {% endcomment %}
   selector:
     matchLabels:
       app: {{ .Values.name }}
+  {% comment %} This section defines the template for the pods that the Deployment will create and manage.
+  The labels defined here will be applied to the pods. {% endcomment %}
   template:
     metadata:
       labels:
         app: {{ .Values.name }}
+    {% comment %} This section defines the container(s) that will run in the pods managed by the Deployment. {% endcomment %}
     spec:
       containers:
         - name: bff
@@ -249,6 +254,7 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          {% comment %} env variables {% endcomment %}
           env:
             - name: PORT
               value: "{{ .Values.service.port }}"
@@ -257,6 +263,14 @@ spec:
             - name: COMMAND_SERVICE_HOST
               value: "{{ .Values.container.dns.command }}.default.svc.cluster.local:{{ .Values.service.commandPort }}"
 ```
+
+```yaml
+ selector:
+    matchLabels:
+      app: {{ .Values.name }}
+```
+
+The selector in the deployment determines which pods the deployment should manage.
 
 Modify the service.yaml file as follows:
 
@@ -277,6 +291,12 @@ spec:
   selector:
     app: {{ .Values.name }}
 ```
+
+The selector in the service determines which pods should receive traffic from the service
+
+The `selector` should match with `matchLabels` in deployment.yaml.
+
+By ensuring that the labels and selectors match, the service can route traffic to the correct set of pods managed by the deployment.
 
 Modify the values.yaml file as follows:
 
@@ -314,6 +334,8 @@ ingress:
   tls: []
 ```
 
+This is going to be default injected values.
+
 Modify the Chart.yaml file as follows:
 
 ```yaml
@@ -343,10 +365,9 @@ version: 0.1.0
 appVersion: "1.16.0"
 ```
 
+The provided Charts.yaml, deployment.yaml and service.yaml files demonstrate how to define Kubernetes resources for deploying microservices.
 
-The provided Charts.yaml, deployment.yaml and service.yaml files demonstrate how to define Kubernetes resources for deploying microservices. 
-
-These files use Helm templating to inject values from the values.yaml file, allowing for customization and reusability.
+These files use Helm templates to inject values from the values.yaml file, allowing for customization and reusability.
 
 Next, create separate YAML files (e.g., bff.yaml, query-service.yaml, command-service.yaml) to inject values specific to each service.
 
@@ -371,9 +392,9 @@ service:
   commandPort: 8082
 ```
 
-Once the Kubernetes resources are defined, you can use Helm to install the charts and deploy the microservices onto the Kubernetes cluster. 
+Once the Kubernetes resources are defined, we can use Helm to install the charts and deploy the microservices onto the Kubernetes cluster.
 
-By running helm install, developers can deploy the microservices with a single command:
+By running helm install, we can deploy the microservices with a single command:
 
 ```sh
 helm install -f k8s/bff.yaml bff ./k8s/microservice
