@@ -284,9 +284,31 @@ func NewCommandServiceClient() genconnect.TaskServiceClient {
 `bff/graph/schema.resolvers.go`:
 
 ```go
+var (
+	queryClient   genconnect.TaskServiceClient
+	commandClient genconnect.TaskServiceClient
+)
+
 func init() {
-  queryClient = client.NewQueryServiceClient()
-  commandClient = client.NewCommandServiceClient()
+	queryClient = client.NewQueryServiceClient()
+	commandClient = client.NewCommandServiceClient()
+}
+
+// CreateTask is the resolver for the createTask field.
+func (r *mutationResolver) CreateTask(ctx context.Context, input model.NewTask) (*model.Task, error) {
+	// Access to command service
+	res, err := commandClient.CreateTask(ctx, connect.NewRequest(&gen.CreateTaskRequest{
+		Text: "task1",
+		Tags: []string{"tag1"},
+	}))
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Task{
+		ID:   string(res.Msg.Task.Id),
+		Text: res.Msg.Task.Text,
+		Tags: res.Msg.Task.Tags}, nil
 }
 
 // GetTask is the resolver for the getTask field.
@@ -302,6 +324,33 @@ func (r *queryResolver) GetTask(ctx context.Context, id string) (*model.Task, er
 		ID:   string(res.Msg.Task.Id),
 		Text: res.Msg.Task.Text,
 		Tags: res.Msg.Task.Tags}, nil
+}
+
+// GetTasksByTag is the resolver for the getTasksByTag field.
+func (r *queryResolver) GetTasksByTag(ctx context.Context, tag string) ([]*model.Task, error) {
+	// Access to query service
+	res, err := queryClient.ListTasksByTag(ctx, connect.NewRequest(&gen.ListTasksByTagRequest{
+		TagName: "tag1",
+	}))
+	if err != nil {
+		return nil, err
+	}
+
+	models := make([]*model.Task, len(res.Msg.Tasks))
+	for i, t := range res.Msg.Tasks {
+		models[i] = &model.Task{ID: string(t.Id), Text: t.Text, Tags: t.Tags}
+	}
+	return models, nil
+}
+
+// Attachments is the resolver for the Attachments field.
+// By assuming it fetches data from DB, this function can reduce the unnecessary query to storage.
+func (r *taskResolver) Attachments(ctx context.Context, obj *model.Task) ([]*model.Attachment, error) {
+	now := time.Now()
+	contents := "contents"
+	// Sleep 1 second to see the difference of response time with or without Attachment field.
+	time.Sleep(1 * time.Second)
+	return []*model.Attachment{{Name: "attachment", Date: &now, Contents: &contents}}, nil
 }
 ```
 
