@@ -21,6 +21,8 @@ Here is a list of posts in the series:
 
 # Project Structure(Overview)
 
+{{<figure src="./project_arch.png" alt="Project Architecture" width="80%" height="80%">}}
+
 Our project revolves around three essential components:
 
 ## Microservices (gRPC):
@@ -40,8 +42,6 @@ It handles frontend-specific logic, aggregating data from various microservices 
 ## Kubernetes for Deployment:
 
 We’ll leverage Kubernetes to deploy our microservices.
-
-{{<figure src="./project_arch.png" alt="Project Architecture" width="80%" height="80%">}}
 
 Explore the full code [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
 
