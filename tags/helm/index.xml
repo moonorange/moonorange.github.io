@@ -2,4 +2,4 @@
 Here is a list of posts in the series:
 Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Deploy services by Kubernetes Full code is in here
 We have implemented gRPC servers and BFF in parts 1 and 2.
-In part 3, we will deploy those services on Minikube using Kubernetes.</description></item></channel></rss>
+In part 3, we will deploy those services using Kubernetes and Minikube.</description></item></channel></rss>
