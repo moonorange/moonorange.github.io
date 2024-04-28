@@ -19,7 +19,7 @@ Full code is in [here](https://github.com/moonorange/go_programs/tree/main/micro
 
 We have implemented gRPC servers and BFF in parts 1 and 2.
 
-In part 3, we will deploy those services on Minikube using Kubernetes.
+In part 3, we will deploy those services using Kubernetes and Minikube.
 
 k8s directory structure:
 
@@ -42,7 +42,7 @@ tree .
 │   └── query-service.yaml
 ```
 
-# Deploy Services on Kubernetes
+# Deploy Services with Kubernetes
 
 ## Understanding Kubernetes
 
