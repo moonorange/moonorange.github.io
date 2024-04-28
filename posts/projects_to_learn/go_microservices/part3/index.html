@@ -147,7 +147,7 @@ In part 3, we will deploy those services on Minikube using Kubernetes.">
 </ul>
 <p>By leveraging Helm, you can streamline the deployment process and ensure consistency across different environments.</p>
 <h2 id=containerization>Containerization</h2>
-<p>To begin, let&rsquo;s containerizing our microservices.</p>
+<p>To begin, let&rsquo;s containerize our microservices.</p>
 <p>The following code snippet is for the bff service, although the Dockerfile is nearly identical for the query and command services as well.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Dockerfile data-lang=Dockerfile><span style=color:#75715e># Use the official Golang image as base</span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>FROM</span><span style=color:#e6db74> golang:1.22.2-alpine AS builder</span><span style=color:#960050;background-color:#1e0010>
