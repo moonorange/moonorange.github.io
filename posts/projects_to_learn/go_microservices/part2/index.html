@@ -265,9 +265,31 @@ go mod tidy
 	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>commandClient</span>
 }
 </code></pre></div><p><code>bff/graph/schema.resolvers.go</code>:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>init</span>() {
-  <span style=color:#a6e22e>queryClient</span> = <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>NewQueryServiceClient</span>()
-  <span style=color:#a6e22e>commandClient</span> = <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>NewCommandServiceClient</span>()
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> (
+	<span style=color:#a6e22e>queryClient</span>   <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>TaskServiceClient</span>
+	<span style=color:#a6e22e>commandClient</span> <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>TaskServiceClient</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>init</span>() {
+	<span style=color:#a6e22e>queryClient</span> = <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>NewQueryServiceClient</span>()
+	<span style=color:#a6e22e>commandClient</span> = <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>NewCommandServiceClient</span>()
+}
+
+<span style=color:#75715e>// CreateTask is the resolver for the createTask field.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>mutationResolver</span>) <span style=color:#a6e22e>CreateTask</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>input</span> <span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>NewTask</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, <span style=color:#66d9ef>error</span>) {
+	<span style=color:#75715e>// Access to command service
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>res</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>commandClient</span>.<span style=color:#a6e22e>CreateTask</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>CreateTaskRequest</span>{
+		<span style=color:#a6e22e>Text</span>: <span style=color:#e6db74>&#34;task1&#34;</span>,
+		<span style=color:#a6e22e>Tags</span>: []<span style=color:#66d9ef>string</span>{<span style=color:#e6db74>&#34;tag1&#34;</span>},
+	}))
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
+	}
+
+	<span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>{
+		<span style=color:#a6e22e>ID</span>:   string(<span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Id</span>),
+		<span style=color:#a6e22e>Text</span>: <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Text</span>,
+		<span style=color:#a6e22e>Tags</span>: <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Tags</span>}, <span style=color:#66d9ef>nil</span>
 }
 
 <span style=color:#75715e>// GetTask is the resolver for the getTask field.
@@ -283,6 +305,33 @@ go mod tidy
 		<span style=color:#a6e22e>ID</span>:   string(<span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Id</span>),
 		<span style=color:#a6e22e>Text</span>: <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Text</span>,
 		<span style=color:#a6e22e>Tags</span>: <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Task</span>.<span style=color:#a6e22e>Tags</span>}, <span style=color:#66d9ef>nil</span>
+}
+
+<span style=color:#75715e>// GetTasksByTag is the resolver for the getTasksByTag field.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>queryResolver</span>) <span style=color:#a6e22e>GetTasksByTag</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tag</span> <span style=color:#66d9ef>string</span>) ([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, <span style=color:#66d9ef>error</span>) {
+	<span style=color:#75715e>// Access to query service
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>res</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>queryClient</span>.<span style=color:#a6e22e>ListTasksByTag</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>connect</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>gen</span>.<span style=color:#a6e22e>ListTasksByTagRequest</span>{
+		<span style=color:#a6e22e>TagName</span>: <span style=color:#e6db74>&#34;tag1&#34;</span>,
+	}))
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
+	}
+
+	<span style=color:#a6e22e>models</span> <span style=color:#f92672>:=</span> make([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>, len(<span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Tasks</span>))
+	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>t</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>Msg</span>.<span style=color:#a6e22e>Tasks</span> {
+		<span style=color:#a6e22e>models</span>[<span style=color:#a6e22e>i</span>] = <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>{<span style=color:#a6e22e>ID</span>: string(<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Id</span>), <span style=color:#a6e22e>Text</span>: <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Text</span>, <span style=color:#a6e22e>Tags</span>: <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Tags</span>}
+	}
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>models</span>, <span style=color:#66d9ef>nil</span>
+}
+
+<span style=color:#75715e>// Attachments is the resolver for the Attachments field.
+</span><span style=color:#75715e>// By assuming it fetches data from DB, this function can reduce the unnecessary query to storage.
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>taskResolver</span>) <span style=color:#a6e22e>Attachments</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>obj</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Task</span>) ([]<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Attachment</span>, <span style=color:#66d9ef>error</span>) {
+	<span style=color:#a6e22e>now</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>()
+	<span style=color:#a6e22e>contents</span> <span style=color:#f92672>:=</span> <span style=color:#e6db74>&#34;contents&#34;</span>
+	<span style=color:#75715e>// Sleep 1 second to see the difference of response time with or without Attachment field.
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#ae81ff>1</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span>)
+	<span style=color:#66d9ef>return</span> []<span style=color:#f92672>*</span><span style=color:#a6e22e>model</span>.<span style=color:#a6e22e>Attachment</span>{{<span style=color:#a6e22e>Name</span>: <span style=color:#e6db74>&#34;attachment&#34;</span>, <span style=color:#a6e22e>Date</span>: <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>now</span>, <span style=color:#a6e22e>Contents</span>: <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>contents</span>}}, <span style=color:#66d9ef>nil</span>
 }
 </code></pre></div><h2 id=running-the-servers>Running the servers</h2>
 <p>With our BFF and microservices in place, it&rsquo;s time to run the servers and test our GraphQL endpoints:</p>
