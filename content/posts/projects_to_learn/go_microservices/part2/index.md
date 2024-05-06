@@ -201,7 +201,13 @@ type Task struct {
 }
 ```
 
-You can see Attachments resolver was implemented.
+And run the following command to generate resolvers. 
+
+```sh
+go run github.com/99designs/gqlgen generate
+```
+
+Now you can see Attachments resolver was implemented.
 
 This will be called only when users asked for the Attachments field.
 

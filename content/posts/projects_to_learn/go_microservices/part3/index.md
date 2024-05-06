@@ -42,8 +42,6 @@ tree .
 │   └── query-service.yaml
 ```
 
-# Deploy Services with Kubernetes
-
 ## Understanding Kubernetes
 
 Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.
@@ -163,7 +161,7 @@ EXPOSE 8080
 CMD ["./bff"] 
 ```
 
-Build and Push the images to DockerHub
+Build and Push the images to DockerHub.
 
 Follow these steps to build and push the images to DockerHub:
 
@@ -264,13 +262,13 @@ spec:
               value: "{{ .Values.container.dns.command }}.default.svc.cluster.local:{{ .Values.service.commandPort }}"
 ```
 
+The following selector part in the deployment.yaml determines which pods the deployment should manage:
+
 ```yaml
  selector:
     matchLabels:
       app: {{ .Values.name }}
 ```
-
-The selector in the deployment determines which pods the deployment should manage.
 
 Modify the service.yaml file as follows:
 
@@ -334,7 +332,7 @@ ingress:
   tls: []
 ```
 
-This is going to be default injected values.
+This file is going to be default injected values.
 
 Modify the Chart.yaml file as follows:
 
