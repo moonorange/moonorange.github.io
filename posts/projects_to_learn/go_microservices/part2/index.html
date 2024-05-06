@@ -197,7 +197,9 @@ go mod tidy
 	<span style=color:#a6e22e>Tags</span> []<span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;Tags,omitempty&#34;`</span>
 	<span style=color:#a6e22e>Attachment</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Attachment</span> <span style=color:#e6db74>`json:&#34;Attachment,omitempty&#34;`</span>
 }
-</code></pre></div><p>You can see Attachments resolver was implemented.</p>
+</code></pre></div><p>And run the following command to generate resolvers.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>go run github.com/99designs/gqlgen generate
+</code></pre></div><p>Now you can see Attachments resolver was implemented.</p>
 <p>This will be called only when users asked for the Attachments field.</p>
 <p>If assuming it fetches data from DB, it can reduce the unnecessary query to storage by implementing attachment resolver</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// Attachments is the resolver for the Attachments field.

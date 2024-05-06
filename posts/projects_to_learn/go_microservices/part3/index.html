@@ -89,8 +89,7 @@ In part 3, we will deploy those services using Kubernetes and Minikube.">
 │   │   │       └── test-connection.yaml
 │   │   └── values.yaml
 │   └── query-service.yaml
-</code></pre></div><h1 id=deploy-services-with-kubernetes>Deploy Services with Kubernetes</h1>
-<h2 id=understanding-kubernetes>Understanding Kubernetes</h2>
+</code></pre></div><h2 id=understanding-kubernetes>Understanding Kubernetes</h2>
 <p>Kubernetes is an open-source container orchestration platform. Its purpose is to automate deployment, scaling, and management of containerized applications.</p>
 <p>Key components of Kubernetes include:</p>
 <p><strong>Nodes:</strong></p>
@@ -186,7 +185,7 @@ In part 3, we will deploy those services using Kubernetes and Minikube.">
 </span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># Command to run the application when starting the container</span><span style=color:#960050;background-color:#1e0010>
 </span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>CMD</span> [<span style=color:#e6db74>&#34;./bff&#34;</span>] <span style=color:#960050;background-color:#1e0010>
-</span></code></pre></div><p>Build and Push the images to DockerHub</p>
+</span></code></pre></div><p>Build and Push the images to DockerHub.</p>
 <p>Follow these steps to build and push the images to DockerHub:</p>
 <p><strong>Login to DockerHub</strong>: Execute the following command to login to DockerHub:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>docker login
@@ -259,11 +258,11 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
               <span style=color:#f92672>value</span>: <span style=color:#e6db74>&#34;{{ .Values.container.dns.query }}.default.svc.cluster.local:{{ .Values.service.queryPort }}&#34;</span>
             - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>COMMAND_SERVICE_HOST</span>
               <span style=color:#f92672>value</span>: <span style=color:#e6db74>&#34;{{ .Values.container.dns.command }}.default.svc.cluster.local:{{ .Values.service.commandPort }}&#34;</span>
-</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml> <span style=color:#f92672>selector</span>:
+</code></pre></div><p>The following selector part in the deployment.yaml determines which pods the deployment should manage:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml> <span style=color:#f92672>selector</span>:
     <span style=color:#f92672>matchLabels</span>:
       <span style=color:#f92672>app</span>: {{ <span style=color:#ae81ff>.Values.name }}</span>
-</code></pre></div><p>The selector in the deployment determines which pods the deployment should manage.</p>
-<p>Modify the service.yaml file as follows:</p>
+</code></pre></div><p>Modify the service.yaml file as follows:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>v1</span>
 <span style=color:#f92672>kind</span>: <span style=color:#ae81ff>Service</span>
 <span style=color:#f92672>metadata</span>:
@@ -314,7 +313,7 @@ DOCKERHUB_REPO <span style=color:#f92672>:=</span> keigokida/gomicroservices
         - <span style=color:#f92672>path</span>: <span style=color:#ae81ff>/</span>
           <span style=color:#f92672>pathType</span>: <span style=color:#ae81ff>ImplementationSpecific</span>
   <span style=color:#f92672>tls</span>: []
-</code></pre></div><p>This is going to be default injected values.</p>
+</code></pre></div><p>This file is going to be default injected values.</p>
 <p>Modify the Chart.yaml file as follows:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>v2</span>
 <span style=color:#f92672>name</span>: <span style=color:#ae81ff>microservice</span>
