@@ -73,7 +73,7 @@ We'll use [gqlgen](https://github.com/99designs/gqlgen) to generate code automat
 
 First, add github.com/99designs/gqlgen to your project's tools.go:
 
-`{PROJECT_ROOT}/bff`:
+`{PROJECT_ROOT}/bff`
 
 ```sh
 printf '// +build tools\npackage tools\nimport (_ "github.com/99designs/gqlgen"\n _ "github.com/99designs/gqlgen/graphql/introspection")' | gofmt > tools.go
@@ -201,7 +201,7 @@ type Task struct {
 }
 ```
 
-And run the following command to generate resolvers. 
+And run the following command to generate resolvers.
 
 ```sh
 go run github.com/99designs/gqlgen generate
@@ -227,7 +227,7 @@ We'll implement clients and resolvers to interact with microservices and retriev
 
 This resolver will communicate with our backend services to fulfill GraphQL queries and mutations.
 
-`bff/client/task_client.go`:
+`bff/client/task_client.go`
 
 ```go
 package client
@@ -287,7 +287,7 @@ func NewCommandServiceClient() genconnect.TaskServiceClient {
 }
 ```
 
-`bff/graph/schema.resolvers.go`:
+`bff/graph/schema.resolvers.go`
 
 ```go
 var (

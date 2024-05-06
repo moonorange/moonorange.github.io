@@ -146,7 +146,7 @@ These language-agnostic schemas allow us to precisely specify the structure of o
 
 Let's kickstart by defining Protocol Buffer for our project:
 
-`{PROJECT_ROOT}/proto_go/proto/task.proto`:
+`{PROJECT_ROOT}/proto_go/proto/task.proto`
 
 ```proto
 syntax = "proto3";
@@ -204,7 +204,7 @@ Refer to the official document to leann how to install and use buf.
 
 Generate Go code from protobuf:
 
-`{PROJECT_ROOT}/proto_go/`:
+`{PROJECT_ROOT}/proto_go/`
 
 ```sh
 cd proto
@@ -221,7 +221,7 @@ As I explained, we will implement two gRPC servers, Command Service and Query Se
 
 We'll begin by creating two gRPC servers: Command Service and Query Service. The following code illustrates setting up a gRPC server:
 
-`{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go`:
+`{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go`
 
 ```go
 const (
@@ -256,7 +256,7 @@ func main() {
 }
 ```
 
-`{PROJECT_ROOT}/microservices/command_service/cmd/server/main.go`:
+`{PROJECT_ROOT}/microservices/command_service/cmd/server/main.go`
 
 ```go
 const (
@@ -299,7 +299,7 @@ Here's a snippet demonstrating the implementation:
 
 For simplicity, we're returning mock data instead of interacting with a real database.
 
-`{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go`:
+`{PROJECT_ROOT}/microservices/query_service/cmd/server/main.go`
 
 ```go
 type taskServer struct {
@@ -326,7 +326,7 @@ func (t *taskServer) ListTasksByTag(ctx context.Context, req *connect.Request[ge
 
 Implement `TaskService.CreateTask` in command service:
 
-`{PROJECT_ROOT}/microservices/command_service/cmd/server/main.go`:
+`{PROJECT_ROOT}/microservices/command_service/cmd/server/main.go
 
 ```go
 // taskServer implements the TaskService API.
@@ -365,7 +365,7 @@ Curl API:
 
 ListTasks in the QueryService:
 
-`{PROJECT_ROOT}/proto_go/`:
+`{PROJECT_ROOT}/proto_go/`
 
 ```sh
 buf curl \
