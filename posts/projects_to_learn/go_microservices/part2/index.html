@@ -105,7 +105,7 @@ Here is a list of posts in the series:</p>
 <h1 id=implementing-bff>Implementing BFF</h1>
 <p>We&rsquo;ll use <a href=https://github.com/99designs/gqlgen>gqlgen</a> to generate code automatically from our GraphQL schema.</p>
 <p>First, add github.com/99designs/gqlgen to your project&rsquo;s tools.go:</p>
-<p><code>{PROJECT_ROOT}/bff</code>:</p>
+<p><code>{PROJECT_ROOT}/bff</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>printf <span style=color:#e6db74>&#39;// +build tools\npackage tools\nimport (_ &#34;github.com/99designs/gqlgen&#34;\n _ &#34;github.com/99designs/gqlgen/graphql/introspection&#34;)&#39;</span> | gofmt &gt; tools.go
 
 go mod tidy
@@ -210,7 +210,7 @@ go mod tidy
 </code></pre></div><h2 id=implementing-resolvers>Implementing resolvers</h2>
 <p>We&rsquo;ll implement clients and resolvers to interact with microservices and retrieve or create data.</p>
 <p>This resolver will communicate with our backend services to fulfill GraphQL queries and mutations.</p>
-<p><code>bff/client/task_client.go</code>:</p>
+<p><code>bff/client/task_client.go</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>client</span>
 
 <span style=color:#f92672>import</span> (
@@ -266,7 +266,7 @@ go mod tidy
 
 	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>commandClient</span>
 }
-</code></pre></div><p><code>bff/graph/schema.resolvers.go</code>:</p>
+</code></pre></div><p><code>bff/graph/schema.resolvers.go</code></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> (
 	<span style=color:#a6e22e>queryClient</span>   <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>TaskServiceClient</span>
 	<span style=color:#a6e22e>commandClient</span> <span style=color:#a6e22e>genconnect</span>.<span style=color:#a6e22e>TaskServiceClient</span>
