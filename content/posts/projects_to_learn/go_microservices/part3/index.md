@@ -15,7 +15,7 @@ Here is a list of posts in the series:
 - [Part 2 - GraphQL BFF](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part2)
 - [Part 3 - Deploy services by Kubernetes](https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3)
 
-Full code is in [here](https://github.com/moonorange/go_programs/tree/main/microservices_tutorial)
+Full code is in [here](https://github.com/moonorange/gomicroservice)
 
 We have implemented gRPC servers and BFF in parts 1 and 2.
 
