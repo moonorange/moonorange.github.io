@@ -1,6 +1,6 @@
 ---
 title: 'Binary Tree'
-date: '2021-5-16'
+date: '2021-05-16'
 categories: ["DSA"]
 tags: ["Tree", "Python", "English Article"]
 ---
