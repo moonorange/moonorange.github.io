@@ -40,6 +40,26 @@
 </header><article class="list__item post">
 <header class=list__header>
 <h2 class="list__title post__title">
+<a href=/posts/dsa/queue_stacks/ rel=bookmark>
+Stack and Queue
+</a>
+</h2>
+<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2022-05-21T00:00:00Z>May 21, 2022</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+</span>
+</div></div>
+</header>
+<div class="content list__excerpt post__content clearfix">
+Queue FIFO
+package queue import "sync" type node struct { data interface{} next *node } type Queue struct { head *node tail *node count int lock *sync.Mutex } func NewQueue() *Queue { return &Queue{lock: &sync.Mutex{}} } func (q *Queue) Len() int { q.lock.Lock() defer q.lock.Unlock() return q.count } func (q *Queue) Push(data interface{}) { q.lock.Lock() defer q.lock.Unlock() ele := &node{data: data} if q.head == nil { q.head = ele q.tail = ele } else { q.
+</div>
+<div class="list__footer clearfix">
+<a class="list__footer-readmore btn" href=/posts/dsa/queue_stacks/>Read more…</a>
+</div>
+</article><article class="list__item post">
+<header class=list__header>
+<h2 class="list__title post__title">
 <a href=/posts/dsa/heap/ rel=bookmark>
 Heap
 </a>
@@ -212,25 +232,6 @@ RAID 複数の Disk をまとめて一つの storage とする技術。 基本�
 <div class="list__footer clearfix">
 <a class="list__footer-readmore btn" href=/posts/middleware/db/>Read more…</a>
 </div>
-</article><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/software_design/oop/ rel=bookmark>
-OOP Random Notes
-</a>
-</h2>
-<div class="list__meta meta">
-<div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-10-03T00:00:00Z>October 03, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/software-design/ rel=category>Software Design</a>
-</span>
-</div></div>
-</header>
-<div class="content list__excerpt post__content clearfix">
-Intro Random notes of relating OOP Terminology Parameter A parameter is a named variable passed into a function. Parameter variables are used to import arguments into functions. The difference between parameters and arguments Function parameters are the names listed in the function&rsquo;s definition. Function arguments are the real values passed to the function. Parameters are initialized to the values of the arguments supplied. MDN Parameter Override Overriding a method means
-</div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/software_design/oop/>Read more…</a>
-</div>
 </article>
 </main>
 <div class=pagination>
@@ -244,11 +245,11 @@ Intro Random notes of relating OOP Terminology Parameter A parameter is a named 
 <h4 class=widget__title>Recent Posts</h4>
 <div class=widget__content>
 <ul class=widget__list>
+<li class=widget__item><a class=widget__link href=/posts/programming_language/typescript/>Typescript Basic</a></li>
 <li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part3/>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 3 - Kubernetes</a></li>
 <li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part2/>Learn gRPC, GraphQL and Kubernetes by building Microservices in Go: Part 2 - GraphQL BFF</a></li>
 <li class=widget__item><a class=widget__link href=/posts/projects_to_learn/go_microservices/part1/>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 1 - Building gRPC Microservices</a></li>
 <li class=widget__item><a class=widget__link href=/posts/programming_language/job_queues_go/>Implementation of Job Queue model using goroutine and channel</a></li>
-<li class=widget__item><a class=widget__link href=/posts/programming_language/go_concurrency_model/>Go Concurrency Model</a></li>
 </ul>
 </div>
 </div>
@@ -296,6 +297,8 @@ Intro Random notes of relating OOP Terminology Parameter A parameter is a named 
 <a class=widget__link href=/categories/software-design/>Software Design</a></li>
 <li class=widget__item>
 <a class=widget__link href=/categories/system-design/>System Design</a></li>
+<li class=widget__item>
+<a class=widget__link href=/categories/typescript/>TypeScript</a></li>
 </ul>
 </div>
 </div>
@@ -345,6 +348,7 @@ Intro Random notes of relating OOP Terminology Parameter A parameter is a named 
 <a class="widget-taglist__link widget__link btn" href=/tags/terraform-cloud/ title="Terraform Cloud">Terraform Cloud</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/tree/ title=Tree>Tree</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/trie/ title=Trie>Trie</a>
+<a class="widget-taglist__link widget__link btn" href=/tags/typescript/ title=TypeScript>TypeScript</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/union-find/ title=Union-Find>Union-Find</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/web/ title=Web>Web</a>
 <a class="widget-taglist__link widget__link btn" href=/tags/web-vulnerability/ title="Web Vulnerability">Web Vulnerability</a>
@@ -365,7 +369,7 @@ Intro Random notes of relating OOP Terminology Parameter A parameter is a named 
 <footer class=footer>
 <div class="container footer__container flex">
 <div class=footer__copyright>
-&copy; 2024 Keigo Kida.
+&copy; 2025 Keigo Kida.
 <span class=footer__copyright-credits>Generated with <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> and <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> theme.</span>
 </div>
 </div>
