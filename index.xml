@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kei's Blog</title><link>https://moonorange.github.io/</link><description>Recent content on Kei's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 22 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://moonorange.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Typescript Basic</title><link>https://moonorange.github.io/posts/programming_language/typescript/</link><pubDate>Sat, 22 Nov 2025 00:00:00 +0000</pubDate><guid>https://moonorange.github.io/posts/programming_language/typescript/</guid><description>Introduction Random notes about TypeScript
-What is TypeScript? TypeScript is a typed superset of JavaScript.
-Ref https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html</description></item><item><title>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 3 - Kubernetes</title><link>https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3/</link><pubDate>Tue, 23 Apr 2024 00:00:00 +0000</pubDate><guid>https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3/</guid><description>Intro This is the third and last post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
+What is TypeScript? TypeScript is a typed superset of JavaScript meaning TypeScript is JavaScript’s runtime with a compile-time type checker.
+It preserves the runtime behavior of JavaScript meaning you can move code from JavaScript to TypeScript even if that the code has type errors.
+Declarations var: declares a variable
+let: block-scoped local variable
+const: block-scoped, read-only named constant
+Examples Scope Difference:
+function varExample() { if (true) { var x = 10; } console.</description></item><item><title>Learn gRPC, GraphQL and Kubernetes by building Microservices: Part 3 - Kubernetes</title><link>https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3/</link><pubDate>Tue, 23 Apr 2024 00:00:00 +0000</pubDate><guid>https://moonorange.github.io/posts/projects_to_learn/go_microservices/part3/</guid><description>Intro This is the third and last post in a series about learning gRPC, GraphQL and Kubernetes by building Microservices in Go.
 Here is a list of posts in the series:
 Part 1 - gRPC Microservices Part 2 - GraphQL BFF Part 3 - Deploy services by Kubernetes Full code is in here
 We have implemented gRPC servers and BFF in parts 1 and 2.

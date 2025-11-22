@@ -9,8 +9,13 @@
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Typescript Basic">
 <meta name=twitter:description content="Introduction Random notes about TypeScript
-What is TypeScript? TypeScript is a typed superset of JavaScript.
-Ref https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html">
+What is TypeScript? TypeScript is a typed superset of JavaScript meaning TypeScript is JavaScript’s runtime with a compile-time type checker.
+It preserves the runtime behavior of JavaScript meaning you can move code from JavaScript to TypeScript even if that the code has type errors.
+Declarations var: declares a variable
+let: block-scoped local variable
+const: block-scoped, read-only named constant
+Examples Scope Difference:
+function varExample() { if (true) { var x = 10; } console.">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
@@ -52,6 +57,11 @@ Ref https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html">
 <ul>
 <li><a href=#introduction>Introduction</a></li>
 <li><a href=#what-is-typescript>What is TypeScript?</a></li>
+<li><a href=#declarations>Declarations</a>
+<ul>
+<li><a href=#examples>Examples</a></li>
+</ul>
+</li>
 <li><a href=#ref>Ref</a></li>
 </ul>
 </nav>
@@ -60,8 +70,67 @@ Ref https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html">
 <h2 id=introduction>Introduction</h2>
 <p>Random notes about TypeScript</p>
 <h2 id=what-is-typescript>What is TypeScript?</h2>
-<p>TypeScript is a typed superset of JavaScript.</p>
-<h2 id=ref>Ref</h2>
+<p>TypeScript is a typed superset of JavaScript meaning TypeScript is JavaScript’s runtime with a compile-time type checker.</p>
+<p>It preserves the runtime behavior of JavaScript meaning you can move code from JavaScript to TypeScript even if that the code has type errors.</p>
+<h2 id=declarations>Declarations</h2>
+<p><code>var</code>: declares a variable</p>
+<p><code>let</code>: block-scoped local variable</p>
+<p><code>const</code>: block-scoped, read-only named constant</p>
+<h3 id=examples>Examples</h3>
+<p><strong>Scope Difference:</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-typescript data-lang=typescript><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>varExample() {</span>
+  <span style=color:#66d9ef>if</span> (<span style=color:#66d9ef>true</span>) {
+    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>x</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>;
+  }
+  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>x</span>); <span style=color:#75715e>// 10: var is function-scoped
+</span><span style=color:#75715e></span>}
+
+<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>letExample() {</span>
+  <span style=color:#66d9ef>if</span> (<span style=color:#66d9ef>true</span>) {
+    <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>y</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>;
+  }
+  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>y</span>); <span style=color:#75715e>// Error: y is not defined, let is block-scoped
+</span><span style=color:#75715e></span>}
+</code></pre></div><p><strong>Re-declaration:</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-typescript data-lang=typescript><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>; <span style=color:#75715e>// OK: var allows re-declaration
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>b</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>b</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>; <span style=color:#75715e>// Error: Cannot redeclare &#39;b&#39;
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>c</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>c</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>; <span style=color:#75715e>// Error: Cannot redeclare &#39;c&#39;
+</span></code></pre></div><p><strong>Re-assignment:</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-typescript data-lang=typescript><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>x</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+<span style=color:#a6e22e>x</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>; <span style=color:#75715e>// OK
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>y</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+<span style=color:#a6e22e>y</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>; <span style=color:#75715e>// OK
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>z</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+<span style=color:#a6e22e>z</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>; <span style=color:#75715e>// Error: Cannot assign to &#39;z&#39; because it is a constant
+</span></code></pre></div><p><strong>Hoisting Behavior:</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-typescript data-lang=typescript><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>a</span>); <span style=color:#75715e>// undefined: var is hoisted
+</span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>;
+
+<span style=color:#75715e>// let/const are also hoisted, but they&#39;re in a &#34;Temporal Dead Zone&#34; (TDZ)
+</span><span style=color:#75715e>// Accessing them before declaration throws a ReferenceError
+</span><span style=color:#75715e></span><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>b</span>); <span style=color:#75715e>// Error: Cannot access &#39;b&#39; before initialization
+</span><span style=color:#75715e></span><span style=color:#66d9ef>let</span> <span style=color:#a6e22e>b</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>;
+
+<span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>c</span>); <span style=color:#75715e>// Error: Cannot access &#39;c&#39; before initialization
+</span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>c</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>;
+</code></pre></div><p><strong>Loop Example:</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-typescript data-lang=typescript><span style=color:#75715e>// var: all callbacks share the same variable
+</span><span style=color:#75715e></span><span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>3</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>) {
+  <span style=color:#a6e22e>setTimeout</span>(() <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>i</span>), <span style=color:#ae81ff>100</span>); <span style=color:#75715e>// 3, 3, 3
+</span><span style=color:#75715e></span>}
+
+<span style=color:#75715e>// let: each iteration has its own binding
+</span><span style=color:#75715e></span><span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>j</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>j</span> <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>3</span>; <span style=color:#a6e22e>j</span><span style=color:#f92672>++</span>) {
+  <span style=color:#a6e22e>setTimeout</span>(() <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>j</span>), <span style=color:#ae81ff>100</span>); <span style=color:#75715e>// 0, 1, 2
+</span><span style=color:#75715e></span>}
+</code></pre></div><h2 id=ref>Ref</h2>
 <p><a href=https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html>https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html</a></p>
 </div>
 <footer class=post__footer>
