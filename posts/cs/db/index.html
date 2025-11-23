@@ -3,19 +3,21 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="IE=edge">
-<title>Hash Set - Kei's Blog</title>
+<title>Notes around database - Kei's Blog</title>
 <script>(function(a,b){a[b]=a[b].replace("no-js","js")})(document.documentElement,"className")</script>
 <meta name=description content>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Hash Set">
-<meta name=twitter:description content="Kei's personal blog about tech">
+<meta name=twitter:title content="Notes around database">
+<meta name=twitter:description content="Introduction Random notes and summary of database.
+Connection pooling Connection pooling is a technique to keep the reusable open database connections so that applications do not need to open and close a new connection for every request.
+Why connections are expensive:
+ Creating a connection requires TCP handshake The DB must authenticate and allocate memory/resources PostgreSQL forks a process per connection MySQL creates a thread per connection (context switching for thread is 5x faster than process)  Connection Pool Size Formula (HikariCP recommendation):">
 <link rel=preconnect href=https://fonts.gstatic.com crossorigin>
 <link rel=dns-prefetch href=//fonts.googleapis.com>
 <link rel=dns-prefetch href=//fonts.gstatic.com>
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 <link rel=stylesheet href=/css/style.css>
 <link rel=stylesheet href=/css/custom.css>
-<link rel=alternate type=application/rss+xml href=/tags/hash-set/index.xml title="Kei's Blog">
 <link rel="shortcut icon" href=/favicon.ico>
 </head>
 <body class=body>
@@ -34,30 +36,97 @@
 </header>
 <div class="wrapper flex">
 <div class=primary>
-<main class="main list" role=main>
-<header class=main__header>
-<h1 class=main__title>Hash Set</h1>
-</header><article class="list__item post">
-<header class=list__header>
-<h2 class="list__title post__title">
-<a href=/posts/dsa/hash/ rel=bookmark>
-Hash Set and Hash Table
-</a>
-</h2>
-<div class="list__meta meta">
+<main class=main role=main>
+<article class=post>
+<header class=post__header>
+<h1 class=post__title>Notes around database</h1>
+<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2021-11-15T00:00:00Z>November 15, 2021</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/dsa/ rel=category>DSA</a>
+<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class=meta__text datetime=2025-11-23T00:00:00Z>November 23, 2025</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class=meta__text><a class=meta__link href=/categories/cs/ rel=category>CS</a>
 </span>
 </div></div>
 </header>
-<div class="content list__excerpt post__content clearfix">
-The Principle of Built-in Hash Table The key value can be any hashable type. A value that belongs to a hashable type has a hash code, and this code is used to get the bucket index. Each bucket contains an array to store all the values in the same bucket initially If there are too many values in the bucket, these values will be stored in the form of height-balanced BST so that look-up can be more efficient.
+<div class="post__toc toc">
+<div class=toc__title>Page content</div>
+<div class=toc__menu>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#introduction>Introduction</a></li>
+<li><a href=#connection-pooling>Connection pooling</a>
+<ul>
+<li><a href=#connection-pool-size>Connection Pool Size</a></li>
+</ul>
+</li>
+</ul>
+</nav>
 </div>
-<div class="list__footer clearfix">
-<a class="list__footer-readmore btn" href=/posts/dsa/hash/>Read more…</a>
+</div><div class="content post__content clearfix">
+<h2 id=introduction>Introduction</h2>
+<p>Random notes and summary of database.</p>
+<h2 id=connection-pooling>Connection pooling</h2>
+<p>Connection pooling is a technique to keep the reusable open database connections so that applications do not need to open and close a new connection for every request.</p>
+<p>Why connections are expensive:</p>
+<ul>
+<li>Creating a connection requires TCP handshake</li>
+<li>The DB must authenticate and allocate memory/resources</li>
+<li>PostgreSQL forks a process per connection</li>
+<li>MySQL creates a thread per connection (context switching for thread is 5x faster than process)</li>
+</ul>
+<h3 id=connection-pool-size>Connection Pool Size</h3>
+<p><strong>Formula (HikariCP recommendation):</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>connections = (core_count * 2) + 1
+</code></pre></div><p><strong>General guidelines:</strong></p>
+<ul>
+<li>Small apps: 5-10 connections</li>
+<li>Medium apps: 10-20 connections</li>
+<li>Large apps: 20-50 connections</li>
+</ul>
+<p><strong>Important considerations:</strong></p>
+<ul>
+<li>More connections ≠ better performance (causes context switching overhead and lock contention)</li>
+<li>Pool size should be based on CPU cores, not expected traffic</li>
+<li>PostgreSQL needs fewer connections than MySQL (processes vs threads)</li>
+<li>Total connections across all app instances must be &lt; database <code>max_connections</code></li>
+</ul>
+<p><strong>Example calculation:</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>Database max_connections: 100
+Application instances: 4
+Reserve for admin: 20
+Available: 80
+Pool size per instance: 80 / 4 = 20 connections max
+Recommended: Start with 10, monitor and tune
+</code></pre></div><p><strong>Key metrics to monitor:</strong></p>
+<ul>
+<li>Connection wait time (increase pool if apps wait)</li>
+<li>Database CPU utilization (decrease pool if saturated)</li>
+<li>Active vs idle connections ratio</li>
+</ul>
 </div>
+<footer class=post__footer>
+<div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5.0 11V3C0 1.5.8.8.8.8S1.5.0 3 0h8c1.5.0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 100-6 3 3 0 000 6z"/></svg>
+<ul class=tags__list>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/db/ rel=tag>DB</a>
+</li>
+<li class=tags__item>
+<a class="tags__link btn" href=/tags/english-article/ rel=tag>English Article</a>
+</li>
+</ul>
+</div>
+</footer>
 </article>
 </main>
+<div class="authorbox clearfix">
+<figure class=authorbox__avatar>
+<img alt="Keigo Kida avatar" src=/img/avatar.jpeg class=avatar height=90 width=90>
+</figure>
+<div class=authorbox__header>
+<span class=authorbox__name>About Keigo Kida</span>
+</div>
+<div class=authorbox__description>
+Software Engineer from Japan
+</div>
+</div>
 </div>
 <aside class=sidebar>
 <div class="widget-recent widget">
@@ -195,5 +264,6 @@ The Principle of Built-in Hash Table The key value can be any hashable type. A v
 </footer>
 </div>
 <script async defer src=/js/menu.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>
