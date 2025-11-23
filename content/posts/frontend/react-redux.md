@@ -73,7 +73,7 @@ useMemo(() => fibonacci(num), [num]);
 
 ### useCallback
 
-関数を受け取り dependency に変更ない限りは同じ関数を呼び出すようにし re ー render を防ぐもの
+関数を受け取り dependency に変更ない限りは同じ関数を呼び出すようにし re-render を防ぐもの
 useMemo と似ており内部的には useMemo が使われている。
 
 ### useLayoutEffect
